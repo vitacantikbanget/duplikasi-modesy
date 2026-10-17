@@ -25,14 +25,14 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { t, formatPrice, toggleWishlist, isInWishlist } = useAppContext();
-  
+
   const vendorName = product.vendorName || product.vendor?.name || "Modesy Seller";
   const imageUrl = product.imageUrl || product.images?.[0] || "";
-  const reviewsCount = typeof product.reviews === "number" 
-    ? product.reviews 
-    : Array.isArray(product.reviews) 
-    ? product.reviews.length 
-    : (product.reviewsCount || 0);
+  const reviewsCount = typeof product.reviews === "number"
+    ? product.reviews
+    : Array.isArray(product.reviews)
+      ? product.reviews.length
+      : (product.reviewsCount || 0);
 
   const isFree = product.price === "Free" || product.price === 0 || product.price === "Gratis";
   const isQuote = product.price === "Request a Quote" || product.price === "Minta Penawaran";
@@ -42,12 +42,12 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Image Container */}
       <Link href={`/product/${product.slug}`} className="relative block aspect-[4/5] bg-gray-50 overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
-          src={imageUrl} 
-          alt={product.title} 
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" 
+        <img
+          src={imageUrl}
+          alt={product.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
         />
-        
+
         {/* Discount Badge */}
         {product.discount && (
           <div className="absolute top-2 left-2 px-1.5 py-0.5 rounded-sm bg-red-500 text-white text-[11px] font-bold shadow-sm">
@@ -67,26 +67,26 @@ export default function ProductCard({ product }: ProductCardProps) {
         <Link href={`/vendor/${vendorName.toLowerCase().replace(/\s+/g, '-')}`} className="text-xs text-gray-400 hover:text-brand-primary transition-colors mb-2 truncate">
           {vendorName}
         </Link>
-        
+
         {/* Rating and Wishlist */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-0.5">
             {[1, 2, 3, 4, 5].map((star) => (
-              <Star 
-                key={star} 
+              <Star
+                key={star}
                 className={cn(
                   "w-3.5 h-3.5",
                   (product.rating || 0) >= star ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
-                )} 
+                )}
               />
             ))}
             <span className="text-[11px] text-gray-400 ml-1">{reviewsCount}</span>
           </div>
-          <button 
+          <button
             onClick={(e) => {
               e.preventDefault();
               toggleWishlist(product.slug);
-            }} 
+            }}
             className="text-gray-300 hover:text-red-500 transition-colors p-1"
             title="Add to Wishlist"
           >
@@ -103,9 +103,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
           <div className={cn(
             "text-sm font-bold",
-            isFree ? "text-brand-primary" : 
-            isQuote ? "text-gray-900" : 
-            product.discount ? "text-brand-primary" : "text-gray-900",
+            isFree ? "text-brand-primary" :
+              isQuote ? "text-gray-900" :
+                product.discount ? "text-brand-primary" : "text-gray-900",
             (product.originalPrice && !product.discount) ? "text-brand-primary" : ""
           )}>
             {typeof product.price === "number" ? formatPrice(product.price) : (product.price === "Free" ? t("free") : t("request_quote"))}

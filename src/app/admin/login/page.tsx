@@ -43,7 +43,7 @@ export default function AdminLogin() {
     
     // Failed auth
     setTimeout(() => {
-      setError("Invalid login credentials (Use admin@codingest.net & 1234)");
+      setError("Kredensial tidak valid (Gunakan admin@codingest.net atau moderator@codingest.net & 1234)");
       setLoading(false);
     }, 400);
   };
@@ -56,28 +56,42 @@ export default function AdminLogin() {
         </h1>
       </div>
       
-      <div className="bg-white shadow-sm w-full max-w-[400px]">
-        <div className="p-4 border-b border-gray-100 text-center text-gray-600 text-sm">
-          Login
+      <div className="bg-white shadow-sm w-full max-w-[420px]">
+        <div className="p-4 border-b border-gray-100 text-center text-gray-600 text-sm font-medium">
+          Masuk ke Panel Administrasi & Moderasi
         </div>
         
         <div className="p-6">
-          {/* Quick Demo Button */}
-          <button
-            type="button"
-            onClick={() => {
-              loginAs("super_admin");
-              router.push("/admin");
-            }}
-            className="w-full mb-4 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 py-2 px-3 rounded text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer"
-          >
-            <span>🛡️ Masuk Langsung (Super Admin)</span>
-            <span className="bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">1-KLIK</span>
-          </button>
+          {/* Quick Demo Buttons */}
+          <div className="grid grid-cols-2 gap-2.5 mb-4">
+            <button
+              type="button"
+              onClick={() => {
+                loginAs("super_admin");
+                router.push("/admin");
+              }}
+              className="bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 py-2 px-2.5 rounded text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer"
+            >
+              <span>🛡️ Super Admin</span>
+              <span className="bg-blue-600 text-white text-[9px] px-1 py-0.2 rounded font-bold">1-KLIK</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                loginAs("moderator");
+                router.push("/admin");
+              }}
+              className="bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 py-2 px-2.5 rounded text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer"
+            >
+              <span>⚖️ Moderator</span>
+              <span className="bg-[#00a99d] text-white text-[9px] px-1 py-0.2 rounded font-bold">1-KLIK</span>
+            </button>
+          </div>
 
           <div className="relative flex items-center justify-center mb-4">
             <div className="absolute inset-x-0 border-t border-gray-200"></div>
-            <span className="bg-white px-2 text-[11px] text-gray-400 relative z-10">Atau gunakan form:</span>
+            <span className="bg-white px-2 text-[11px] text-gray-400 relative z-10">Atau login manual:</span>
           </div>
 
           {error && (

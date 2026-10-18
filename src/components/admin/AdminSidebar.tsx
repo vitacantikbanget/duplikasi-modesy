@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Home,
   Paintbrush,
@@ -43,12 +43,17 @@ import {
   ChevronDown,
   Circle,
   X,
+  ShieldAlert,
 } from "lucide-react";
 import { useAdminContext } from "@/contexts/AdminContext";
+import { useAppContext } from "@/contexts/AppContext";
+import { createClient } from "@/lib/supabase/client";
 
 interface SubItem {
   label: string;
   href: string;
+  badge?: number | string;
+  badgeColor?: string;
 }
 
 const SidebarSection = ({
@@ -78,6 +83,8 @@ const SidebarItem = ({
   isOpen,
   onToggle,
   onItemClick,
+  badge,
+  badgeColor = "bg-[#dd4b39]",
 }: {
   icon: any;
   label: string;
@@ -88,28 +95,39 @@ const SidebarItem = ({
   isOpen?: boolean;
   onToggle?: () => void;
   onItemClick?: () => void;
+  badge?: number | string;
+  badgeColor?: string;
 }) => {
   const pathname = usePathname();
 
   const itemContent = (
     <>
-      <div className="flex items-center">
+      <div className="flex items-center min-w-0">
         <Icon className="w-[18px] h-[18px] mr-3 shrink-0" strokeWidth={active ? 2.5 : 2} />
         <span className="text-[13.5px] truncate">{label}</span>
       </div>
-      {hasDropdown && (
-        <ChevronDown
-          className={`w-3.5 h-3.5 opacity-60 transition-transform duration-200 shrink-0 ${isOpen ? "rotate-180" : "-rotate-90"
+      <div className="flex items-center space-x-1.5 shrink-0 ml-2">
+        {badge !== undefined && Number(badge) > 0 && (
+          <span className={`text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full leading-tight ${badgeColor}`}>
+            {badge}
+          </span>
+        )}
+        {hasDropdown && (
+          <ChevronDown
+            className={`w-3.5 h-3.5 opacity-60 transition-transform duration-200 shrink-0 ${
+              isOpen ? "rotate-180" : "-rotate-90"
             }`}
-        />
-      )}
+          />
+        )}
+      </div>
     </>
   );
 
-  const baseClass = `flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none ${active
+  const baseClass = `flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none ${
+    active
       ? "text-white font-medium bg-[#2a3038]/60"
       : "text-[#8a99a8] hover:text-white hover:bg-[#2a3038]/40"
-    }`;
+  }`;
 
   if (hasDropdown) {
     return (
@@ -131,12 +149,18 @@ const SidebarItem = ({
                   <Link
                     href={sub.href}
                     onClick={onItemClick}
-                    className={`block pl-12 pr-6 py-1.5 text-[12.5px] transition-colors ${isSubActive
+                    className={`flex items-center justify-between pl-12 pr-6 py-1.5 text-[12.5px] transition-colors ${
+                      isSubActive
                         ? "text-white font-medium bg-[#1e2329]"
                         : "text-[#8a99a8] hover:text-white hover:bg-[#1e2329]/60"
-                      }`}
+                    }`}
                   >
-                    • {sub.label}
+                    <span>• {sub.label}</span>
+                    {sub.badge !== undefined && Number(sub.badge) > 0 && (
+                      <span className={`text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full ${sub.badgeColor || "bg-[#dd4b39]"}`}>
+                        {sub.badge}
+                      </span>
+                    )}
                   </Link>
                 </li>
               );
@@ -173,6 +197,47 @@ const SidebarItem = ({
 export default function AdminSidebar() {
   const pathname = usePathname();
   const { sidebarOpenMobile, sidebarCollapsed, closeMobileSidebar } = useAdminContext();
+  const { role, userProfile } = useAppContext();
+
+  const isModerator = role === "moderator";
+
+  // Badges count state for moderator queue
+  const [counts, setCounts] = useState({
+    pendingProducts: 2,
+    abuseReports: 2,
+    refundRequests: 1,
+  });
+
+  useEffect(() => {
+    async function fetchCounts() {
+      try {
+        const supabase = createClient();
+        const [prodRes, abuseRes, refundRes] = await Promise.all([
+          supabase
+            .from("products")
+            .select("id", { count: "exact", head: true })
+            .eq("is_approved", false),
+          supabase
+            .from("abuse_reports")
+            .select("id", { count: "exact", head: true })
+            .eq("status", "pending"),
+          supabase
+            .from("refund_requests")
+            .select("id", { count: "exact", head: true })
+            .eq("status", "pending"),
+        ]);
+
+        setCounts({
+          pendingProducts: prodRes.count ?? 2,
+          abuseReports: abuseRes.count ?? 2,
+          refundRequests: refundRes.count ?? 1,
+        });
+      } catch (err) {
+        console.error("Error fetching admin counts:", err);
+      }
+    }
+    fetchCounts();
+  }, []);
 
   // Accordion state for dropdown items
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
@@ -192,6 +257,9 @@ export default function AdminSidebar() {
   };
 
   const isActive = (path: string) => pathname === path;
+
+  const displayName = userProfile?.name || (isModerator ? "Moderator" : "Super Admin");
+  const avatarUrl = userProfile?.avatar || (isModerator ? "https://i.pravatar.cc/150?u=moderator" : "https://i.pravatar.cc/150?u=admin");
 
   return (
     <>
@@ -221,13 +289,13 @@ export default function AdminSidebar() {
         `}
       >
         {/* Header / Brand */}
-        <div className="pt-6 pb-5 px-6 flex items-center justify-between relative">
+        <div className="pt-6 pb-5 px-6 flex items-center justify-between relative border-b border-gray-700/40">
           <Link
             href="/admin"
             onClick={closeMobileSidebar}
             className="text-[22px] tracking-wide text-center text-white font-bold w-full"
           >
-            Modesy <span className="font-light">Panel</span>
+            Modesy <span className="font-light text-[#00a99d]">Panel</span>
           </Link>
           {/* Close button on mobile */}
           <button
@@ -238,20 +306,31 @@ export default function AdminSidebar() {
           </button>
         </div>
 
-        {/* Admin Info Banner */}
-        <div className="px-6 py-2 flex items-center mb-2">
+        {/* Dynamic User Profile Info Banner */}
+        <div className="px-5 py-3.5 flex items-center mb-1 bg-[#282d35]/70 mx-3 mt-3 rounded-md border border-gray-700/50">
           <div className="relative shrink-0">
             <img
-              src="https://i.pravatar.cc/150?u=admin"
-              alt="Admin"
-              className="w-[50px] h-[50px] rounded-full object-cover shadow-sm border border-gray-600"
+              src={avatarUrl}
+              alt={displayName}
+              className="w-[44px] h-[44px] rounded-full object-cover shadow-sm border border-gray-600"
             />
           </div>
-          <div className="ml-4 overflow-hidden">
-            <p className="text-[14px] font-bold text-white mb-0.5">Admin</p>
-            <div className="flex items-center text-[11px] text-white">
-              <Circle className="w-2.5 h-2.5 fill-[#00a65a] text-[#00a65a] mr-1.5" />
-              Online
+          <div className="ml-3 overflow-hidden flex-1">
+            <p className="text-[13.5px] font-bold text-white mb-0.5 truncate">{displayName}</p>
+            <div className="flex items-center gap-2">
+              <span
+                className={`text-[9.5px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ${
+                  isModerator
+                    ? "bg-[#00a99d]/20 text-[#00a99d] border border-[#00a99d]/40"
+                    : "bg-blue-500/20 text-blue-400 border border-blue-500/40"
+                }`}
+              >
+                {isModerator ? "Moderator" : "Admin"}
+              </span>
+              <div className="flex items-center text-[10px] text-white">
+                <Circle className="w-2 h-2 fill-[#00a65a] text-[#00a65a] mr-1" />
+                Online
+              </div>
             </div>
           </div>
         </div>
@@ -266,27 +345,32 @@ export default function AdminSidebar() {
               active={isActive("/admin")}
               onItemClick={closeMobileSidebar}
             />
-            <SidebarItem
-              icon={Paintbrush}
-              label="Theme"
-              href="/admin/theme"
-              active={isActive("/admin/theme")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={SlidersHorizontal}
-              label="Slider"
-              href="/admin/slider"
-              active={isActive("/admin/slider")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={LayoutTemplate}
-              label="Homepage Manager"
-              href="/admin/homepage-manager"
-              active={isActive("/admin/homepage-manager")}
-              onItemClick={closeMobileSidebar}
-            />
+            {/* Super Admin only navigation */}
+            {!isModerator && (
+              <>
+                <SidebarItem
+                  icon={Paintbrush}
+                  label="Theme"
+                  href="/admin/theme"
+                  active={isActive("/admin/theme")}
+                  onItemClick={closeMobileSidebar}
+                />
+                <SidebarItem
+                  icon={SlidersHorizontal}
+                  label="Slider"
+                  href="/admin/slider"
+                  active={isActive("/admin/slider")}
+                  onItemClick={closeMobileSidebar}
+                />
+                <SidebarItem
+                  icon={LayoutTemplate}
+                  label="Homepage Manager"
+                  href="/admin/homepage-manager"
+                  active={isActive("/admin/homepage-manager")}
+                  onItemClick={closeMobileSidebar}
+                />
+              </>
+            )}
           </SidebarSection>
 
           <SidebarSection title="ORDERS">
@@ -315,6 +399,8 @@ export default function AdminSidebar() {
               label="Refund Requests"
               href="/admin/refund-requests"
               active={isActive("/admin/refund-requests")}
+              badge={counts.refundRequests}
+              badgeColor="bg-amber-600"
               onItemClick={closeMobileSidebar}
             />
           </SidebarSection>
@@ -324,11 +410,17 @@ export default function AdminSidebar() {
               icon={ShoppingBasket}
               label="Products"
               hasDropdown
+              badge={counts.pendingProducts > 0 ? counts.pendingProducts : undefined}
               isOpen={openMenus.products}
               onToggle={() => toggleMenu("products")}
               subItems={[
                 { label: "Products", href: "/admin/products" },
-                { label: "Pending Products", href: "/admin/pending-products" },
+                { 
+                  label: "Pending Products", 
+                  href: "/admin/pending-products",
+                  badge: counts.pendingProducts,
+                  badgeColor: "bg-[#dd4b39]"
+                },
                 { label: "Hidden Products", href: "/admin/hidden-products" },
                 { label: "Drafts", href: "/admin/drafts" },
               ]}
@@ -368,18 +460,27 @@ export default function AdminSidebar() {
           </SidebarSection>
 
           <SidebarSection title="PAYMENTS">
-            <SidebarItem
-              icon={CreditCard}
-              label="Payments"
-              hasDropdown
-              isOpen={openMenus.payments}
-              onToggle={() => toggleMenu("payments")}
-              subItems={[
-                { label: "Payment History", href: "/admin/payment-history" },
-                { label: "Payment Settings", href: "/admin/payment-settings" },
-              ]}
-              onItemClick={closeMobileSidebar}
-            />
+            {!isModerator ? (
+              <SidebarItem
+                icon={CreditCard}
+                label="Payments"
+                hasDropdown
+                isOpen={openMenus.payments}
+                onToggle={() => toggleMenu("payments")}
+                subItems={[
+                  { label: "Payment History", href: "/admin/payment-history" },
+                  { label: "Payment Settings", href: "/admin/payment-settings" },
+                ]}
+                onItemClick={closeMobileSidebar}
+              />
+            ) : (
+              <SidebarItem
+                icon={CreditCard}
+                label="Payment History"
+                href="/admin/payment-history"
+                onItemClick={closeMobileSidebar}
+              />
+            )}
             <SidebarItem
               icon={Banknote}
               label="Earnings"
@@ -428,44 +529,59 @@ export default function AdminSidebar() {
               hasDropdown
               isOpen={openMenus.membership}
               onToggle={() => toggleMenu("membership")}
-              subItems={[
-                { label: "Users", href: "/admin/users" },
-                { label: "Vendors", href: "/admin/vendors" },
-                { label: "Administrators", href: "/admin/administrators" },
-              ]}
+              subItems={
+                !isModerator
+                  ? [
+                      { label: "Users", href: "/admin/users" },
+                      { label: "Vendors", href: "/admin/vendors" },
+                      { label: "Administrators", href: "/admin/administrators" },
+                    ]
+                  : [
+                      { label: "Users", href: "/admin/users" },
+                      { label: "Vendors", href: "/admin/vendors" },
+                    ]
+              }
               onItemClick={closeMobileSidebar}
             />
-            <SidebarItem
-              icon={KeyRound}
-              label="Roles & Permissions"
-              href="/admin/roles"
-              onItemClick={closeMobileSidebar}
-            />
+            {/* Roles & Permissions: Super Admin only */}
+            {!isModerator && (
+              <SidebarItem
+                icon={KeyRound}
+                label="Roles & Permissions"
+                href="/admin/roles"
+                onItemClick={closeMobileSidebar}
+              />
+            )}
           </SidebarSection>
 
           <SidebarSection title="MANAGEMENT TOOLS">
             <SidebarItem
+              icon={AlertTriangle}
+              label="Abuse Reports"
+              href="/admin/abuse-reports"
+              active={isActive("/admin/abuse-reports")}
+              badge={counts.abuseReports}
+              badgeColor="bg-rose-600"
+              onItemClick={closeMobileSidebar}
+            />
+            <SidebarItem
+              icon={StarHalf}
+              label="Reviews"
+              href="/admin/reviews"
+              active={isActive("/admin/reviews")}
+              onItemClick={closeMobileSidebar}
+            />
+            <SidebarItem
+              icon={MessageCircle}
+              label="Comments"
+              href="/admin/comments"
+              active={isActive("/admin/comments")}
+              onItemClick={closeMobileSidebar}
+            />
+            <SidebarItem
               icon={HelpCircle}
               label="Help Center"
               href="/admin/help-center"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Database}
-              label="Cache System"
-              href="/admin/cache-system"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={BarChart}
-              label="SEO Tools"
-              href="/admin/seo-tools"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Megaphone}
-              label="Ad Spaces"
-              href="/admin/ad-spaces"
               onItemClick={closeMobileSidebar}
             />
             <SidebarItem
@@ -481,15 +597,9 @@ export default function AdminSidebar() {
               onItemClick={closeMobileSidebar}
             />
             <SidebarItem
-              icon={StarHalf}
-              label="Reviews"
-              href="/admin/reviews"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={MessageCircle}
-              label="Comments"
-              href="/admin/comments"
+              icon={Megaphone}
+              label="Ad Spaces"
+              href="/admin/ad-spaces"
               onItemClick={closeMobileSidebar}
             />
             <SidebarItem
@@ -504,52 +614,70 @@ export default function AdminSidebar() {
               href="/admin/affiliate"
               onItemClick={closeMobileSidebar}
             />
-            <SidebarItem
-              icon={AlertTriangle}
-              label="Abuse Reports"
-              href="/admin/abuse-reports"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={MailX}
-              label="Email Blacklist"
-              href="/admin/email-blacklist"
-              onItemClick={closeMobileSidebar}
-            />
+
+            {/* Super Admin only maintenance tools */}
+            {!isModerator && (
+              <>
+                <SidebarItem
+                  icon={Database}
+                  label="Cache System"
+                  href="/admin/cache-system"
+                  onItemClick={closeMobileSidebar}
+                />
+                <SidebarItem
+                  icon={BarChart}
+                  label="SEO Tools"
+                  href="/admin/seo-tools"
+                  onItemClick={closeMobileSidebar}
+                />
+                <SidebarItem
+                  icon={MailX}
+                  label="Email Blacklist"
+                  href="/admin/email-blacklist"
+                  onItemClick={closeMobileSidebar}
+                />
+              </>
+            )}
           </SidebarSection>
 
-          <SidebarSection title="SETTINGS">
-            <SidebarItem
-              icon={Sliders}
-              label="Preferences"
-              href="/admin/preferences"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Settings}
-              label="Settings"
-              hasDropdown
-              isOpen={openMenus.settings}
-              onToggle={() => toggleMenu("settings")}
-              subItems={[
-                { label: "General Settings", href: "/admin/settings" },
-                { label: "Visual Settings", href: "/admin/visual-settings" },
-                { label: "Email Settings", href: "/admin/email-settings" },
-              ]}
-              onItemClick={closeMobileSidebar}
-            />
-          </SidebarSection>
+          {/* Settings Section: Super Admin only */}
+          {!isModerator && (
+            <SidebarSection title="SETTINGS">
+              <SidebarItem
+                icon={Sliders}
+                label="Preferences"
+                href="/admin/preferences"
+                onItemClick={closeMobileSidebar}
+              />
+              <SidebarItem
+                icon={Settings}
+                label="Settings"
+                hasDropdown
+                isOpen={openMenus.settings}
+                onToggle={() => toggleMenu("settings")}
+                subItems={[
+                  { label: "General Settings", href: "/admin/settings" },
+                  { label: "Visual Settings", href: "/admin/visual-settings" },
+                  { label: "Email Settings", href: "/admin/email-settings" },
+                ]}
+                onItemClick={closeMobileSidebar}
+              />
+            </SidebarSection>
+          )}
 
-          <div className="px-6 mt-8 mb-4">
-            <button
-              type="button"
-              onClick={() => alert("Database backup download started...")}
-              className="w-full flex items-center justify-center py-2 px-3 bg-[#2a3038] hover:bg-[#252a31] text-[#8a99a8] hover:text-white rounded text-xs transition-colors border border-[#252a31] cursor-pointer"
-            >
-              <DownloadCloud className="w-4 h-4 mr-2" />
-              Download Database Backup
-            </button>
-          </div>
+          {/* Database Backup: Super Admin only */}
+          {!isModerator && (
+            <div className="px-6 mt-8 mb-4">
+              <button
+                type="button"
+                onClick={() => alert("Database backup download started...")}
+                className="w-full flex items-center justify-center py-2 px-3 bg-[#2a3038] hover:bg-[#252a31] text-[#8a99a8] hover:text-white rounded text-xs transition-colors border border-[#252a31] cursor-pointer"
+              >
+                <DownloadCloud className="w-4 h-4 mr-2" />
+                Download Database Backup
+              </button>
+            </div>
+          )}
         </div>
       </aside>
     </>

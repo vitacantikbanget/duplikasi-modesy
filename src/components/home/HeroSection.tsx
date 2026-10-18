@@ -20,7 +20,7 @@ const SLIDES: SlideData[] = [
     title: "Buy Nice and Unique Clothes",
     subtitle: "Discover quality premium basics and trendy essentials at surprisingly affordable prices",
     btnText: "Explore Now",
-    btnLink: "/category/clothing",
+    btnLink: "/clothing",
   },
   {
     id: "backpacks",
@@ -28,7 +28,7 @@ const SLIDES: SlideData[] = [
     title: "Find Backpacks That Best Suit You",
     subtitle: "Timeless, modern, and feminine pieces made with quality materials and craftsmanship",
     btnText: "Buy Now",
-    btnLink: "/category/accessories",
+    btnLink: "/jewelry-accessories",
   },
 ];
 

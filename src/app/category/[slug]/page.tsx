@@ -17,6 +17,7 @@ export default function CategoryPage({ initialSlug }: { initialSlug?: string } =
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedCondition, setSelectedCondition] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("newest");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
@@ -44,6 +45,14 @@ export default function CategoryPage({ initialSlug }: { initialSlug?: string } =
         return false;
       }
 
+      // Condition filter (Used Stuff / New)
+      if (selectedCondition === "new" && product.condition && product.condition !== "New") {
+        return false;
+      }
+      if (selectedCondition === "used" && (!product.condition || product.condition === "New")) {
+        return false;
+      }
+
       // Price filter
       if (typeof product.price === "number") {
         if (minPrice && product.price < parseFloat(minPrice)) return false;
@@ -67,7 +76,7 @@ export default function CategoryPage({ initialSlug }: { initialSlug?: string } =
       }
       return 0; // Default newest
     });
-  }, [slug, selectedType, minPrice, maxPrice, sortBy]);
+  }, [slug, selectedType, selectedCondition, minPrice, maxPrice, sortBy]);
 
   return (
     <div className="bg-[#fcfcfc] min-h-screen pb-20">
@@ -170,6 +179,7 @@ export default function CategoryPage({ initialSlug }: { initialSlug?: string } =
                   { id: "physical", label: "Produk Fisik (Dikirim)" },
                   { id: "digital", label: "Produk Digital (Download)" },
                   { id: "quote", label: "Request a Quote (Tawar)" },
+                  { id: "ordinary", label: "Barang Bekas (Iklan Baris)" },
                 ].map((t) => (
                   <label key={t.id} className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -180,6 +190,32 @@ export default function CategoryPage({ initialSlug }: { initialSlug?: string } =
                       className="text-brand-primary focus:ring-brand-primary"
                     />
                     <span>{t.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Condition Filter (Used Stuff / Classifieds) */}
+            <div className="pt-4 border-t border-gray-100">
+              <h3 className="font-bold text-xs uppercase tracking-wider text-gray-800 mb-3 flex items-center justify-between">
+                <span>Kondisi Barang</span>
+                <span className="text-[10px] font-normal text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">Used Stuff</span>
+              </h3>
+              <div className="space-y-2 text-xs text-gray-600">
+                {[
+                  { id: "all", label: "Semua Kondisi" },
+                  { id: "new", label: "Baru (Brand New)" },
+                  { id: "used", label: "Barang Bekas (Used / Pre-owned)" },
+                ].map((c) => (
+                  <label key={c.id} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="condType"
+                      checked={selectedCondition === c.id}
+                      onChange={() => setSelectedCondition(c.id)}
+                      className="text-brand-primary focus:ring-brand-primary"
+                    />
+                    <span>{c.label}</span>
                   </label>
                 ))}
               </div>

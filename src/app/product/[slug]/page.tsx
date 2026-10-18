@@ -270,8 +270,16 @@ export default function ProductDetailPage() {
 
               <span className="text-gray-300">|</span>
 
-              <span className="text-xs text-gray-500 font-medium">
-                Kondisi: <span className="text-gray-800">Baru</span>
+              <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
+                Kondisi: 
+                <span className={cn(
+                  "font-semibold px-2 py-0.5 rounded text-[11px]",
+                  currentProduct.condition && currentProduct.condition !== "New"
+                    ? "bg-amber-100 text-amber-800 border border-amber-300 font-bold"
+                    : "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                )}>
+                  {currentProduct.condition || "Baru (New)"}
+                </span>
               </span>
             </div>
 
@@ -405,6 +413,30 @@ export default function ProductDetailPage() {
                 >
                   <Heart className={cn("w-5 h-5", isFavorited ? "fill-red-500 text-red-500" : "")} />
                 </button>
+              </div>
+            )}
+
+            {/* Direct WhatsApp Contact for Used Stuff / Classified Ads */}
+            {(Boolean(currentProduct.condition && currentProduct.condition !== "New") || currentProduct.productType === "ordinary") && (
+              <div className="mb-6 p-3.5 bg-gradient-to-r from-emerald-50/70 to-teal-50/70 border border-emerald-200/80 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xs">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-[#25D366] text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <MessageCircle className="w-4 h-4 fill-white text-white" />
+                  </div>
+                  <div className="text-xs">
+                    <p className="font-bold text-gray-900 leading-tight">Barang Bekas / Iklan Baris (Used Stuff)</p>
+                    <p className="text-gray-500 mt-0.5">Nego harga, cek kondisi langsung, atau atur COD / Cash on Delivery.</p>
+                  </div>
+                </div>
+                <a
+                  href={`https://wa.me/6281234567890?text=${encodeURIComponent(`Halo ${currentProduct.vendor.name}, saya tertarik dengan barang bekas "${currentProduct.title}" di Modesy.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto px-4 py-2 bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-bold rounded-md flex items-center justify-center gap-2 shrink-0 transition-colors cursor-pointer shadow-xs"
+                >
+                  <MessageCircle className="w-4 h-4 fill-current" />
+                  <span>Chat WhatsApp</span>
+                </a>
               </div>
             )}
 

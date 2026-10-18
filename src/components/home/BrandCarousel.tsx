@@ -67,7 +67,7 @@ export default function BrandCarousel() {
         {/* Header */}
         <div className="mb-6 pb-2 border-b border-[#f1f3f5]">
           <h2 className="text-[20px] sm:text-[22px] font-bold text-[#2b333e] tracking-tight">
-            {t("shop_by_brand") || "Shop By Brand"}
+            {t("shop_by_brand", "Shop By Brand")}
           </h2>
         </div>
 

@@ -6,15 +6,15 @@ type CurrencyCode = "USD" | "EUR" | "BRL" | "GBP" | "IDR" | "INR" | "NGN" | "RUB
 type LanguageCode = "EN" | "ID";
 
 export const currencies = [
-  { label: "USD ($)", code: "USD", symbol: "$", rate: 0.000064 },
-  { label: "EUR (€)", code: "EUR", symbol: "€", rate: 0.000059 },
-  { label: "BRL (R$)", code: "BRL", symbol: "R$", rate: 0.00032 },
-  { label: "GBP (£)", code: "GBP", symbol: "£", rate: 0.000050 },
-  { label: "IDR (Rp)", code: "IDR", symbol: "Rp", rate: 1 },
-  { label: "INR (₹)", code: "INR", symbol: "₹", rate: 0.0053 },
-  { label: "NGN (₦)", code: "NGN", symbol: "₦", rate: 0.098 },
-  { label: "RUB (₽)", code: "RUB", symbol: "₽", rate: 0.0059 },
-  { label: "TRY (₺)", code: "TRY", symbol: "₺", rate: 0.0020 },
+  { label: "USD ($)", code: "USD", symbol: "$", rate: 1 },
+  { label: "EUR (€)", code: "EUR", symbol: "€", rate: 0.92 },
+  { label: "BRL (R$)", code: "BRL", symbol: "R$", rate: 5.2 },
+  { label: "GBP (£)", code: "GBP", symbol: "£", rate: 0.79 },
+  { label: "IDR (Rp)", code: "IDR", symbol: "Rp", rate: 15800 },
+  { label: "INR (₹)", code: "INR", symbol: "₹", rate: 83 },
+  { label: "NGN (₦)", code: "NGN", symbol: "₦", rate: 1500 },
+  { label: "RUB (₽)", code: "RUB", symbol: "₽", rate: 92 },
+  { label: "TRY (₺)", code: "TRY", symbol: "₺", rate: 32.5 },
 ];
 
 export const languages = [
@@ -150,6 +150,8 @@ export const translations = {
     featured_products: "Featured Products",
     new_arrivals: "New Arrivals",
     load_more: "Load More",
+    shop_by_brand: "Shop By Brand",
+    latest_blog_posts: "Latest Blog Posts",
     categories_title: "Categories",
     categories: {
       clothing: "Clothing",
@@ -249,6 +251,8 @@ export const translations = {
     featured_products: "Produk Unggulan",
     new_arrivals: "Kedatangan Baru",
     load_more: "Muat Lebih Banyak",
+    shop_by_brand: "Belanja Berdasarkan Merek",
+    latest_blog_posts: "Postingan Blog Terbaru",
     categories_title: "Kategori",
     categories: {
       clothing: "Pakaian",
@@ -814,22 +818,77 @@ interface AppContextType {
   clearCart: () => void;
   cartCount: number;
   cartSubtotal: number;
+  addedModalItem: CartItem | null;
+  setAddedModalItem: (item: CartItem | null) => void;
+  isAddToCartModalOpen: boolean;
+  setIsAddToCartModalOpen: (open: boolean) => void;
   // Wishlist
   wishlist: string[];
   toggleWishlist: (productSlug: string) => void;
   isInWishlist: (productSlug: string) => boolean;
   wishlistCount: number;
+  // Quick View Modal
+  quickViewProduct: any | null;
+  setQuickViewProduct: (product: any | null) => void;
+  isQuickViewOpen: boolean;
+  setIsQuickViewOpen: (open: boolean) => void;
+  openQuickView: (product: any) => void;
+  closeQuickView: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [currency, setCurrency] = useState(currencies.find(c => c.code === "IDR")!);
+  const [currency, setCurrencyState] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("modesy_currency");
+      if (saved) {
+        const found = currencies.find(c => c.code === saved);
+        if (found) return found;
+      }
+    }
+    return currencies.find(c => c.code === "IDR") || currencies[0];
+  });
+
+  const setCurrency = (c: typeof currencies[0]) => {
+    setCurrencyState(c);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("modesy_currency", c.code);
+    }
+  };
+
   const [language, setLanguage] = useState(languages[0]);
   const [location, setLocation] = useState("Location");
+  const [addedModalItem, setAddedModalItem] = useState<CartItem | null>(null);
+  const [isAddToCartModalOpen, setIsAddToCartModalOpen] = useState(false);
+  const [quickViewProduct, setQuickViewProduct] = useState<any | null>(null);
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
-  // User Role & Session (Default to guest, persistent when logged in)
-  const [role, setRoleState] = useState<UserRole>("guest");
+  const openQuickView = (product: any) => {
+    setQuickViewProduct(product);
+    setIsQuickViewOpen(true);
+  };
+
+  const closeQuickView = () => {
+    setIsQuickViewOpen(false);
+    setQuickViewProduct(null);
+  };
+
+  // Synchronize document direction and language for RTL (Arabic)
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      if (language.code === "AR") {
+        document.documentElement.setAttribute("dir", "rtl");
+        document.documentElement.setAttribute("lang", "ar");
+      } else {
+        document.documentElement.setAttribute("dir", "ltr");
+        document.documentElement.setAttribute("lang", language.code.toLowerCase());
+      }
+    }
+  }, [language]);
+
+  // User Role & Session (Default to admin to mirror Modesy live demo, persistent when changed)
+  const [role, setRoleState] = useState<UserRole>("admin");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -842,7 +901,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     const cookieRole = getCookie("demo_role") as UserRole | null;
     const localRole = localStorage.getItem("modesy_role") as UserRole | null;
-    const active = cookieRole || localRole || "guest";
+    const active = cookieRole || localRole || "admin";
 
     setRoleState(active);
     if (active !== "guest") {
@@ -901,7 +960,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         id: "black-midi-skirt-default",
         productSlug: "black-midi-skirt",
         title: "Black midi skirt with white flowers",
-        price: 791186.40,
+        price: 48,
         imageUrl: "https://images.unsplash.com/photo-1583496661160-c588c4af16b2?w=500&q=80",
         quantity: 1,
         selectedColor: "Black Floral",
@@ -949,6 +1008,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, item];
     });
+    setAddedModalItem(item);
+    setIsAddToCartModalOpen(true);
   };
 
   const removeFromCart = (id: string) => {
@@ -985,17 +1046,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const t = (path: string, fallback?: string) => {
     const keys = path.split(".");
     let current: any = translations[language.code as LanguageCode];
-    if (!current) return fallback || path;
+    if (!current) current = translations.EN;
     for (const key of keys) {
-      if (current[key] === undefined) return fallback || path;
+      if (current === undefined || current[key] === undefined) {
+        let enVal: any = translations.EN;
+        for (const enKey of keys) {
+          if (enVal === undefined || enVal[enKey] === undefined) {
+            return fallback !== undefined ? fallback : path;
+          }
+          enVal = enVal[enKey];
+        }
+        return enVal;
+      }
       current = current[key];
     }
     return current;
   };
 
-  const formatPrice = (priceIdr: number) => {
-    const converted = priceIdr * currency.rate;
-    return `${currency.symbol}${converted.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const formatPrice = (priceVal: number) => {
+    const converted = priceVal * currency.rate;
+    if (currency.code === "IDR") {
+      return `Rp ${Math.round(converted).toLocaleString("id-ID")}`;
+    }
+    if (Number.isInteger(converted)) {
+      return `${currency.symbol}${converted}`;
+    }
+    return `${currency.symbol}${converted.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
   };
 
   return (
@@ -1022,10 +1098,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
         clearCart,
         cartCount,
         cartSubtotal,
+        addedModalItem,
+        setAddedModalItem,
+        isAddToCartModalOpen,
+        setIsAddToCartModalOpen,
         wishlist,
         toggleWishlist,
         isInWishlist,
-        wishlistCount
+        wishlistCount,
+        // Quick View Modal
+        quickViewProduct,
+        setQuickViewProduct,
+        isQuickViewOpen,
+        setIsQuickViewOpen,
+        openQuickView,
+        closeQuickView
       }}
     >
       {children}

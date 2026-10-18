@@ -3,6 +3,9 @@
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import AddToCartModal from "@/components/common/AddToCartModal";
+import QuickViewModal from "@/components/common/QuickViewModal";
+import CookiesWarning from "@/components/common/CookiesWarning";
 
 export default function FrontendLayoutWrapper({
   children,
@@ -25,6 +28,9 @@ export default function FrontendLayoutWrapper({
         {children}
       </main>
       <Footer />
+      <AddToCartModal />
+      <QuickViewModal />
+      <CookiesWarning />
     </div>
   );
 }

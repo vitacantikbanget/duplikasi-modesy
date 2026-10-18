@@ -76,27 +76,27 @@ export default function AdminHeader() {
                 <LayoutGrid className="w-4 h-4 mr-3 text-gray-400" />
                 Dashboard
               </Link>
-              <Link href="#" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+              <Link href="/profile/admin" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <User className="w-4 h-4 mr-3 text-gray-400" />
                 Profile
               </Link>
-              <Link href="#" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+              <Link href="/wallet" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <Wallet className="w-4 h-4 mr-3 text-gray-400" />
                 Wallet
               </Link>
-              <Link href="#" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+              <Link href="/orders" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <ShoppingBasket className="w-4 h-4 mr-3 text-gray-400" />
                 Orders
               </Link>
-              <Link href="#" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+              <Link href="/my-coupons" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <Tag className="w-4 h-4 mr-3 text-gray-400" />
                 My Coupons
               </Link>
-              <Link href="#" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+              <Link href="/messages" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <MessageSquare className="w-4 h-4 mr-3 text-gray-400" />
                 Messages
               </Link>
-              <Link href="#" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+              <Link href="/settings/edit-profile" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <Settings className="w-4 h-4 mr-3 text-gray-400" />
                 Profile Settings
               </Link>

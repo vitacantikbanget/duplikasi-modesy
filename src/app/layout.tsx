@@ -2,17 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Modesy — Marketplace Terpercaya",
-  description:
-    "Modesy adalah marketplace terpercaya untuk jual beli produk digital dan fisik dengan harga terbaik. Temukan ribuan produk dari penjual terverifikasi.",
-  keywords: [
-    "marketplace",
-    "jual beli online",
-    "toko online",
-    "produk digital",
-    "e-commerce",
-  ],
+  title: "Home - Modesy - Marketplace - Classified Ads Script",
+  description: "Modesy - Marketplace - Classified Ads Script",
+  keywords: ["index", "home", "modesy", "marketplace", "classified ads"],
 };
+
 
 import { AppProvider } from "@/contexts/AppContext";
 import FrontendLayoutWrapper from "@/components/layout/FrontendLayoutWrapper";

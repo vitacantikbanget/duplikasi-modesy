@@ -344,6 +344,7 @@ export default function AdminSidebar() {
               icon={Folder}
               label="Categories"
               href="/admin/categories"
+              active={isActive("/admin/categories")}
               onItemClick={closeMobileSidebar}
             />
             <SidebarItem

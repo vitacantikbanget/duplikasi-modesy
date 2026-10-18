@@ -3,113 +3,113 @@
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import ProductCard from "@/components/common/ProductCard";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
 
 export const specialOffers = [
   {
     id: "s1",
-    slug: "animal-prints",
+    slug: "animal-prints-39",
     title: "Animal colorful digital prints",
     vendorName: "Trendshop",
     rating: 5,
     reviews: 0,
-    originalPrice: 642838.95,
-    price: 478008.45,
+    originalPrice: 39,
+    price: 29,
     discount: 25,
     imageUrl: "/images/products/animal-prints.webp",
-    secondaryImageUrl: "/images/products/animal-prints-2.webp",
+    hoverImageUrl: "/images/products/animal-prints-2.webp",
   },
   {
     id: "s2",
-    slug: "summer-top",
+    slug: "summer-top-13",
     title: "Summer fashion top lace",
     vendorName: "Trendshop",
     rating: 5,
     reviews: 1,
-    originalPrice: 1302160.95,
-    price: 1071398.25,
+    originalPrice: 79,
+    price: 65,
     discount: 17,
     imageUrl: "/images/products/summer-top.webp",
-    secondaryImageUrl: "/images/products/summer-top-2.webp",
+    hoverImageUrl: "/images/products/summer-top-2.webp",
   },
   {
     id: "s3",
-    slug: "lace-blouse",
+    slug: "lace-blouse-28",
     title: "Women lace blouse with different colors",
     vendorName: "Trendshop",
     rating: 0,
     reviews: 1,
-    originalPrice: 1302160.95,
-    price: 1137330.45,
+    originalPrice: 79,
+    price: 69,
     discount: 12,
     imageUrl: "/images/products/lace-blouse.webp",
-    secondaryImageUrl: "/images/products/lace-blouse-2.webp",
+    hoverImageUrl: "/images/products/lace-blouse-2.webp",
   },
   {
     id: "s4",
-    slug: "floral-sundress",
+    slug: "floral-sundress-38",
     title: "Floral women sundress",
     vendorName: "Admin",
     rating: 4,
     reviews: 0,
-    originalPrice: 1466991.45,
-    price: 1318644,
+    originalPrice: 89,
+    price: 80,
     discount: 10,
     imageUrl: "/images/products/floral-sundress.webp",
-    secondaryImageUrl: "/images/products/floral-sundress-2.webp",
+    hoverImageUrl: "/images/products/floral-sundress-2.webp",
   },
   {
     id: "s5",
-    slug: "gucci-backpack",
+    slug: "gucci-smart-backpack-7",
     title: "Gucci nylon fabric smart backpack",
     vendorName: "Admin",
     rating: 0,
     reviews: 0,
-    originalPrice: 1137330.45,
-    price: 906567.75,
+    originalPrice: 69,
+    price: 55,
     discount: 20,
     imageUrl: "/images/products/gucci-backpack.webp",
-    secondaryImageUrl: "/images/products/gucci-backpack-2.webp",
+    hoverImageUrl: "/images/products/gucci-backpack-2.webp",
   },
   {
     id: "s6",
-    slug: "black-sneakers",
+    slug: "sneaker-shoes-34",
     title: "Black sneakers with white sole",
     vendorName: "Admin",
     rating: 0,
     reviews: 0,
-    originalPrice: 1466991.45,
-    price: 1137330.45,
+    originalPrice: 89,
+    price: 69,
     discount: 22,
     imageUrl: "/images/products/sneaker-shoes.webp",
-    secondaryImageUrl: "/images/products/black-sneakers-2.webp",
+    hoverImageUrl: "/images/products/black-sneakers-2.webp",
   },
   {
     id: "s7",
-    slug: "kipling-handbag",
+    slug: "kipling-handbag-40",
     title: "Women kipling bailey saddle handbag",
     vendorName: "Admin",
     rating: 0,
     reviews: 0,
-    originalPrice: 1137330.45,
-    price: 972499.95,
+    originalPrice: 69,
+    price: 59,
     discount: 14,
     imageUrl: "/images/products/kipling-handbag.webp",
-    secondaryImageUrl: "/images/products/kipling-handbag-2.webp",
+    hoverImageUrl: "/images/products/kipling-handbag-2.webp",
   },
   {
     id: "s8",
-    slug: "decorative-pillow",
+    slug: "decorative-pillow-42",
     title: "Handcrafted decorative pillow for a luxurious touch",
     vendorName: "Admin",
     rating: 5,
     reviews: 0,
-    originalPrice: 1137330.45,
-    price: 972499.95,
+    originalPrice: 69,
+    price: 59,
     discount: 14,
     imageUrl: "/images/products/decorative-pillow.webp",
-    secondaryImageUrl: "/images/products/decorative-pillow-2.webp",
+    hoverImageUrl: "/images/products/decorative-pillow-2.webp",
   },
 ];
 
@@ -118,6 +118,32 @@ export default function SpecialOffers() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+
+  // Live Deal Countdown Timer (Ticking every second)
+  const [timeLeft, setTimeLeft] = useState({
+    days: 2,
+    hours: 14,
+    minutes: 35,
+    seconds: 48,
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev.seconds > 0) {
+          return { ...prev, seconds: prev.seconds - 1 };
+        } else if (prev.minutes > 0) {
+          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+        } else if (prev.hours > 0) {
+          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        } else if (prev.days > 0) {
+          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
+        }
+        return { days: 2, hours: 14, minutes: 35, seconds: 48 };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const checkScroll = () => {
     if (scrollRef.current) {
@@ -151,13 +177,41 @@ export default function SpecialOffers() {
   };
 
   return (
-    <section className="bg-white pb-14">
+    <section className="section section-special-offers bg-white pb-14">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="mb-6 pb-2 border-b border-[#f1f3f5]">
-          <h2 className="text-[20px] sm:text-[22px] font-bold text-[#2b333e] tracking-tight">
-            {t("special_offers")}
-          </h2>
+        {/* Header with Deal Countdown Timer */}
+        <div className="section-header mb-6 pb-2 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <h3 className="title text-xl sm:text-2xl font-bold text-[#222222]">
+              {t("special_offers", "Special Offers")}
+            </h3>
+            <span className="hidden sm:inline-block px-2 py-0.5 rounded-[2px] bg-red-100 text-red-600 text-[11px] font-bold uppercase tracking-wider">
+              Hot Deals
+            </span>
+          </div>
+
+          {/* Deal Countdown Clock matching Modesy */}
+          <div className="flex items-center gap-1.5 text-xs text-gray-700 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-[4px] shadow-2xs">
+            <Clock className="w-3.5 h-3.5 text-[#e74c3c]" />
+            <span className="font-medium text-gray-500 mr-1">Ends in:</span>
+            <div className="flex items-center gap-1 font-mono font-bold text-[#222222]">
+              <span className="bg-white border border-gray-200 px-1.5 py-0.5 rounded-[2px]">
+                {String(timeLeft.days).padStart(2, "0")}d
+              </span>
+              <span>:</span>
+              <span className="bg-white border border-gray-200 px-1.5 py-0.5 rounded-[2px]">
+                {String(timeLeft.hours).padStart(2, "0")}h
+              </span>
+              <span>:</span>
+              <span className="bg-white border border-gray-200 px-1.5 py-0.5 rounded-[2px]">
+                {String(timeLeft.minutes).padStart(2, "0")}m
+              </span>
+              <span>:</span>
+              <span className="bg-white border border-gray-200 px-1.5 py-0.5 rounded-[2px] text-[#e74c3c]">
+                {String(timeLeft.seconds).padStart(2, "0")}s
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Carousel Container */}
@@ -168,7 +222,7 @@ export default function SpecialOffers() {
               type="button"
               onClick={() => handleScroll("left")}
               aria-label="Scroll left"
-              className="absolute top-1/2 -left-4 -translate-y-1/2 z-20 hidden md:flex w-10 h-10 rounded-full bg-white shadow-[0_3px_12px_rgba(0,0,0,0.15)] border border-[#e4e7ea] items-center justify-center text-[#2b333e] hover:bg-[#00ab97] hover:text-white transition-all duration-200 active:scale-95 cursor-pointer"
+              className="absolute top-1/2 -left-4 -translate-y-1/2 z-20 hidden md:flex w-10 h-10 rounded-full bg-white shadow-md border border-gray-200 items-center justify-center text-gray-700 hover:bg-brand-primary hover:text-white transition-all duration-200 active:scale-95 cursor-pointer"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -196,18 +250,18 @@ export default function SpecialOffers() {
               type="button"
               onClick={() => handleScroll("right")}
               aria-label="Scroll right"
-              className="absolute top-1/2 -right-4 -translate-y-1/2 z-20 hidden md:flex w-10 h-10 rounded-full bg-white shadow-[0_3px_12px_rgba(0,0,0,0.15)] border border-[#e4e7ea] items-center justify-center text-[#2b333e] hover:bg-[#00ab97] hover:text-white transition-all duration-200 active:scale-95 cursor-pointer"
+              className="absolute top-1/2 -right-4 -translate-y-1/2 z-20 hidden md:flex w-10 h-10 rounded-full bg-white shadow-md border border-gray-200 items-center justify-center text-gray-700 hover:bg-brand-primary hover:text-white transition-all duration-200 active:scale-95 cursor-pointer"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
           )}
         </div>
 
-        {/* Promo Banners */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+        {/* Promo Banners Row (index_bn_1 and index_bn_2) */}
+        <div className="section section-index-bn grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
           <Link
-            href="/category/clothing"
-            className="block rounded-[4px] overflow-hidden group shadow-2xs hover:shadow-md transition-all"
+            href="/clothing"
+            className="col-index-bn index_bn_1 block rounded-[4px] overflow-hidden group shadow-2xs hover:shadow-md transition-all"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -218,8 +272,8 @@ export default function SpecialOffers() {
           </Link>
 
           <Link
-            href="/category/clothing"
-            className="block rounded-[4px] overflow-hidden group shadow-2xs hover:shadow-md transition-all"
+            href="/jewelry-accessories"
+            className="col-index-bn index_bn_2 block rounded-[4px] overflow-hidden group shadow-2xs hover:shadow-md transition-all"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

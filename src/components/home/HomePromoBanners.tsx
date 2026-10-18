@@ -3,34 +3,37 @@ import Link from "next/link";
 const banners = [
   {
     id: "bn1",
+    className: "index_bn_3",
     image: "/images/banners/banner-bottom-1.webp",
-    link: "/category/home-living",
+    link: "/home-living",
     alt: "Home & Living Promotion",
   },
   {
     id: "bn2",
+    className: "index_bn_5",
     image: "/images/banners/banner-bottom-2.webp",
-    link: "/category/shoes",
+    link: "/shoes",
     alt: "Shoes Promotion",
   },
   {
     id: "bn3",
+    className: "index_bn_4",
     image: "/images/banners/banner-bottom-3.webp",
-    link: "/category/clothing",
+    link: "/clothing",
     alt: "Special Offers Promotion",
   },
 ];
 
 export default function HomePromoBanners() {
   return (
-    <section className="bg-white pb-16">
+    <section className="section section-index-bn bg-white pb-14">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {banners.map((b) => (
             <Link
               key={b.id}
               href={b.link}
-              className="block rounded-[4px] overflow-hidden group shadow-2xs hover:shadow-md transition-all"
+              className={`col-index-bn ${b.className} block rounded-[4px] overflow-hidden group shadow-2xs hover:shadow-md transition-all`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

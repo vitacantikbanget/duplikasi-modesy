@@ -12,7 +12,8 @@ import {
   ExternalLink, 
   Check, 
   Sparkles,
-  Lock
+  Lock,
+  User
 } from "lucide-react";
 
 export default function RoleSwitcher() {
@@ -40,6 +41,16 @@ export default function RoleSwitcher() {
       icon: Globe,
       destination: "/",
       description: "Tampilan marketplace publik untuk pembeli/tamu. Topbar menampilkan tombol 'Login / Register'.",
+    },
+    {
+      id: "member",
+      title: "Mode MEMBER (John Doe - Pembeli)",
+      subTitle: "Akun Pembeli / Customer Terdaftar",
+      tag: "Member",
+      tagColor: "bg-sky-50 text-sky-700 border-sky-300",
+      icon: User,
+      destination: "/orders",
+      description: "Tampilan akun pembeli terdaftar. Akses riwayat pesanan (orders), unduhan file digital, kupon saya, chat pesan, dan profil pembeli.",
     },
     {
       id: "vendor",

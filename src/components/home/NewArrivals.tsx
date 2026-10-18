@@ -6,38 +6,182 @@ import ProductCard from "@/components/common/ProductCard";
 import { useAppContext } from "@/contexts/AppContext";
 
 export const newArrivals = [
-  { id: "n1", slug: "scarves", title: "Colorful women scarves", vendorName: "Trendshop", rating: 0, reviews: 0, originalPrice: 741737.25, price: 659322, discount: 11, imageUrl: "/images/products/scarves.webp" },
-  { id: "n2", slug: "ankle-boot", title: "Women's ankle boot with different colors", vendorName: "Admin", rating: 0, reviews: 0, originalPrice: 1137330.45, price: 972499.95, discount: 14, imageUrl: "/images/products/ankle-boot.webp" },
-  { id: "n3", slug: "navy-polka-dress", title: "Navy polka dot dress", vendorName: "Trendshop", rating: 0, reviews: 0, originalPrice: 2472457.50, price: 2142796.50, discount: 13, imageUrl: "/images/products/navy-polka-dress.webp" },
-  { id: "n4", slug: "modern-couch", title: "Modern grey couch and pillows", vendorName: "Admin", rating: 0, reviews: 0, price: "Request a Quote", discount: null, imageUrl: "/images/products/modern-couch.webp" },
-  { id: "n5", slug: "black-backpack", title: "Black fashion women backpack", vendorName: "Trendshop", rating: 0, reviews: 0, price: "Request a Quote", discount: null, imageUrl: "/images/products/black-backpack.webp" },
-  { id: "n6", slug: "decorative-pillow-2", title: "Handcrafted decorative pillow for a luxurious touch", vendorName: "Admin", rating: 0, reviews: 0, originalPrice: 1137330.45, price: 972499.95, discount: 14, imageUrl: "/images/products/decorative-pillow.webp", secondaryImageUrl: "/images/products/decorative-pillow-2.webp" },
-  { id: "n7", slug: "animal-prints-na", title: "Animal colorful digital prints", vendorName: "Trendshop", rating: 5, reviews: 0, originalPrice: 642838.95, price: 478008.45, discount: 25, imageUrl: "/images/products/animal-prints.webp", secondaryImageUrl: "/images/products/animal-prints-2.webp" },
-  { id: "n8", slug: "summer-top-na", title: "Summer fashion top lace", vendorName: "Trendshop", rating: 5, reviews: 1, originalPrice: 1302160.95, price: 1071398.25, discount: 17, imageUrl: "/images/products/summer-top.webp", secondaryImageUrl: "/images/products/summer-top-2.webp" },
-  { id: "n9", slug: "lace-blouse-na", title: "Women lace blouse with different colors", vendorName: "Trendshop", rating: 0, reviews: 1, originalPrice: 1302160.95, price: 1137330.45, discount: 12, imageUrl: "/images/products/lace-blouse.webp", secondaryImageUrl: "/images/products/lace-blouse-2.webp" },
-  { id: "n10", slug: "floral-sundress-na", title: "Floral women sundress", vendorName: "Admin", rating: 4, reviews: 0, originalPrice: 1466991.45, price: 1318644, discount: 10, imageUrl: "/images/products/floral-sundress.webp", secondaryImageUrl: "/images/products/floral-sundress-2.webp" },
-  { id: "n11", slug: "gucci-backpack-na", title: "Gucci nylon fabric smart backpack", vendorName: "Admin", rating: 0, reviews: 0, originalPrice: 1137330.45, price: 906567.75, discount: 20, imageUrl: "/images/products/gucci-backpack.webp", secondaryImageUrl: "/images/products/gucci-backpack-2.webp" },
-  { id: "n12", slug: "black-sneakers-na", title: "Black sneakers with white sole", vendorName: "Admin", rating: 0, reviews: 0, originalPrice: 1466991.45, price: 1137330.45, discount: 22, imageUrl: "/images/products/sneaker-shoes.webp", secondaryImageUrl: "/images/products/black-sneakers-2.webp" },
+  {
+    id: "n1",
+    slug: "colorful-women-scarves-47",
+    title: "Colorful women scarves",
+    vendorName: "Trendshop",
+    rating: 0,
+    reviews: 0,
+    originalPrice: 45,
+    price: 40,
+    discount: 11,
+    imageUrl: "/images/products/scarves.webp",
+    hoverImageUrl: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=500&q=80",
+  },
+  {
+    id: "n2",
+    slug: "womens-ankle-boot-46",
+    title: "Women's ankle boot with different colors",
+    vendorName: "Admin",
+    rating: 0,
+    reviews: 0,
+    originalPrice: 89,
+    price: 79,
+    discount: 11,
+    imageUrl: "/images/products/ankle-boot.webp",
+    hoverImageUrl: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&q=80",
+  },
+  {
+    id: "n3",
+    slug: "navy-polka-dot-dress-45",
+    title: "Navy polka dot dress",
+    vendorName: "Trendshop",
+    rating: 0,
+    reviews: 1,
+    originalPrice: 150,
+    price: 130,
+    discount: 13,
+    imageUrl: "/images/products/navy-polka-dress.webp",
+    hoverImageUrl: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=500&q=80",
+  },
+  {
+    id: "n4",
+    slug: "modern-grey-couch-44",
+    title: "Modern grey couch and pillows",
+    vendorName: "Admin",
+    rating: 0,
+    reviews: 0,
+    price: "Request a Quote",
+    discount: null,
+    imageUrl: "/images/products/modern-couch.webp",
+    hoverImageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80",
+  },
+  {
+    id: "n5",
+    slug: "black-fashion-women-backpack-43",
+    title: "Black fashion women backpack",
+    vendorName: "Trendshop",
+    rating: 0,
+    reviews: 0,
+    price: "Request a Quote",
+    discount: null,
+    imageUrl: "/images/products/black-backpack.webp",
+    hoverImageUrl: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80",
+  },
+  {
+    id: "n6",
+    slug: "decorative-pillow-42",
+    title: "Handcrafted decorative pillow for a luxurious touch",
+    vendorName: "Admin",
+    rating: 0,
+    reviews: 0,
+    originalPrice: 69,
+    price: 59,
+    discount: 14,
+    imageUrl: "/images/products/decorative-pillow.webp",
+    hoverImageUrl: "/images/products/decorative-pillow-2.webp",
+  },
+  {
+    id: "n7",
+    slug: "animal-prints-39",
+    title: "Animal colorful digital prints",
+    vendorName: "Trendshop",
+    rating: 5,
+    reviews: 0,
+    originalPrice: 39,
+    price: 29,
+    discount: 25,
+    imageUrl: "/images/products/animal-prints.webp",
+    hoverImageUrl: "/images/products/animal-prints-2.webp",
+  },
+  {
+    id: "n8",
+    slug: "summer-top-13",
+    title: "Summer fashion top lace",
+    vendorName: "Trendshop",
+    rating: 5,
+    reviews: 1,
+    originalPrice: 79,
+    price: 65,
+    discount: 17,
+    imageUrl: "/images/products/summer-top.webp",
+    hoverImageUrl: "/images/products/summer-top-2.webp",
+  },
+  {
+    id: "n9",
+    slug: "lace-blouse-28",
+    title: "Women lace blouse with different colors",
+    vendorName: "Trendshop",
+    rating: 0,
+    reviews: 1,
+    originalPrice: 79,
+    price: 69,
+    discount: 12,
+    imageUrl: "/images/products/lace-blouse.webp",
+    hoverImageUrl: "/images/products/lace-blouse-2.webp",
+  },
+  {
+    id: "n10",
+    slug: "floral-sundress-38",
+    title: "Floral women sundress",
+    vendorName: "Admin",
+    rating: 4,
+    reviews: 0,
+    originalPrice: 89,
+    price: 80,
+    discount: 10,
+    imageUrl: "/images/products/floral-sundress.webp",
+    hoverImageUrl: "/images/products/floral-sundress-2.webp",
+  },
+  {
+    id: "n11",
+    slug: "gucci-smart-backpack-7",
+    title: "Gucci nylon fabric smart backpack",
+    vendorName: "Admin",
+    rating: 0,
+    reviews: 0,
+    originalPrice: 69,
+    price: 55,
+    discount: 20,
+    imageUrl: "/images/products/gucci-backpack.webp",
+    hoverImageUrl: "/images/products/gucci-backpack-2.webp",
+  },
+  {
+    id: "n12",
+    slug: "sneaker-shoes-34",
+    title: "Black sneakers with white sole",
+    vendorName: "Admin",
+    rating: 0,
+    reviews: 0,
+    originalPrice: 89,
+    price: 69,
+    discount: 22,
+    imageUrl: "/images/products/sneaker-shoes.webp",
+    hoverImageUrl: "/images/products/black-sneakers-2.webp",
+  },
 ];
 
 export default function NewArrivals() {
   const { t } = useAppContext();
 
   return (
-    <section className="bg-white pb-14">
+    <section className="section section-latest-products bg-white pb-14">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 pb-2 border-b border-[#f1f3f5]">
-          <h2 className="text-[20px] sm:text-[22px] font-bold text-[#2b333e] tracking-tight">
-            {t("new_arrivals")}
-          </h2>
+        <div className="section-header flex items-center justify-between mb-6 pb-2 border-b border-gray-100">
+          <h3 className="title text-xl sm:text-2xl font-bold text-[#222222]">
+            <Link href="/products" className="hover:text-brand-primary transition-colors">
+              {t("new_arrivals", "New Arrivals")}
+            </Link>
+          </h3>
 
           <Link
-            href="/products?sort=newest"
-            className="text-[13px] sm:text-[14px] font-semibold text-[#2b333e] hover:text-[#00ab97] flex items-center gap-1.5 transition-colors group"
+            href="/products"
+            className="font-semibold text-sm text-[#222222] hover:text-brand-primary flex items-center gap-1.5 transition-colors group"
           >
-            <span>{t("view_all") || "View All"}</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-[#00ab97]" />
+            <span>{t("view_all", "View All")}</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 

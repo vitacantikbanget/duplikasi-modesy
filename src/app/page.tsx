@@ -27,14 +27,14 @@ export default function HomePage() {
       {/* Category Products: Clothing */}
       <CategoryProductsSection
         title="Clothing"
-        href="/category/clothing"
+        href="/clothing"
         products={clothingShowcaseProducts}
       />
 
       {/* Category Products: Jewelry & Accessories */}
       <CategoryProductsSection
         title="Jewelry & Accessories"
-        href="/category/jewelry-accessories"
+        href="/jewelry-accessories"
         products={jewelryShowcaseProducts}
       />
 

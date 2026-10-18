@@ -1,15 +1,32 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { 
   ChevronUp, 
   Rss, 
   Send,
   MessageCircle,
-  Share2
+  Share2,
+  CheckCircle2
 } from "lucide-react";
 
 export default function Footer() {
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success">("idle");
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim()) return;
+    setNewsletterStatus("loading");
+    setTimeout(() => {
+      setNewsletterStatus("success");
+      setNewsletterEmail("");
+      setTimeout(() => {
+        setNewsletterStatus("idle");
+      }, 5000);
+    }, 400);
+  };
   return (
     <footer className="bg-white border-t border-[#f1f3f5] pt-16 pb-8 font-sans text-[#495057]">
       <div className="max-w-[1320px] mx-auto px-4">
@@ -19,9 +36,14 @@ export default function Footer() {
           {/* Column 1: Brand Info & Social Icons */}
           <div className="space-y-4">
             <Link href="/" className="inline-block">
-              <span className="text-3xl font-bold tracking-tight text-[#2c333e]">
-                Mode<span className="text-[#00ab97]">sy</span>
-              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/logo.svg"
+                alt="Modesy"
+                width={160}
+                height={60}
+                className="w-[150px] h-auto object-contain"
+              />
             </Link>
 
             <p className="text-xs text-[#6c757d] leading-relaxed max-w-sm">
@@ -255,12 +277,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/products" className="hover:text-[#00ab97] transition-colors">
+                <Link href="/shops" className="hover:text-[#00ab97] transition-colors">
                   Shops
                 </Link>
               </li>
               <li>
-                <Link href="/help" className="hover:text-[#00ab97] transition-colors">
+                <Link href="/help-center" className="hover:text-[#00ab97] transition-colors">
                   Help Center
                 </Link>
               </li>
@@ -271,12 +293,12 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2.5 text-xs text-[#6c757d]">
               <li>
-                <Link href="/terms" className="hover:text-[#00ab97] transition-colors">
+                <Link href="/terms-conditions" className="hover:text-[#00ab97] transition-colors">
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-[#00ab97] transition-colors">
+                <Link href="/about-us" className="hover:text-[#00ab97] transition-colors">
                   About Us
                 </Link>
               </li>
@@ -292,26 +314,31 @@ export default function Footer() {
               Join our subscribers list to get the latest news, updates and special offers directly in your inbox
             </p>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Thank you for subscribing!");
-              }}
-              className="space-y-2.5 mb-6"
-            >
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-[2px] outline-none focus:border-[#00ab97] bg-white transition-colors"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full py-2.5 bg-[#00ab97] hover:bg-[#009684] text-white text-xs font-semibold rounded-[2px] transition-colors cursor-pointer shadow-2xs"
-              >
-                Subscribe
-              </button>
-            </form>
+            {newsletterStatus === "success" ? (
+              <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-[2px] text-emerald-800 text-xs flex items-start gap-2 mb-6 animate-in fade-in duration-200">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="leading-tight">You have successfully subscribed to our newsletter!</span>
+              </div>
+            ) : (
+              <form onSubmit={handleNewsletterSubmit} className="space-y-2.5 mb-6">
+                <input
+                  type="email"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-[2px] outline-none focus:border-[#00ab97] bg-white transition-colors"
+                  required
+                  disabled={newsletterStatus === "loading"}
+                />
+                <button
+                  type="submit"
+                  disabled={newsletterStatus === "loading"}
+                  className="w-full py-2.5 bg-[#00ab97] hover:bg-[#009684] text-white text-xs font-semibold rounded-[2px] transition-colors cursor-pointer shadow-2xs disabled:opacity-60"
+                >
+                  {newsletterStatus === "loading" ? "Subscribing..." : "Subscribe"}
+                </button>
+              </form>
+            )}
 
             {/* Official Payment Logos matching Screenshot 2 */}
             <div className="flex items-center gap-2 pt-1 flex-wrap">
@@ -358,10 +385,10 @@ export default function Footer() {
           </p>
 
           <div className="flex items-center gap-5">
-            <Link href="/privacy" className="hover:text-[#00ab97] transition-colors">
+            <Link href="/privacy-policy" className="hover:text-[#00a99d] transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/cookie" className="hover:text-[#00ab97] transition-colors">
+            <Link href="/cookie-policy" className="hover:text-[#00a99d] transition-colors">
               Cookie Policy
             </Link>
           </div>

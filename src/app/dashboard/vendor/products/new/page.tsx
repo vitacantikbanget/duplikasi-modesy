@@ -62,6 +62,7 @@ export default function AddProductPage() {
   const [discountRate, setDiscountRate] = useState("");
   const [vatRate, setVatRate] = useState("");
   const [shippingCost, setShippingCost] = useState("");
+  const [condition, setCondition] = useState("Brand New");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -768,9 +769,22 @@ export default function AddProductPage() {
       {/* STEP 2: Details */}
       {step === 2 && (
         <div className="bg-white border border-[#e2e8f0] rounded-[3px] p-6 sm:p-8 shadow-2xs">
-          <h2 className="text-[16px] font-bold text-[#2c333e] mb-6 border-b border-[#e2e8f0] pb-3">
+          <h2 className="text-[16px] font-bold text-[#2c333e] mb-4 border-b border-[#e2e8f0] pb-3">
             Product Pricing &amp; Inventory Details
           </h2>
+
+          {/* Ordinary Listing (Classified / Used Stuff) Notice */}
+          {listingType === "ordinary" && (
+            <div className="mb-5 p-3.5 bg-amber-50 border border-amber-200 rounded-[3px] text-xs text-amber-900 flex items-start gap-2.5">
+              <span className="text-base shrink-0">📢</span>
+              <div>
+                <strong className="block font-semibold">Mode Iklan Baris / Ordinary Listing Aktif:</strong>
+                <p className="text-[12px] text-amber-800 mt-0.5 leading-relaxed">
+                  Produk ini akan dipublikasikan sebagai iklan barang bekas/iklan baris tanpa checkout langsung. Calon pembeli akan diarahkan menghubungi Anda via WhatsApp atau fitur Chat Modesy untuk negosiasi atau Cash on Delivery (COD).
+                </p>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
             <div>
@@ -799,6 +813,24 @@ export default function AddProductPage() {
 
             <div>
               <label className="block text-[13px] font-bold text-[#2c333e] mb-1.5">
+                Item Condition (Kondisi Barang) *
+              </label>
+              <select
+                value={condition}
+                onChange={(e) => setCondition(e.target.value)}
+                className="w-full border border-[#d1d5db] rounded-[3px] px-3 py-2 text-[13px] text-[#495057] outline-none focus:border-[#00ab97] bg-white cursor-pointer"
+              >
+                <option value="Brand New">Brand New (Baru dengan Tag / Dus)</option>
+                <option value="Used - Like New">Used - Like New (Bekas Seperti Baru, 95%+ Mulus)</option>
+                <option value="Used - Good">Used - Good (Bekas Bagus / Pemakaian Normal)</option>
+                <option value="Used - Fair">Used - Fair (Bekas Wajar / Ada Tanda Pemakaian)</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div>
+              <label className="block text-[13px] font-bold text-[#2c333e] mb-1.5">
                 Discount Rate (%)
               </label>
               <input
@@ -809,9 +841,7 @@ export default function AddProductPage() {
                 className="w-full border border-[#d1d5db] rounded-[3px] px-3 py-2 text-[13px] outline-none focus:border-[#00ab97]"
               />
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-[13px] font-bold text-[#2c333e] mb-1.5">
                 VAT Rate (%)

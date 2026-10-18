@@ -124,7 +124,7 @@ export default function BlogSection() {
         <div className="flex items-center justify-between mb-6 pb-2 border-b border-[#f1f3f5]">
           <h2 className="text-[20px] sm:text-[22px] font-bold text-[#2b333e] tracking-tight">
             <Link href="/blog" className="hover:text-[#00ab97] transition-colors">
-              {t("latest_blog_posts") || "Latest Blog Posts"}
+              {t("latest_blog_posts", "Latest Blog Posts")}
             </Link>
           </h2>
 

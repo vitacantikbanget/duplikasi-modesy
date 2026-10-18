@@ -41,37 +41,39 @@ const CATEGORY_TREE: CategoryNode[] = [
     id: 1,
     name: "Clothing",
     children: [
-      { id: 7, name: "Women's Clothing" },
-      { id: 8, name: "Men's Clothing" },
-    ],
-  },
-  {
-    id: 6,
-    name: "Graphics & Photos",
-    children: [{ id: 9, name: "Graphics" }],
-  },
-  {
-    id: 3,
-    name: "Home & Living",
-    children: [
-      { id: 10, name: "Furniture" },
-      { id: 11, name: "Painting" },
       {
-        id: 12,
-        name: "Home Decor",
-        children: [{ id: 13, name: "Decorative Pillows" }],
+        id: 101,
+        name: "Women's Clothing",
+        children: [
+          { id: 1011, name: "Dresses" },
+          { id: 1012, name: "Skirts" },
+          { id: 1013, name: "Pants & Capris" },
+          { id: 1014, name: "Sweaters & Cardigans" },
+          { id: 1015, name: "Tops & T-Shirts" },
+          { id: 1016, name: "Jackets & Coats" },
+        ],
       },
-    ],
-  },
-  {
-    id: 4,
-    name: "Jewelry & Accessories",
-    children: [
-      { id: 14, name: "Necklaces & Accessories" },
       {
-        id: 15,
-        name: "Bags & Purses",
-        children: [{ id: 16, name: "Handbags" }],
+        id: 102,
+        name: "Men's Clothing",
+        children: [
+          { id: 1021, name: "Shirts" },
+          { id: 1022, name: "T-Shirts & Polos" },
+          { id: 1023, name: "Pants & Jeans" },
+          { id: 1024, name: "Jackets & Coats" },
+          { id: 1025, name: "Sweaters & Hoodies" },
+          { id: 1026, name: "Suits & Blazers" },
+        ],
+      },
+      {
+        id: 103,
+        name: "Kid's Clothing",
+        children: [
+          { id: 1031, name: "Boys Clothing" },
+          { id: 1032, name: "Girls Clothing" },
+          { id: 1033, name: "Baby & Toddler" },
+          { id: 1034, name: "Clothing Sets" },
+        ],
       },
     ],
   },
@@ -80,15 +82,280 @@ const CATEGORY_TREE: CategoryNode[] = [
     name: "Shoes",
     children: [
       {
-        id: 17,
+        id: 201,
+        name: "Men's Shoes",
+        children: [
+          { id: 2011, name: "Sneakers" },
+          { id: 2012, name: "Boots" },
+          { id: 2013, name: "Loafers & Slip-Ons" },
+          { id: 2014, name: "Formal Shoes" },
+          { id: 2015, name: "Sandals & Slides" },
+        ],
+      },
+      {
+        id: 202,
         name: "Women's Shoes",
-        children: [{ id: 18, name: "Boots" }],
+        children: [
+          { id: 2021, name: "Heels & Pumps" },
+          { id: 2022, name: "Flats & Ballerinas" },
+          { id: 2023, name: "Sneakers" },
+          { id: 2024, name: "Boots & Booties" },
+          { id: 2025, name: "Sandals & Wedges" },
+        ],
+      },
+      {
+        id: 203,
+        name: "Kid's Shoes",
+        children: [
+          { id: 2031, name: "Boys Shoes" },
+          { id: 2032, name: "Girls Shoes" },
+          { id: 2033, name: "Toddler & Baby Shoes" },
+        ],
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: "Home & Living",
+    children: [
+      {
+        id: 301,
+        name: "Furniture",
+        children: [
+          { id: 3011, name: "Living Room Furniture" },
+          { id: 3012, name: "Bedroom Furniture" },
+          { id: 3013, name: "Office Furniture" },
+          { id: 3014, name: "Dining Room Furniture" },
+        ],
+      },
+      {
+        id: 302,
+        name: "Home Decor",
+        children: [
+          { id: 3021, name: "Decorative Pillows & Throws" },
+          { id: 3022, name: "Mirrors & Clocks" },
+          { id: 3023, name: "Wall Art & Prints" },
+          { id: 3024, name: "Vases & Sculptures" },
+          { id: 3025, name: "Rugs & Carpets" },
+        ],
+      },
+      {
+        id: 303,
+        name: "Lighting",
+        children: [
+          { id: 3031, name: "Desk & Table Lamps" },
+          { id: 3032, name: "Ceiling & Pendant Lights" },
+          { id: 3033, name: "Floor Lamps" },
+          { id: 3034, name: "Wall Sconces" },
+        ],
+      },
+      {
+        id: 304,
+        name: "Kitchen & Dining",
+        children: [
+          { id: 3041, name: "Cookware & Bakeware" },
+          { id: 3042, name: "Dinnerware & Plates" },
+          { id: 3043, name: "Drinkware & Glassware" },
+        ],
+      },
+      {
+        id: 305,
+        name: "Painting & Art",
+        children: [
+          { id: 3051, name: "Canvas Paintings" },
+          { id: 3052, name: "Watercolor Paintings" },
+          { id: 3053, name: "Oil Paintings" },
+        ],
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "Jewelry & Accessories",
+    children: [
+      {
+        id: 401,
+        name: "Fine Jewelry",
+        children: [
+          { id: 4011, name: "Rings" },
+          { id: 4012, name: "Necklaces & Pendants" },
+          { id: 4013, name: "Bracelets & Bangles" },
+          { id: 4014, name: "Earrings" },
+        ],
+      },
+      {
+        id: 402,
+        name: "Watches",
+        children: [
+          { id: 4021, name: "Men's Watches" },
+          { id: 4022, name: "Women's Watches" },
+          { id: 4023, name: "Smartwatches & Bands" },
+        ],
+      },
+      {
+        id: 403,
+        name: "Bags & Purses",
+        children: [
+          { id: 4031, name: "Handbags & Totes" },
+          { id: 4032, name: "Backpacks" },
+          { id: 4033, name: "Wallets & Cardholders" },
+          { id: 4034, name: "Clutches & Evening Bags" },
+        ],
+      },
+      {
+        id: 404,
+        name: "Accessories",
+        children: [
+          { id: 4041, name: "Hats & Caps" },
+          { id: 4042, name: "Belts" },
+          { id: 4043, name: "Sunglasses & Eyewear" },
+          { id: 4044, name: "Scarves & Shawls" },
+        ],
       },
     ],
   },
   {
     id: 5,
     name: "Toys & Entertainment",
+    children: [
+      {
+        id: 501,
+        name: "Toys & Games",
+        children: [
+          { id: 5011, name: "Action Figures & Collectibles" },
+          { id: 5012, name: "Dolls & Plush Toys" },
+          { id: 5013, name: "Puzzles & Board Games" },
+          { id: 5014, name: "Building Blocks & LEGO" },
+          { id: 5015, name: "Remote Control & Vehicles" },
+        ],
+      },
+      {
+        id: 502,
+        name: "Video Games & Consoles",
+        children: [
+          { id: 5021, name: "PlayStation" },
+          { id: 5022, name: "Xbox" },
+          { id: 5023, name: "Nintendo Switch" },
+          { id: 5024, name: "PC Gaming & Accessories" },
+        ],
+      },
+      {
+        id: 503,
+        name: "Movies & Music",
+        children: [
+          { id: 5031, name: "Vinyl Records" },
+          { id: 5032, name: "CDs & DVDs" },
+          { id: 5033, name: "Musical Instruments" },
+        ],
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: "Graphics & Photos",
+    children: [
+      {
+        id: 601,
+        name: "Vectors & Illustrations",
+        children: [
+          { id: 6011, name: "Icons & Badges" },
+          { id: 6012, name: "Vector Illustrations" },
+          { id: 6013, name: "Backgrounds & Patterns" },
+          { id: 6014, name: "Character Art" },
+        ],
+      },
+      {
+        id: 602,
+        name: "Photos & Stock",
+        children: [
+          { id: 6021, name: "Nature & Landscapes" },
+          { id: 6022, name: "People & Lifestyle" },
+          { id: 6023, name: "Business & Tech" },
+          { id: 6024, name: "Food & Architecture" },
+        ],
+      },
+      {
+        id: 603,
+        name: "Fonts & Typography",
+        children: [
+          { id: 6031, name: "Serif Fonts" },
+          { id: 6032, name: "Sans-Serif Fonts" },
+          { id: 6033, name: "Script & Calligraphy" },
+          { id: 6034, name: "Display & Decorative" },
+        ],
+      },
+    ],
+  },
+  {
+    id: 7,
+    name: "Video & Audio",
+    children: [
+      {
+        id: 701,
+        name: "Video Templates",
+        children: [
+          { id: 7011, name: "After Effects Templates" },
+          { id: 7012, name: "Premiere Pro Templates" },
+          { id: 7013, name: "DaVinci Resolve Templates" },
+          { id: 7014, name: "Intros & Openers" },
+        ],
+      },
+      {
+        id: 702,
+        name: "Audio & Music",
+        children: [
+          { id: 7021, name: "Music Tracks" },
+          { id: 7022, name: "Sound Effects (SFX)" },
+          { id: 7023, name: "Logos & Idents" },
+          { id: 7024, name: "Ambient & Lo-Fi" },
+        ],
+      },
+      {
+        id: 703,
+        name: "Stock Footage",
+        children: [
+          { id: 7031, name: "Nature & Aerial" },
+          { id: 7032, name: "Urban & Drone" },
+          { id: 7033, name: "People & Events" },
+        ],
+      },
+    ],
+  },
+  {
+    id: 8,
+    name: "Web Templates & Code",
+    children: [
+      {
+        id: 801,
+        name: "HTML Templates",
+        children: [
+          { id: 8011, name: "Admin Dashboards" },
+          { id: 8012, name: "Landing Pages" },
+          { id: 8013, name: "Portfolio & Creative" },
+          { id: 8014, name: "E-commerce Templates" },
+        ],
+      },
+      {
+        id: 802,
+        name: "CMS Themes",
+        children: [
+          { id: 8021, name: "WordPress Themes" },
+          { id: 8022, name: "Shopify Themes" },
+          { id: 8023, name: "Magento Themes" },
+          { id: 8024, name: "WooCommerce" },
+        ],
+      },
+      {
+        id: 803,
+        name: "Scripts & Code",
+        children: [
+          { id: 8031, name: "PHP Scripts" },
+          { id: 8032, name: "JavaScript & React" },
+          { id: 8033, name: "Python & Mobile Apps" },
+          { id: 8034, name: "Plugins & Addons" },
+        ],
+      },
+    ],
   },
 ];
 
@@ -232,31 +499,54 @@ function CategorySelectDropdown({
         return (
           <div key={node.id} className="text-[13px]">
             <div
-              onClick={() => handleSelect(fullPath)}
-              className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 transition-colors group select-none"
+              className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 transition-colors group select-none"
+              onClick={(e) => {
+                if (hasChildren) {
+                  toggleExpand(node.id, e);
+                } else {
+                  handleSelect(fullPath);
+                }
+              }}
             >
-              {hasChildren ? (
+              <div className="flex items-center min-w-0">
+                {hasChildren ? (
+                  <button
+                    type="button"
+                    onClick={(e) => toggleExpand(node.id, e)}
+                    className="p-1 -ml-1 mr-1 text-gray-400 hover:text-gray-700 focus:outline-none"
+                    title={isExpanded ? "Collapse parts" : "Expand parts"}
+                  >
+                    <ChevronRight
+                      className={`w-3.5 h-3.5 transition-transform duration-150 ${
+                        isExpanded ? "rotate-90 text-[#00a65a]" : ""
+                      }`}
+                    />
+                  </button>
+                ) : (
+                  <span className="w-4 mr-1" />
+                )}
+                <span className="truncate group-hover:text-black font-medium">
+                  {node.name} <span className="text-gray-400 font-normal">· #{node.id}</span>
+                </span>
+              </div>
+
+              {hasChildren && (
                 <button
                   type="button"
-                  onClick={(e) => toggleExpand(node.id, e)}
-                  className="mr-2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelect(fullPath);
+                  }}
+                  className="opacity-0 group-hover:opacity-100 text-[11px] font-semibold text-[#0088cc] hover:underline px-2 py-0.5 rounded bg-blue-50 border border-blue-200 ml-2 shrink-0 transition-opacity"
+                  title="Select this entire parent category"
                 >
-                  <ChevronRight
-                    className={`w-3.5 h-3.5 transition-transform duration-150 ${
-                      isExpanded ? "rotate-90 text-gray-700" : ""
-                    }`}
-                  />
+                  Select this
                 </button>
-              ) : (
-                <span className="w-3.5 mr-2" />
               )}
-              <span className="group-hover:text-black">
-                {node.name} <span className="text-gray-400">· #{node.id}</span>
-              </span>
             </div>
 
             {hasChildren && isExpanded && (
-              <div className="pl-5 border-l border-gray-100 ml-4">
+              <div className="pl-4 border-l border-gray-100 ml-3">
                 {renderNodes(node.children!, fullPath)}
               </div>
             )}

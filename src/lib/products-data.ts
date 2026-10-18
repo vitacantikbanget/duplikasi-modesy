@@ -23,7 +23,9 @@ export interface ProductItem {
   price: number | "Free" | "Request a Quote";
   originalPrice?: number | null;
   discount?: number | null;
-  productType: "physical" | "digital" | "license_key" | "quote";
+  productType: "physical" | "digital" | "license_key" | "quote" | "ordinary";
+  condition?: "New" | "Used - Like New" | "Used - Good" | "Used - Fair";
+  listingType?: "sale" | "ordinary" | "quote" | "license";
   stock: number;
   sku: string;
   rating: number;
@@ -63,13 +65,14 @@ export const ALL_PRODUCTS: ProductItem[] = [
     originalPrice: 906567.75,
     discount: 13,
     productType: "physical",
+    condition: "New",
     stock: 24,
     sku: "SKU-BMS-001",
     rating: 4.8,
     reviewsCount: 14,
     images: [
       "/images/products/black-midi-skirt.webp",
-      "/images/products/black-midi-skirt.webp"
+      "https://images.unsplash.com/photo-1583496661160-c588c4af16b2?w=500&q=80"
     ],
     colors: [
       { name: "Black Floral", hex: "#1a1a1a" },
@@ -140,13 +143,14 @@ export const ALL_PRODUCTS: ProductItem[] = [
     originalPrice: 1137330.45,
     discount: 14,
     productType: "physical",
+    condition: "Used - Like New",
     stock: 12,
     sku: "SKU-HDP-002",
     rating: 5.0,
     reviewsCount: 8,
     images: [
       "/images/products/decorative-pillow.webp",
-      "/images/products/decorative-pillow.webp"
+      "/images/products/decorative-pillow-2.webp"
     ],
     colors: [
       { name: "Mustard Gold", hex: "#e5a93c" },
@@ -207,7 +211,7 @@ export const ALL_PRODUCTS: ProductItem[] = [
     reviewsCount: 19,
     images: [
       "/images/products/floral-sundress.webp",
-      "/images/products/floral-sundress.webp"
+      "/images/products/floral-sundress-2.webp"
     ],
     colors: [
       { name: "Sunshine Yellow", hex: "#f4c430" },
@@ -255,7 +259,7 @@ export const ALL_PRODUCTS: ProductItem[] = [
     reviewsCount: 6,
     images: [
       "/images/products/sun-hat.webp",
-      "/images/products/sun-hat.webp"
+      "https://images.unsplash.com/photo-1572307480813-ceb0e59d8325?w=500&q=80"
     ],
     vendor: {
       name: "Trendshop",
@@ -294,13 +298,14 @@ export const ALL_PRODUCTS: ProductItem[] = [
     originalPrice: 1648305,
     discount: 11,
     productType: "physical",
+    condition: "Used - Good",
     stock: 35,
     sku: "SKU-SNK-005",
     rating: 4.8,
     reviewsCount: 22,
     images: [
       "/images/products/sneaker-shoes.webp",
-      "/images/products/sneaker-shoes.webp"
+      "/images/products/black-sneakers-2.webp"
     ],
     colors: [
       { name: "Vibrant Crimson Red", hex: "#e63946" },
@@ -402,7 +407,8 @@ export const ALL_PRODUCTS: ProductItem[] = [
     rating: 5.0,
     reviewsCount: 12,
     images: [
-      "/images/products/piano-music.webp"
+      "/images/products/piano-music.webp",
+      "https://images.unsplash.com/photo-1520523839898-50712825e3a7?w=500&q=80"
     ],
     vendor: {
       name: "Admin",
@@ -446,7 +452,8 @@ export const ALL_PRODUCTS: ProductItem[] = [
     rating: 5.0,
     reviewsCount: 18,
     images: [
-      "/images/products/vacation-spots.webp"
+      "/images/products/vacation-spots.webp",
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80"
     ],
     vendor: {
       name: "Trendshop",
@@ -488,7 +495,8 @@ export const ALL_PRODUCTS: ProductItem[] = [
     rating: 5.0,
     reviewsCount: 7,
     images: [
-      "/images/products/light-blue-shirt.webp"
+      "/images/products/light-blue-shirt.webp",
+      "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=500&q=80"
     ],
     colors: [
       { name: "Pastel Light Blue", hex: "#a0c4e2" },
@@ -536,7 +544,8 @@ export const ALL_PRODUCTS: ProductItem[] = [
     rating: 5.0,
     reviewsCount: 11,
     images: [
-      "/images/products/summer-top.webp"
+      "/images/products/summer-top.webp",
+      "/images/products/summer-top-2.webp"
     ],
     colors: [
       { name: "Ivory White", hex: "#fffff0" },
@@ -583,7 +592,8 @@ export const ALL_PRODUCTS: ProductItem[] = [
     rating: 5.0,
     reviewsCount: 13,
     images: [
-      "/images/products/animal-prints.webp"
+      "/images/products/animal-prints.webp",
+      "/images/products/animal-prints-2.webp"
     ],
     vendor: {
       name: "Trendshop",
@@ -620,12 +630,14 @@ export const ALL_PRODUCTS: ProductItem[] = [
     originalPrice: 1137330.45,
     discount: 20,
     productType: "physical",
+    condition: "Used - Like New",
     stock: 8,
     sku: "SKU-GBP-014",
     rating: 4.9,
     reviewsCount: 29,
     images: [
-      "/images/products/gucci-backpack.webp"
+      "/images/products/gucci-backpack.webp",
+      "/images/products/gucci-backpack-2.webp"
     ],
     colors: [
       { name: "Black Onyx", hex: "#0a0a0a" }
@@ -664,6 +676,109 @@ export const ALL_PRODUCTS: ProductItem[] = [
         comment: "Tas sangat kuat dan jahitannya presisi. Muat laptop dan pakaian untuk trip 2 hari!"
       }
     ]
+  },
+  {
+    id: "u1",
+    slug: "vintage-leather-jacket",
+    title: "Vintage 90s Distressed Biker Leather Jacket",
+    category: "Clothing",
+    categorySlug: "clothing",
+    subcategory: "Men's Clothing",
+    subcategorySlug: "mens-clothing",
+    price: 1250000,
+    originalPrice: 2800000,
+    discount: 55,
+    productType: "ordinary",
+    condition: "Used - Good",
+    listingType: "ordinary",
+    stock: 1,
+    sku: "USED-VLJ-099",
+    rating: 5.0,
+    reviewsCount: 4,
+    images: [
+      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80",
+      "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=800&q=80"
+    ],
+    colors: [
+      { name: "Distressed Brown", hex: "#4a3525" }
+    ],
+    sizes: ["L"],
+    vendor: {
+      name: "Trendshop",
+      slug: "trendshop",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80",
+      rating: 4.9,
+      joinedDate: "Jan 2024",
+      location: "Yogyakarta, Indonesia",
+      verified: true
+    },
+    description: `
+      Authentic 1990s heavyweight cowhide biker leather jacket with natural distressing and patina. 
+      Heavy duty YKK zippers, quilted satin lining, and classic asymmetrical zip closure. 
+      Dijual karena koleksi pribadi, kondisi sangat terawat tanpa sobek. Hubungi langsung via WhatsApp atau chat untuk nego dan COD di Yogya.
+    `,
+    specs: [
+      { label: "Material", value: "Genuine Heavyweight Cowhide" },
+      { label: "Era", value: "1990s Vintage" },
+      { label: "Condition", value: "Used - Good (Authentic Patina)" },
+      { label: "Fit", value: "Regular Mens Large" }
+    ],
+    shippingInfo: {
+      estimatedDelivery: "2 - 4 Business Days / COD Available",
+      shippingCost: "Standard shipping or local pickup",
+      returnPolicy: "As-is pre-owned classified item"
+    },
+    reviews: []
+  },
+  {
+    id: "u2",
+    slug: "canon-dslr-camera-set",
+    title: "Canon EOS DSLR Camera + 18-55mm IS II Lens Kit (Pre-owned)",
+    category: "Graphics & Photos",
+    categorySlug: "graphics-photos",
+    subcategory: "Cameras",
+    subcategorySlug: "cameras",
+    price: 3600000,
+    originalPrice: 6500000,
+    discount: 45,
+    productType: "ordinary",
+    condition: "Used - Like New",
+    listingType: "ordinary",
+    stock: 1,
+    sku: "USED-CAM-101",
+    rating: 5.0,
+    reviewsCount: 9,
+    images: [
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80",
+      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800&q=80"
+    ],
+    vendor: {
+      name: "Admin",
+      slug: "admin",
+      avatar: "https://i.pravatar.cc/150?u=admin",
+      rating: 5.0,
+      joinedDate: "2023",
+      location: "Jakarta Barat, Indonesia",
+      verified: true
+    },
+    description: `
+      Kamera Canon EOS DSLR lengkap dengan lensa kit 18-55mm IS II. 
+      Shutter count rendah (sekitar 3.500 shot), sensor bersih bebas jamur, optik lensa bening. 
+      Kelengkapan: Body, Lensa, Baterai Original, Charger, Strap, Dus & Buku lengkap.
+      Menerima COD area Jakarta Barat atau pengiriman berasuransi dengan packing kayu.
+    `,
+    specs: [
+      { label: "Sensor", value: "24.2 MP APS-C CMOS" },
+      { label: "Lens", value: "EF-S 18-55mm f/3.5-5.6 IS II" },
+      { label: "Shutter Count", value: "~3,500 shots" },
+      { label: "Condition", value: "Used - Like New (98% mulus)" }
+    ],
+    shippingInfo: {
+      estimatedDelivery: "1 - 3 Business Days with Insurance",
+      shippingCost: "Free Delivery Jakarta Area",
+      returnPolicy: "3 days inspection warranty"
+    },
+    reviews: []
   }
 ];
 

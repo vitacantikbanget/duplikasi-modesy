@@ -12,6 +12,8 @@ import {
   LayoutGrid,
   Wallet,
   ShoppingBag,
+  ShoppingBasket,
+  Layers,
   Tag,
   MessageSquare,
   Settings,
@@ -19,10 +21,24 @@ import {
   Shield,
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAppContext, currencies, languages, countries, countryStates, UserRole } from "@/contexts/AppContext";
 import { createClient } from "@/lib/supabase/client";
+import { ALL_PRODUCTS, ProductItem } from "@/lib/products-data";
+import { cn } from "@/lib/utils";
+
+const SEARCH_CATEGORIES = [
+  { name: "All Categories", slug: "all" },
+  { name: "Clothing", slug: "clothing" },
+  { name: "Shoes", slug: "shoes" },
+  { name: "Home & Living", slug: "home-living" },
+  { name: "Jewelry & Accessories", slug: "jewelry-accessories" },
+  { name: "Toys & Entertainment", slug: "toys-entertainment" },
+  { name: "Graphics & Photos", slug: "graphics-photos" },
+  { name: "Video & Audio", slug: "video-audio" },
+  { name: "Web Templates & Code", slug: "web-templates-code" },
+];
 
 export default function Navbar() {
   const [mounted, setMounted] = useState(false);
@@ -38,6 +54,74 @@ export default function Navbar() {
   const [stateSearch, setStateSearch] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
+
+  // Live AJAX Search states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchCategory, setSearchCategory] = useState("all");
+  const [searchCategoryLabel, setSearchCategoryLabel] = useState("All Categories");
+  const [searchCategoryOpen, setSearchCategoryOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<ProductItem[]>([]);
+  const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const mobileSearchRef = useRef<HTMLDivElement>(null);
+
+  // Close search dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(e.target as Node)
+      ) {
+        setSearchDropdownOpen(false);
+        setSearchCategoryOpen(false);
+      }
+      if (
+        mobileSearchRef.current &&
+        !mobileSearchRef.current.contains(e.target as Node)
+      ) {
+        setMobileSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Debounced live search autocomplete matching Modesy
+  useEffect(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (q.length >= 2) {
+      const filtered = ALL_PRODUCTS.filter((p) => {
+        const matchesQuery =
+          p.title.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          (p.subcategory && p.subcategory.toLowerCase().includes(q));
+
+        if (searchCategory === "all") return matchesQuery;
+        return (
+          matchesQuery &&
+          p.categorySlug.toLowerCase() === searchCategory.toLowerCase()
+        );
+      });
+      setSearchResults(filtered.slice(0, 6));
+      setSearchDropdownOpen(true);
+    } else {
+      setSearchResults([]);
+      setSearchDropdownOpen(false);
+    }
+  }, [searchQuery, searchCategory]);
+
+  const handleSearchSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!searchQuery.trim()) return;
+    setSearchDropdownOpen(false);
+    setMobileSearchOpen(false);
+    const catParam =
+      searchCategory !== "all" ? `&category=${searchCategory}` : "";
+    router.push(
+      `/products?search=${encodeURIComponent(searchQuery.trim())}${catParam}`
+    );
+  };
 
   // Login states (Prefilled with demo credentials)
   const [email, setEmail] = useState("trendshop@codingest.net");
@@ -152,21 +236,21 @@ export default function Navbar() {
     <>
       <header className="w-full bg-white border-b border-gray-200 relative z-40">
         {/* Topbar */}
-        <div className="border-b border-gray-100 text-gray-500 text-xs py-1.5 hidden md:block bg-white">
+        <div className="border-b border-[#f1f3f5] text-[#6c757d] text-[12px] py-1.5 hidden md:block bg-white">
           <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-            <div className="flex gap-4" suppressHydrationWarning>
-              <Link href="/contact" suppressHydrationWarning className="hover:text-brand-primary py-1 transition-colors">{t("contact")}</Link>
-              <Link href="/sell-on-modesy" suppressHydrationWarning className="hover:text-brand-primary py-1 transition-colors">{t("sell_on_modesy")}</Link>
+            <div className="flex gap-5" suppressHydrationWarning>
+              <Link href="/contact" suppressHydrationWarning className="hover:text-[#00a699] py-1 transition-colors">{t("contact")}</Link>
+              <Link href="/sell-on-modesy" suppressHydrationWarning className="hover:text-[#00a699] py-1 transition-colors">{t("sell_on_modesy")}</Link>
             </div>
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-5 items-center">
 
               {/* Location Button (Opens Modal) */}
               <div className="flex items-center gap-2 py-1">
                 <div
                   onClick={() => setLocationModalOpen(true)}
-                  className="group cursor-pointer flex items-center gap-1 hover:text-brand-primary transition-colors"
+                  className="group cursor-pointer flex items-center gap-1 hover:text-[#00a699] transition-colors"
                 >
-                  <MapPin className="w-3 h-3" /> {location === "Location" ? t("location") : location}
+                  <MapPin className="w-3.5 h-3.5 text-[#6c757d]" /> {location === "Location" ? t("location") : location}
                 </div>
                 {location !== "Location" && (
                   <button
@@ -183,28 +267,28 @@ export default function Navbar() {
 
               {/* Currency Dropdown */}
               <div className="relative group cursor-pointer py-1">
-                <div className="flex items-center gap-1 hover:text-brand-primary transition-colors">
-                  {currency.label} <ChevronDown className="w-3 h-3" />
+                <div className="flex items-center gap-1 hover:text-[#00a699] transition-colors">
+                  {currency.label} <ChevronDown className="w-3 h-3 text-[#6c757d]" />
                 </div>
                 <div className="absolute top-full left-0 hidden group-hover:block w-32 bg-white border border-gray-100 shadow-lg rounded-md py-1 mt-0 z-50">
                   {currencies.map((c) => (
-                    <div key={c.code} onClick={() => setCurrency(c)} className="px-4 py-2 hover:bg-gray-50 hover:text-brand-primary transition-colors">{c.label}</div>
+                    <div key={c.code} onClick={() => setCurrency(c)} className="px-4 py-2 hover:bg-gray-50 hover:text-[#00a699] transition-colors">{c.label}</div>
                   ))}
                 </div>
               </div>
 
               {/* Language Dropdown */}
               <div className="relative group cursor-pointer py-1">
-                <div className="flex items-center gap-1 hover:text-brand-primary transition-colors">
+                <div className="flex items-center gap-1 hover:text-[#00a699] transition-colors">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={language.flagUrl} alt={language.label} className="w-[18px] h-auto object-contain rounded-sm" />
-                  {language.label} <ChevronDown className="w-3 h-3" />
+                  <img src={language.flagUrl} alt={language.label} className="w-[16px] h-auto object-contain rounded-2xs" />
+                  {language.label} <ChevronDown className="w-3 h-3 text-[#6c757d]" />
                 </div>
                 <div className="absolute top-full right-0 hidden group-hover:block w-32 bg-white border border-gray-100 shadow-lg rounded-md py-1 mt-0 z-50">
                   {languages.map((l) => (
-                    <div key={l.code} onClick={() => setLanguage(l)} className="px-4 py-2 hover:bg-gray-50 hover:text-brand-primary transition-colors flex items-center gap-2">
+                    <div key={l.code} onClick={() => setLanguage(l)} className="px-4 py-2 hover:bg-gray-50 hover:text-[#00a699] transition-colors flex items-center gap-2">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={l.flagUrl} alt={l.label} className="w-[18px] h-auto object-contain rounded-sm" />
+                      <img src={l.flagUrl} alt={l.label} className="w-[16px] h-auto object-contain rounded-2xs" />
                       {l.label}
                     </div>
                   ))}
@@ -217,7 +301,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => setLoginModalOpen(true)}
-                    className="hover:text-brand-primary flex items-center gap-1 cursor-pointer transition-colors"
+                    className="hover:text-[#00a699] flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     <User className="w-3.5 h-3.5" />
                     <span>Login</span>
@@ -225,55 +309,106 @@ export default function Navbar() {
                   <span className="text-gray-300">/</span>
                   <Link
                     href="/register"
-                    className="hover:text-brand-primary cursor-pointer transition-colors"
+                    className="hover:text-[#00a699] cursor-pointer transition-colors"
                   >
                     Register
                   </Link>
                 </div>
-              ) : role === "admin" || role === "super_admin" ? (
+              ) : role === "admin" || role === "super_admin" || role === "moderator" ? (
                 <div className="flex items-center gap-1">
                   <div className="relative group cursor-pointer py-1">
-                    <div className="flex items-center gap-1.5 hover:text-blue-600 font-medium text-gray-700 transition-colors">
+                    <div className="flex items-center gap-1.5 hover:text-[#00a699] font-medium text-[#2c333e] transition-colors">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="https://i.pravatar.cc/150?u=admin"
                         alt="Admin"
-                        className="w-5 h-5 rounded-full object-cover border border-blue-500"
+                        className="w-5 h-5 rounded-full object-cover"
                       />
-                      <span className="font-semibold text-gray-800">Super Admin</span>
-                      <span className="bg-blue-100 text-blue-800 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Admin</span>
-                      <ChevronDown className="w-3 h-3 text-gray-500" />
+                      <span className="text-[12px] font-semibold text-[#2c333e]">Admin</span>
+                      <ChevronDown className="w-3 h-3 text-[#6c757d]" />
                     </div>
-                    <div className="absolute top-full right-0 hidden group-hover:block w-[200px] bg-white border border-[#e9ecef] shadow-lg rounded-[2px] py-1 mt-0 z-50 text-[13px] text-[#495057] animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute top-full right-0 hidden group-hover:block w-[185px] bg-white border border-[#e9ecef] shadow-lg rounded-[4px] py-1.5 mt-0 z-50 text-[13px] text-[#495057] animate-in fade-in zoom-in-95 duration-100">
+                      {/* 1. Admin Panel */}
                       <Link
                         href="/admin"
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#212529] transition-colors"
                       >
-                        <Shield className="w-4 h-4 text-blue-600 shrink-0" strokeWidth={1.5} />
-                        <span className="font-semibold text-blue-700">Admin Panel</span>
+                        <Layers className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>Admin Panel</span>
                       </Link>
+
+                      {/* 2. Dashboard */}
                       <Link
                         href="/dashboard"
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#212529] transition-colors"
                       >
                         <LayoutGrid className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>Vendor Dashboard</span>
+                        <span>Dashboard</span>
                       </Link>
+
+                      {/* 3. Profile */}
                       <Link
-                        href="/admin/settings"
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                        href="/profile/admin"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#212529] transition-colors"
+                      >
+                        <User className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>Profile</span>
+                      </Link>
+
+                      {/* 4. Wallet */}
+                      <Link
+                        href="/wallet"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#212529] transition-colors"
+                      >
+                        <Wallet className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>Wallet</span>
+                      </Link>
+
+                      {/* 5. Orders */}
+                      <Link
+                        href="/orders"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#212529] transition-colors"
+                      >
+                        <ShoppingBasket className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>Orders</span>
+                      </Link>
+
+                      {/* 6. My Coupons */}
+                      <Link
+                        href="/my-coupons"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#212529] transition-colors"
+                      >
+                        <Tag className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>My Coupons</span>
+                      </Link>
+
+                      {/* 7. Messages */}
+                      <Link
+                        href="/messages"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#212529] transition-colors"
+                      >
+                        <MessageSquare className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>Messages</span>
+                      </Link>
+
+                      {/* 8. Profile Settings */}
+                      <Link
+                        href="/settings/edit-profile"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#212529] transition-colors"
                       >
                         <Settings className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>General Settings</span>
+                        <span>Profile Settings</span>
                       </Link>
+
+                      {/* 9. Logout */}
                       <div className="border-t border-[#f1f3f5] my-1" />
                       <button
                         type="button"
                         onClick={() => logout()}
-                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors text-left cursor-pointer"
+                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#212529] transition-colors text-left cursor-pointer"
                       >
                         <LogOut className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>Logout (Keluar)</span>
+                        <span>Logout</span>
                       </button>
                     </div>
                   </div>
@@ -289,23 +424,58 @@ export default function Navbar() {
                         className="w-5 h-5 rounded-full object-cover border border-gray-300"
                       />
                       <span className="font-semibold text-gray-800">John Doe</span>
-                      <span className="bg-gray-100 text-gray-700 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Member</span>
+                      <span className="bg-sky-100 text-sky-800 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Member</span>
                       <ChevronDown className="w-3 h-3 text-gray-500" />
                     </div>
-                    <div className="absolute top-full right-0 hidden group-hover:block w-[190px] bg-white border border-[#e9ecef] shadow-lg rounded-[2px] py-1 mt-0 z-50 text-[13px] text-[#495057] animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute top-full right-0 hidden group-hover:block w-[210px] bg-white border border-[#e9ecef] shadow-lg rounded-[2px] py-1 mt-0 z-50 text-[13px] text-[#495057] animate-in fade-in zoom-in-95 duration-100">
                       <Link
-                        href="/dashboard/sales"
+                        href="/orders"
                         className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
                       >
                         <ShoppingBag className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>Orders</span>
+                        <span>Orders (Pesanan)</span>
+                      </Link>
+                      <Link
+                        href="/wallet"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                      >
+                        <Wallet className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>Wallet (Dompet)</span>
+                      </Link>
+                      <Link
+                        href="/my-coupons"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                      >
+                        <Tag className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>My Coupons</span>
                       </Link>
                       <Link
                         href="/messages"
                         className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
                       >
                         <MessageSquare className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>Messages</span>
+                        <span>Messages (Pesan)</span>
+                      </Link>
+                      <Link
+                        href="/wishlist"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                      >
+                        <Heart className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>Wishlist (Favorit)</span>
+                      </Link>
+                      <Link
+                        href="/settings/edit-profile"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                      >
+                        <Settings className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <span>Profile Settings</span>
+                      </Link>
+                      <Link
+                        href="/sell-on-modesy"
+                        className="flex items-center gap-3 px-4 py-2 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition-colors font-medium"
+                      >
+                        <ShoppingBag className="w-4 h-4 text-emerald-700 shrink-0" strokeWidth={1.5} />
+                        <span>Start Selling (Buka Toko)</span>
                       </Link>
                       <div className="border-t border-[#f1f3f5] my-1" />
                       <button
@@ -414,75 +584,220 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <span className="text-3xl md:text-4xl font-bold tracking-tight text-gray-800">
-              Mode<span className="text-brand-primary">sy</span>
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/logo.svg"
+              alt="Modesy"
+              width={160}
+              height={60}
+              className="w-[140px] md:w-[160px] h-auto object-contain"
+            />
           </Link>
 
-          {/* Search Bar */}
-          <div className="flex-1 max-w-2xl hidden md:block">
-            <div className="flex w-full bg-[#f4f4f4] rounded-md overflow-hidden border border-transparent focus-within:border-brand-primary focus-within:bg-white transition-all h-11">
+          {/* Search Bar matching Modesy live screenshot exactly */}
+          <div ref={searchContainerRef} className="flex-1 max-w-2xl hidden md:block relative">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="flex items-center w-full bg-[#f4f5f7] rounded-[4px] px-4 h-11 border border-transparent focus-within:border-[#00a699] focus-within:bg-white transition-all relative"
+            >
               <input
                 type="text"
-                placeholder={t("search_placeholder")}
-                className="flex-1 px-4 text-sm bg-transparent outline-none text-gray-700 placeholder-gray-400"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => {
+                  if (searchQuery.trim().length >= 2) setSearchDropdownOpen(true);
+                }}
+                placeholder="Search for products, categories or brands"
+                className="flex-1 text-[13.5px] bg-transparent outline-none text-[#2c333e] placeholder:text-[#888888] font-normal"
               />
-              <button className="px-5 text-gray-400 hover:text-white hover:bg-brand-primary transition-colors flex items-center justify-center">
-                <Search className="w-5 h-5" />
+
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="px-1 text-gray-400 hover:text-gray-600 transition-colors mr-1 cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+
+              <button
+                type="submit"
+                className="text-gray-400 hover:text-[#00a699] transition-colors flex items-center justify-center p-1 cursor-pointer"
+                title="Search"
+              >
+                <Search className="w-4 h-4 text-[#888888]" />
               </button>
-            </div>
+            </form>
+
+            {/* Live Search AJAX Dropdown (#response_search_results) */}
+            {searchDropdownOpen && (
+              <div
+                id="response_search_results"
+                className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#dcdfe3] rounded-[3px] shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150"
+              >
+                {searchResults.length > 0 ? (
+                  <div>
+                    <div className="px-4 py-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 flex justify-between items-center">
+                      <span>Products</span>
+                      <span>{searchResults.length} match{searchResults.length > 1 ? "es" : ""}</span>
+                    </div>
+                    <div className="divide-y divide-gray-50 max-h-80 overflow-y-auto">
+                      {searchResults.map((item) => (
+                        <Link
+                          key={item.id}
+                          href={`/product/${item.slug}`}
+                          onClick={() => setSearchDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#f8f9fa] transition-colors group"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={item.images?.[0] || "/images/products/placeholder.webp"}
+                            alt={item.title}
+                            className="w-10 h-10 rounded-[2px] object-cover border border-gray-200 shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-xs font-semibold text-gray-800 group-hover:text-[#00a699] truncate transition-colors">
+                              {item.title}
+                            </h4>
+                            <span className="text-[11px] text-gray-400">
+                              {item.category}
+                            </span>
+                          </div>
+                          <div className="text-xs font-bold text-[#00a699] shrink-0">
+                            ${typeof item.price === "number" ? item.price : 49}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="p-2 border-t border-gray-100 bg-gray-50/70">
+                      <button
+                        type="button"
+                        onClick={() => handleSearchSubmit()}
+                        className="w-full text-center text-xs font-semibold text-[#00a699] hover:underline py-1 cursor-pointer"
+                      >
+                        See all results for &quot;{searchQuery}&quot; →
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="px-4 py-6 text-center text-xs text-gray-500">
+                    No products found matching &quot;{searchQuery}&quot;
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-4 md:gap-6 flex-shrink-0">
-            <Link href="/cart" className="flex items-center gap-2 text-gray-600 hover:text-brand-primary transition-colors group">
+          {/* Actions matching Modesy screenshot exactly */}
+          <div className="flex items-center gap-6 flex-shrink-0">
+            {/* Cart with red counter badge and text */}
+            <Link
+              href="/cart"
+              className="flex items-center gap-2 text-[#495057] hover:text-[#00a699] transition-colors group"
+            >
               <div className="relative">
-                <ShoppingCart className="w-6 h-6 md:w-7 md:h-7 group-hover:scale-110 transition-transform" />
-                {mounted && cartCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center border border-white">
-                    {cartCount}
+                <ShoppingCart className="w-6 h-6 text-[#495057] stroke-[1.6]" />
+                {mounted && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-[#e74c3c] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white leading-none">
+                    {cartCount > 0 ? cartCount : 1}
                   </span>
                 )}
               </div>
-              <span className="text-sm font-medium hidden lg:block">{t("cart")}</span>
+              <span className="text-[13.5px] font-medium text-[#495057]">Cart</span>
             </Link>
 
-            <Link href="/wishlist" className="hidden sm:flex items-center gap-2 text-gray-600 hover:text-brand-primary transition-colors group">
+            {/* Wishlist with heart icon and text */}
+            <Link
+              href="/wishlist"
+              className="hidden sm:flex items-center gap-2 text-[#495057] hover:text-[#00a699] transition-colors group"
+            >
               <div className="relative">
-                <Heart className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                <Heart className="w-6 h-6 text-[#495057] stroke-[1.6]" />
                 {mounted && wishlistCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center border border-white">
+                  <span className="absolute -top-1.5 -right-1.5 bg-[#e74c3c] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white leading-none">
                     {wishlistCount}
                   </span>
                 )}
               </div>
-              <span className="text-sm font-medium hidden lg:block">{t("wishlist")}</span>
+              <span className="text-[13.5px] font-medium text-[#495057]">Wishlist</span>
             </Link>
 
+            {/* Sell Now solid teal button */}
             <Link
               href="/dashboard/vendor/products/new"
-              className="hidden md:flex items-center justify-center bg-[#00a699] text-white px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#00897b] transition-colors shadow-sm active:scale-95"
+              className="hidden md:flex items-center justify-center bg-[#00a699] hover:bg-[#008f84] text-white px-5 py-2.5 rounded-[3px] text-[13.5px] font-semibold transition-colors shadow-2xs active:scale-95"
             >
-              {t("sell_now")}
+              Sell Now
             </Link>
 
             {/* Mobile Search Icon */}
-            <button className="md:hidden text-gray-600 hover:text-[#00a699] p-1">
+            <button
+              type="button"
+              onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+              className="md:hidden text-gray-600 hover:text-[#00a699] p-1 cursor-pointer"
+              aria-label="Toggle Search"
+            >
               <Search className="w-6 h-6" />
             </button>
           </div>
         </div>
 
+        {/* Mobile Search Drawer */}
+        {mobileSearchOpen && (
+          <div ref={mobileSearchRef} className="md:hidden px-4 pb-3 bg-white border-b border-gray-200">
+            <form onSubmit={handleSearchSubmit} className="flex w-full bg-[#f4f4f4] rounded-[3px] border border-[#dcdfe3] h-10 overflow-hidden">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t("search_placeholder")}
+                className="flex-1 px-3 text-xs bg-transparent outline-none text-gray-700"
+                autoFocus
+              />
+              <button
+                type="submit"
+                className="px-4 bg-[#00a99d] text-white flex items-center justify-center cursor-pointer"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+            </form>
+
+            {/* Mobile live search dropdown */}
+            {searchResults.length > 0 && (
+              <div className="mt-2 bg-white border border-gray-200 rounded shadow-lg max-h-60 overflow-y-auto divide-y divide-gray-100">
+                {searchResults.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/product/${item.slug}`}
+                    onClick={() => setMobileSearchOpen(false)}
+                    className="flex items-center gap-2 p-2 hover:bg-gray-50 text-xs"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={item.images?.[0] || "/images/products/placeholder.webp"}
+                      alt={item.title}
+                      className="w-8 h-8 rounded object-cover"
+                    />
+                    <span className="flex-1 truncate font-medium text-gray-800">{item.title}</span>
+                    <span className="font-bold text-[#00a99d]">${typeof item.price === "number" ? item.price : 49}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 shadow-lg py-4 px-4 flex flex-col gap-4">
+          <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 shadow-lg py-4 px-4 flex flex-col gap-4 z-40">
             <Link href="/login" className="flex items-center gap-2 text-gray-700 p-2 hover:bg-gray-50 rounded"><User className="w-5 h-5" /> {t("login")} / {t("register")}</Link>
             <div className="h-px bg-gray-100 w-full"></div>
-            <Link href="#" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.clothing")}</Link>
-            <Link href="#" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.shoes")}</Link>
-            <Link href="#" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.home_living")}</Link>
-            <Link href="#" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.jewelry")}</Link>
-            <Link href="#" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.toys")}</Link>
+            <Link href="/clothing" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.clothing")}</Link>
+            <Link href="/shoes" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.shoes")}</Link>
+            <Link href="/home-living" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.home_living")}</Link>
+            <Link href="/jewelry-accessories" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.jewelry")}</Link>
+            <Link href="/toys-entertainment" className="text-gray-700 p-2 hover:bg-gray-50 rounded">{t("categories.toys")}</Link>
             <Link
               href="/dashboard/vendor/products/new"
               className="mt-4 flex items-center justify-center bg-[#00a699] text-white px-4 py-3 rounded-md text-sm font-medium hover:bg-[#00897b] transition-colors"
@@ -492,12 +807,12 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Category Nav Bar (Desktop) */}
-        <div className="hidden md:block pb-4">
-          <div className="max-w-7xl mx-auto px-4 flex justify-center flex-wrap gap-x-6 gap-y-2 text-[13px] font-medium text-gray-600">
+        {/* Category Nav Bar (Desktop) matching screenshot */}
+        <div className="hidden md:block pb-3.5 border-b border-[#f1f3f5]">
+          <div className="max-w-7xl mx-auto px-4 flex justify-center flex-wrap gap-x-7 lg:gap-x-8 text-[13.5px] font-medium text-[#2c333e]">
 
             <div className="group relative">
-              <Link href="#" className="hover:text-brand-primary hover:underline transition-all py-1 block">{t("categories.clothing")}</Link>
+              <Link href="/clothing" className="hover:text-[#00a699] transition-colors py-1.5 block">{t("categories.clothing")}</Link>
 
               {/* Mega Menu */}
               <div className="absolute top-full left-0 -ml-[50px] hidden group-hover:block w-[850px] bg-white border border-gray-100 shadow-xl z-50 p-8 cursor-default mt-4 rounded-sm animate-in fade-in slide-in-from-top-2 duration-200">
@@ -509,41 +824,41 @@ export default function Navbar() {
                   <div className="flex gap-16 flex-1">
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Women's Clothing</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Dresses</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Skirts</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Pants & Capris</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Sweaters</Link>
+                      <Link href="/clothing" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Dresses</Link>
+                      <Link href="/clothing" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Skirts</Link>
+                      <Link href="/clothing" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Pants & Capris</Link>
+                      <Link href="/clothing" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Sweaters</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Men's Clothing</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Jackets & Coats</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Sweaters</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Pants & Jeans</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Shirts</Link>
+                      <Link href="/clothing" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Jackets & Coats</Link>
+                      <Link href="/clothing" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Sweaters</Link>
+                      <Link href="/clothing" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Pants & Jeans</Link>
+                      <Link href="/clothing" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Shirts</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Kid's Clothing</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Clothing Sets</Link>
+                      <Link href="/clothing" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Clothing Sets</Link>
                     </div>
                   </div>
 
                   {/* Images */}
                   <div className="w-[320px] grid grid-cols-2 gap-3">
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/clothing" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=200&fit=crop" alt="Women's Clothing" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Women's Clothing</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/clothing" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=300&h=200&fit=crop" alt="Sweaters" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Sweaters</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/clothing" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=300&h=200&fit=crop" alt="Men's Clothing" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
@@ -557,45 +872,45 @@ export default function Navbar() {
 
             {/* SHOES */}
             <div className="group relative">
-              <Link href="#" className="hover:text-brand-primary hover:underline transition-all py-1 block">{t("categories.shoes")}</Link>
+              <Link href="/shoes" className="hover:text-[#00a699] transition-colors py-1.5 block">{t("categories.shoes")}</Link>
               <div className="absolute top-full left-0 -ml-[50px] hidden group-hover:block w-[850px] bg-white border border-gray-100 shadow-xl z-50 p-8 cursor-default mt-4 rounded-sm animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="absolute -top-4 left-0 w-full h-4 bg-transparent"></div>
                 <div className="flex justify-between gap-8">
                   <div className="flex gap-16 flex-1">
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Men's Shoes</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Sneakers</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Boots</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Loafers</Link>
+                      <Link href="/shoes" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Sneakers</Link>
+                      <Link href="/shoes" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Boots</Link>
+                      <Link href="/shoes" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Loafers</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Women's Shoes</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Heels</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Flats</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Sneakers</Link>
+                      <Link href="/shoes" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Heels</Link>
+                      <Link href="/shoes" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Flats</Link>
+                      <Link href="/shoes" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Sneakers</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Kid's Shoes</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Boys</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Girls</Link>
+                      <Link href="/shoes" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Boys</Link>
+                      <Link href="/shoes" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Girls</Link>
                     </div>
                   </div>
                   <div className="w-[320px] grid grid-cols-2 gap-3">
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/shoes" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&h=200&fit=crop" alt="Shoes" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Sneakers</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/shoes" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&h=200&fit=crop" alt="Heels" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Heels</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/shoes" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src="https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=300&h=200&fit=crop" alt="Boots" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
@@ -609,43 +924,43 @@ export default function Navbar() {
 
             {/* HOME & LIVING */}
             <div className="group relative">
-              <Link href="#" className="hover:text-brand-primary hover:underline transition-all py-1 block">{t("categories.home_living")}</Link>
+              <Link href="/home-living" className="hover:text-[#00a699] transition-colors py-1.5 block">{t("categories.home_living")}</Link>
               <div className="absolute top-full left-0 -ml-[150px] hidden group-hover:block w-[850px] bg-white border border-gray-100 shadow-xl z-50 p-8 cursor-default mt-4 rounded-sm animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="absolute -top-4 left-0 w-full h-4 bg-transparent"></div>
                 <div className="flex justify-between gap-8">
                   <div className="flex gap-16 flex-1">
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Furniture</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Living Room</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Bedroom</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Office</Link>
+                      <Link href="/home-living" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Living Room</Link>
+                      <Link href="/home-living" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Bedroom</Link>
+                      <Link href="/home-living" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Office</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Decor</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Pillows</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Mirrors</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Art</Link>
+                      <Link href="/home-living" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Pillows</Link>
+                      <Link href="/home-living" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Mirrors</Link>
+                      <Link href="/home-living" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Art</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Lighting</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Lamps</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Ceiling</Link>
+                      <Link href="/home-living" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Lamps</Link>
+                      <Link href="/home-living" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Ceiling</Link>
                     </div>
                   </div>
                   <div className="w-[320px] grid grid-cols-2 gap-3">
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/home-living" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop" alt="Living Room" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Living Room</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/home-living" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=300&h=200&fit=crop" alt="Decor" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Decor</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/home-living" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1507452741499-52219468c4d2?w=300&h=200&fit=crop" alt="Lighting" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Lighting</span>
@@ -658,43 +973,43 @@ export default function Navbar() {
 
             {/* JEWELRY */}
             <div className="group relative">
-              <Link href="#" className="hover:text-brand-primary hover:underline transition-all py-1 block">{t("categories.jewelry")}</Link>
+              <Link href="/jewelry-accessories" className="hover:text-[#00a699] transition-colors py-1.5 block">{t("categories.jewelry")}</Link>
               <div className="absolute top-full left-0 -ml-[250px] hidden group-hover:block w-[850px] bg-white border border-gray-100 shadow-xl z-50 p-8 cursor-default mt-4 rounded-sm animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="absolute -top-4 left-0 w-full h-4 bg-transparent"></div>
                 <div className="flex justify-between gap-8">
                   <div className="flex gap-16 flex-1">
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Fine Jewelry</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Rings</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Necklaces</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Bracelets</Link>
+                      <Link href="/jewelry-accessories" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Rings</Link>
+                      <Link href="/jewelry-accessories" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Necklaces</Link>
+                      <Link href="/jewelry-accessories" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Bracelets</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Watches</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Men's Watches</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Women's Watches</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Smartwatches</Link>
+                      <Link href="/jewelry-accessories" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Men's Watches</Link>
+                      <Link href="/jewelry-accessories" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Women's Watches</Link>
+                      <Link href="/jewelry-accessories" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Smartwatches</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Accessories</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Hats</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Belts</Link>
+                      <Link href="/jewelry-accessories" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Hats</Link>
+                      <Link href="/jewelry-accessories" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Belts</Link>
                     </div>
                   </div>
                   <div className="w-[320px] grid grid-cols-2 gap-3">
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/jewelry-accessories" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1599643478524-fb506462a474?w=300&h=200&fit=crop" alt="Rings" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Rings</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/jewelry-accessories" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=300&h=200&fit=crop" alt="Watches" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Watches</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/jewelry-accessories" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=300&h=200&fit=crop" alt="Sunglasses" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Sunglasses</span>
@@ -707,43 +1022,43 @@ export default function Navbar() {
 
             {/* TOYS */}
             <div className="group relative">
-              <Link href="#" className="hover:text-brand-primary hover:underline transition-all py-1 block">{t("categories.toys")}</Link>
+              <Link href="/toys-entertainment" className="hover:text-[#00a699] transition-colors py-1.5 block">{t("categories.toys")}</Link>
               <div className="absolute top-full left-0 -ml-[400px] hidden group-hover:block w-[850px] bg-white border border-gray-100 shadow-xl z-50 p-8 cursor-default mt-4 rounded-sm animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="absolute -top-4 left-0 w-full h-4 bg-transparent"></div>
                 <div className="flex justify-between gap-8">
                   <div className="flex gap-16 flex-1">
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Toys</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Action Figures</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Dolls</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Puzzles</Link>
+                      <Link href="/toys-entertainment" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Action Figures</Link>
+                      <Link href="/toys-entertainment" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Dolls</Link>
+                      <Link href="/toys-entertainment" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Puzzles</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Video Games</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">PlayStation</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Xbox</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Nintendo</Link>
+                      <Link href="/toys-entertainment" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">PlayStation</Link>
+                      <Link href="/toys-entertainment" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Xbox</Link>
+                      <Link href="/toys-entertainment" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Nintendo</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Movies & Music</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">DVDs</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Vinyl</Link>
+                      <Link href="/toys-entertainment" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">DVDs</Link>
+                      <Link href="/toys-entertainment" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Vinyl</Link>
                     </div>
                   </div>
                   <div className="w-[320px] grid grid-cols-2 gap-3">
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/toys-entertainment" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=300&h=200&fit=crop" alt="Toys" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Toys</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/toys-entertainment" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1605901309584-818e25960b8f?w=300&h=200&fit=crop" alt="Video Games" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Video Games</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/toys-entertainment" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=300&h=200&fit=crop" alt="Music" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Music</span>
@@ -756,43 +1071,43 @@ export default function Navbar() {
 
             {/* GRAPHICS */}
             <div className="group relative">
-              <Link href="#" className="hover:text-brand-primary hover:underline transition-all py-1 block">{t("categories.graphics")}</Link>
+              <Link href="/graphics-photos" className="hover:text-[#00a699] transition-colors py-1.5 block">{t("categories.graphics")}</Link>
               <div className="absolute top-full right-0 -mr-[150px] hidden group-hover:block w-[850px] bg-white border border-gray-100 shadow-xl z-50 p-8 cursor-default mt-4 rounded-sm animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="absolute -top-4 left-0 w-full h-4 bg-transparent"></div>
                 <div className="flex justify-between gap-8">
                   <div className="flex gap-16 flex-1">
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Vectors</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Icons</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Illustrations</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Backgrounds</Link>
+                      <Link href="/graphics-photos" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Icons</Link>
+                      <Link href="/graphics-photos" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Illustrations</Link>
+                      <Link href="/graphics-photos" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Backgrounds</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Photos</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Nature</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">People</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Business</Link>
+                      <Link href="/graphics-photos" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Nature</Link>
+                      <Link href="/graphics-photos" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">People</Link>
+                      <Link href="/graphics-photos" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Business</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Fonts</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Serif</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Sans Serif</Link>
+                      <Link href="/graphics-photos" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Serif</Link>
+                      <Link href="/graphics-photos" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Sans Serif</Link>
                     </div>
                   </div>
                   <div className="w-[320px] grid grid-cols-2 gap-3">
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/graphics-photos" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1626785776573-4b799315345d?w=300&h=200&fit=crop" alt="Design" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Design</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/graphics-photos" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=300&h=200&fit=crop" alt="Photography" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Photography</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/graphics-photos" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1616423640778-28d1b53229bd?w=300&h=200&fit=crop" alt="Typography" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Typography</span>
@@ -805,43 +1120,43 @@ export default function Navbar() {
 
             {/* VIDEO */}
             <div className="group relative">
-              <Link href="#" className="hover:text-brand-primary hover:underline transition-all py-1 block">{t("categories.video_audio")}</Link>
+              <Link href="/video-audio" className="hover:text-[#00a699] transition-colors py-1.5 block">{t("categories.video_audio")}</Link>
               <div className="absolute top-full right-0 -mr-[50px] hidden group-hover:block w-[850px] bg-white border border-gray-100 shadow-xl z-50 p-8 cursor-default mt-4 rounded-sm animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="absolute -top-4 left-0 w-full h-4 bg-transparent"></div>
                 <div className="flex justify-between gap-8">
                   <div className="flex gap-16 flex-1">
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Video Templates</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">After Effects</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Premiere Pro</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">DaVinci Resolve</Link>
+                      <Link href="/video-audio" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">After Effects</Link>
+                      <Link href="/video-audio" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Premiere Pro</Link>
+                      <Link href="/video-audio" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">DaVinci Resolve</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Audio</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Music Tracks</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Sound Effects</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Logos & Idents</Link>
+                      <Link href="/video-audio" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Music Tracks</Link>
+                      <Link href="/video-audio" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Sound Effects</Link>
+                      <Link href="/video-audio" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Logos & Idents</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Stock Footage</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Nature</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Urban</Link>
+                      <Link href="/video-audio" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Nature</Link>
+                      <Link href="/video-audio" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Urban</Link>
                     </div>
                   </div>
                   <div className="w-[320px] grid grid-cols-2 gap-3">
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/video-audio" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=300&h=200&fit=crop" alt="Video" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Video</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/video-audio" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=300&h=200&fit=crop" alt="Audio" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Audio</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/video-audio" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=300&h=200&fit=crop" alt="Footage" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Footage</span>
@@ -854,43 +1169,43 @@ export default function Navbar() {
 
             {/* WEB TEMPLATES */}
             <div className="group relative">
-              <Link href="#" className="hover:text-brand-primary hover:underline transition-all py-1 block">{t("categories.web_templates")}</Link>
+              <Link href="/web-templates-code" className="hover:text-[#00a699] transition-colors py-1.5 block">{t("categories.web_templates")}</Link>
               <div className="absolute top-full right-0 hidden group-hover:block w-[850px] bg-white border border-gray-100 shadow-xl z-50 p-8 cursor-default mt-4 rounded-sm animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="absolute -top-4 left-0 w-full h-4 bg-transparent"></div>
                 <div className="flex justify-between gap-8">
                   <div className="flex gap-16 flex-1">
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">HTML Templates</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Admin</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Landing Page</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Portfolio</Link>
+                      <Link href="/web-templates-code" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Admin</Link>
+                      <Link href="/web-templates-code" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Landing Page</Link>
+                      <Link href="/web-templates-code" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Portfolio</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">CMS Themes</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">WordPress</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Shopify</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">Magento</Link>
+                      <Link href="/web-templates-code" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">WordPress</Link>
+                      <Link href="/web-templates-code" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Shopify</Link>
+                      <Link href="/web-templates-code" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">Magento</Link>
                     </div>
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Scripts</h4>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">PHP</Link>
-                      <Link href="#" className="text-gray-500 hover:text-brand-primary hover:underline text-[13px]">JavaScript</Link>
+                      <Link href="/web-templates-code" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">PHP</Link>
+                      <Link href="/web-templates-code" className="text-[#6c757d] hover:text-[#00a699] transition-colors text-[13px]">JavaScript</Link>
                     </div>
                   </div>
                   <div className="w-[320px] grid grid-cols-2 gap-3">
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/web-templates-code" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=300&h=200&fit=crop" alt="Code" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Code</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/web-templates-code" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=300&h=200&fit=crop" alt="Web Design" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Web Design</span>
                       </div>
                     </Link>
-                    <Link href="#" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
+                    <Link href="/web-templates-code" className="relative group/img overflow-hidden rounded bg-gray-100 block h-24">
                       <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=300&h=200&fit=crop" alt="Server" className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/30 transition-colors flex items-end p-2.5">
                         <span className="text-white text-xs font-bold leading-tight">Server</span>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Star, ShoppingCart, Eye } from "lucide-react";
+import { Heart, Star, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAppContext } from "@/contexts/AppContext";
 
@@ -60,7 +60,7 @@ const PRODUCT_HOVER_FALLBACKS: Record<string, string> = {
 };
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { t, formatPrice, toggleWishlist, isInWishlist, addToCart, openQuickView } = useAppContext();
+  const { t, formatPrice, toggleWishlist, isInWishlist, addToCart } = useAppContext();
 
   const vendorName = product.vendorName || product.vendor?.name || "Trendshop";
   const vendorSlug = product.vendor?.slug || vendorName.toLowerCase().replace(/\s+/g, '-');
@@ -114,17 +114,6 @@ export default function ProductCard({ product }: ProductCardProps) {
     e.preventDefault();
     e.stopPropagation();
     toggleWishlist(product.slug);
-  };
-
-  const handleQuickView = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    openQuickView({
-      ...product,
-      imageUrl: defaultImage,
-      hoverImageUrl: hasHoverImage ? hoverImage : undefined,
-      vendorName,
-    });
   };
 
   const isFavorited = isInWishlist(product.slug);
@@ -196,16 +185,6 @@ export default function ProductCard({ product }: ProductCardProps) {
               )}
             />
           </button>
-
-          <button
-            type="button"
-            onClick={handleQuickView}
-            className="action-btn quick-view-btn btn-quick-view"
-            title="Quick View"
-            aria-label="Quick View"
-          >
-            <Eye className="w-4 h-4 text-gray-600 hover:text-black" />
-          </button>
         </div>
       </div>
 
@@ -269,14 +248,17 @@ export default function ProductCard({ product }: ProductCardProps) {
               </Link>
             ) : (
               <>
-                <span className={cn(
-                  "price font-bold text-[15px]",
-                  (product.discount || product.originalPrice) ? "price-green" : "text-gray-900"
-                )}>
+                <span
+                  suppressHydrationWarning
+                  className={cn(
+                    "price font-bold text-[15px]",
+                    (product.discount || product.originalPrice) ? "price-green" : "text-gray-900"
+                  )}
+                >
                   {formatPrice(numericPrice)}
                 </span>
                 {product.originalPrice && (
-                  <del className="discount-original-price">
+                  <del suppressHydrationWarning className="discount-original-price">
                     {formatPrice(product.originalPrice)}
                   </del>
                 )}

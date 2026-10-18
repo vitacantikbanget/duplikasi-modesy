@@ -170,6 +170,30 @@ button {
   animation: slideDown 0.3s ease forwards;
 }
 
+/* Modesy Hero Banner Slider Animations (Triggered on every slide change) */
+@keyframes sliderFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slider-title {
+  animation: sliderFadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.animate-slider-desc {
+  animation: sliderFadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+.animate-slider-btn {
+  animation: sliderFadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+}
+
 /* Modesy Product Card Image & Hover Overlays */
 .multi-image-container .hover-image {
   position: absolute;

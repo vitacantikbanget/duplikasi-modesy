@@ -267,8 +267,8 @@ export default function Navbar() {
 
               {/* Currency Dropdown */}
               <div className="relative group cursor-pointer py-1">
-                <div className="flex items-center gap-1 hover:text-[#00a699] transition-colors">
-                  {currency.label} <ChevronDown className="w-3 h-3 text-[#6c757d]" />
+                <div suppressHydrationWarning className="flex items-center gap-1 hover:text-[#00a699] transition-colors">
+                  {mounted ? currency.label : currencies[0].label} <ChevronDown className="w-3 h-3 text-[#6c757d]" />
                 </div>
                 <div className="absolute top-full left-0 hidden group-hover:block w-32 bg-white border border-gray-100 shadow-lg rounded-md py-1 mt-0 z-50">
                   {currencies.map((c) => (
@@ -279,7 +279,7 @@ export default function Navbar() {
 
               {/* Language Dropdown */}
               <div className="relative group cursor-pointer py-1">
-                <div className="flex items-center gap-1 hover:text-[#00a699] transition-colors">
+                <div suppressHydrationWarning className="flex items-center gap-1 hover:text-[#00a699] transition-colors">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={language.flagUrl} alt={language.label} className="w-[16px] h-auto object-contain rounded-2xs" />
                   {language.label} <ChevronDown className="w-3 h-3 text-[#6c757d]" />

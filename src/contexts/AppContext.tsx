@@ -839,21 +839,28 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [currency, setCurrencyState] = useState(() => {
-    if (typeof window !== "undefined") {
+  const [currency, setCurrencyState] = useState(currencies[0]);
+
+  useEffect(() => {
+    try {
       const saved = localStorage.getItem("modesy_currency");
       if (saved) {
         const found = currencies.find(c => c.code === saved);
-        if (found) return found;
+        if (found) setCurrencyState(found);
       }
+    } catch (e) {
+      console.error(e);
     }
-    return currencies.find(c => c.code === "IDR") || currencies[0];
-  });
+  }, []);
 
   const setCurrency = (c: typeof currencies[0]) => {
     setCurrencyState(c);
     if (typeof window !== "undefined") {
-      localStorage.setItem("modesy_currency", c.code);
+      try {
+        localStorage.setItem("modesy_currency", c.code);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
@@ -946,57 +953,52 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const userProfile = ROLE_PROFILES[role] || null;
 
   // Cart & Wishlist State
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem("modesy_cart");
-        if (saved) return JSON.parse(saved);
-      } catch (e) {
-        console.error(e);
-      }
+  const [cart, setCart] = useState<CartItem[]>([
+    {
+      id: "black-midi-skirt-default",
+      productSlug: "black-midi-skirt",
+      title: "Black midi skirt with white flowers",
+      price: 48,
+      imageUrl: "https://images.unsplash.com/photo-1583496661160-c588c4af16b2?w=500&q=80",
+      quantity: 1,
+      selectedColor: "Black Floral",
+      selectedSize: "M",
+      vendorName: "Trendshop"
     }
-    return [
-      {
-        id: "black-midi-skirt-default",
-        productSlug: "black-midi-skirt",
-        title: "Black midi skirt with white flowers",
-        price: 48,
-        imageUrl: "https://images.unsplash.com/photo-1583496661160-c588c4af16b2?w=500&q=80",
-        quantity: 1,
-        selectedColor: "Black Floral",
-        selectedSize: "M",
-        vendorName: "Trendshop"
-      }
-    ];
-  });
+  ]);
 
-  const [wishlist, setWishlist] = useState<string[]>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem("modesy_wishlist");
-        if (saved) return JSON.parse(saved);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    return ["gucci-backpack"];
-  });
+  const [wishlist, setWishlist] = useState<string[]>(["gucci-backpack"]);
+  const [cartHydrated, setCartHydrated] = useState(false);
 
   useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem("modesy_cart");
+      if (savedCart) setCart(JSON.parse(savedCart));
+      const savedWishlist = localStorage.getItem("modesy_wishlist");
+      if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
+    } catch (e) {
+      console.error(e);
+    }
+    setCartHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!cartHydrated) return;
     try {
       localStorage.setItem("modesy_cart", JSON.stringify(cart));
     } catch (e) {
       console.error(e);
     }
-  }, [cart]);
+  }, [cart, cartHydrated]);
 
   useEffect(() => {
+    if (!cartHydrated) return;
     try {
       localStorage.setItem("modesy_wishlist", JSON.stringify(wishlist));
     } catch (e) {
       console.error(e);
     }
-  }, [wishlist]);
+  }, [wishlist, cartHydrated]);
 
   const addToCart = (item: CartItem) => {
     setCart(prev => {

@@ -774,11 +774,11 @@ export const ROLE_PROFILES: Record<UserRole, UserProfile | null> = {
     badgeLabel: "Moderator",
   },
   member: {
-    name: "John Doe",
+    name: "Peter Jone",
     email: "member@codingest.net",
-    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80",
+    avatar: "/images/peter-jone-avatar.jpg",
     role: "member",
-    badgeLabel: "Pembeli",
+    badgeLabel: "Member",
   },
   guest: null,
 };
@@ -894,8 +894,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [language]);
 
-  // User Role & Session (Default to admin to mirror Modesy live demo, persistent when changed)
-  const [role, setRoleState] = useState<UserRole>("admin");
+  // User Role & Session (Default to guest to mirror Modesy live demo, unauthenticated by default)
+  const [role, setRoleState] = useState<UserRole>("guest");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -906,9 +906,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return null;
     };
 
+    const pathname = window.location.pathname;
     const cookieRole = getCookie("demo_role") as UserRole | null;
     const localRole = localStorage.getItem("modesy_role") as UserRole | null;
-    const active = cookieRole || localRole || "admin";
+
+    // Auto-detect role from URL path if matching dedicated portals
+    let active: UserRole = "guest";
+    if (pathname.startsWith("/admin")) {
+      active = "admin";
+    } else if (pathname.startsWith("/dashboard")) {
+      active = "vendor";
+    } else if (pathname.startsWith("/member")) {
+      active = "member";
+    } else if (pathname.startsWith("/guest")) {
+      active = "guest";
+    } else {
+      active = (cookieRole && cookieRole !== "admin") ? cookieRole : (localRole && localRole !== "admin") ? localRole : "guest";
+    }
 
     setRoleState(active);
     if (active !== "guest") {

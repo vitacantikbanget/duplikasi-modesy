@@ -416,75 +416,80 @@ export default function Navbar() {
               ) : role === "member" ? (
                 <div className="flex items-center gap-1">
                   <div className="relative group cursor-pointer py-1">
-                    <div className="flex items-center gap-1.5 hover:text-brand-primary font-medium text-gray-700 transition-colors">
+                    <div className="flex items-center gap-2 hover:text-[#00a99d] font-medium text-[13.5px] text-[#333] transition-colors">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80"
-                        alt="Member"
-                        className="w-5 h-5 rounded-full object-cover border border-gray-300"
+                        src="/images/peter-jone-avatar.jpg"
+                        alt="Peter Jone"
+                        className="w-6 h-6 rounded-full object-cover ring-1 ring-black/10"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80";
+                        }}
                       />
-                      <span className="font-semibold text-gray-800">John Doe</span>
-                      <span className="bg-sky-100 text-sky-800 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Member</span>
-                      <ChevronDown className="w-3 h-3 text-gray-500" />
+                      <span>Peter Jone</span>
+                      <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
                     </div>
-                    <div className="absolute top-full right-0 hidden group-hover:block w-[210px] bg-white border border-[#e9ecef] shadow-lg rounded-[2px] py-1 mt-0 z-50 text-[13px] text-[#495057] animate-in fade-in zoom-in-95 duration-100">
+
+                    {/* Member Dropdown Menu - matches screenshot order and styling */}
+                    <div className="absolute top-full right-0 hidden group-hover:block w-[185px] bg-white border border-[#e9ecef] shadow-lg rounded-[2px] py-1.5 mt-0 z-50 text-[13.5px] text-[#495057] animate-in fade-in zoom-in-95 duration-100">
                       <Link
-                        href="/orders"
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                        href="/member/profile"
+                        className="group/item flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] text-[#495057] hover:text-[#00a99d] transition-colors"
                       >
-                        <ShoppingBag className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>Orders (Pesanan)</span>
+                        <User className="w-4 h-4 text-[#7b808a] group-hover/item:text-[#00a99d] transition-colors shrink-0" strokeWidth={1.5} />
+                        <span>Profile</span>
                       </Link>
+
                       <Link
-                        href="/wallet"
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                        href="/member/wallet"
+                        className="group/item flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] text-[#495057] hover:text-[#00a99d] transition-colors"
                       >
-                        <Wallet className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>Wallet (Dompet)</span>
+                        <Wallet className="w-4 h-4 text-[#7b808a] group-hover/item:text-[#00a99d] transition-colors shrink-0" strokeWidth={1.5} />
+                        <span>Wallet</span>
                       </Link>
+
                       <Link
-                        href="/my-coupons"
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                        href="/member/orders"
+                        className="group/item flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] text-[#495057] hover:text-[#00a99d] transition-colors"
                       >
-                        <Tag className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <ShoppingBag className="w-4 h-4 text-[#7b808a] group-hover/item:text-[#00a99d] transition-colors shrink-0" strokeWidth={1.5} />
+                        <span>Orders</span>
+                      </Link>
+
+                      <Link
+                        href="/member/coupons"
+                        className="group/item flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] text-[#495057] hover:text-[#00a99d] transition-colors"
+                      >
+                        <Tag className="w-4 h-4 text-[#7b808a] group-hover/item:text-[#00a99d] transition-colors shrink-0" strokeWidth={1.5} />
                         <span>My Coupons</span>
                       </Link>
+
                       <Link
-                        href="/messages"
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                        href="/member/messages"
+                        className="group/item flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] text-[#495057] hover:text-[#00a99d] transition-colors"
                       >
-                        <MessageSquare className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>Messages (Pesan)</span>
+                        <MessageSquare className="w-4 h-4 text-[#7b808a] group-hover/item:text-[#00a99d] transition-colors shrink-0" strokeWidth={1.5} />
+                        <span>Messages</span>
                       </Link>
+
                       <Link
-                        href="/wishlist"
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
+                        href="/member/settings"
+                        className="group/item flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] text-[#495057] hover:text-[#00a99d] transition-colors"
                       >
-                        <Heart className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>Wishlist (Favorit)</span>
-                      </Link>
-                      <Link
-                        href="/settings/edit-profile"
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors"
-                      >
-                        <Settings className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
+                        <Settings className="w-4 h-4 text-[#7b808a] group-hover/item:text-[#00a99d] transition-colors shrink-0" strokeWidth={1.5} />
                         <span>Profile Settings</span>
                       </Link>
-                      <Link
-                        href="/sell-on-modesy"
-                        className="flex items-center gap-3 px-4 py-2 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition-colors font-medium"
-                      >
-                        <ShoppingBag className="w-4 h-4 text-emerald-700 shrink-0" strokeWidth={1.5} />
-                        <span>Start Selling (Buka Toko)</span>
-                      </Link>
+
                       <div className="border-t border-[#f1f3f5] my-1" />
+
                       <button
                         type="button"
                         onClick={() => logout()}
-                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] hover:text-[#2c333e] transition-colors text-left cursor-pointer"
+                        className="group/item w-full flex items-center gap-3 px-4 py-2 hover:bg-[#f8f9fa] text-[#495057] hover:text-[#00a99d] transition-colors text-left cursor-pointer"
                       >
-                        <LogOut className="w-4 h-4 text-[#6c757d] shrink-0" strokeWidth={1.5} />
-                        <span>Logout (Keluar)</span>
+                        <LogOut className="w-4 h-4 text-[#7b808a] group-hover/item:text-[#00a99d] transition-colors shrink-0" strokeWidth={1.5} />
+                        <span>Logout</span>
                       </button>
                     </div>
                   </div>

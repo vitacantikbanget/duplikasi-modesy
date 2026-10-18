@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     store_description TEXT,
     store_banner_url TEXT,
     is_verified BOOLEAN DEFAULT false,
+    is_banned BOOLEAN DEFAULT false,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -60,7 +61,10 @@ CREATE TABLE IF NOT EXISTS public.products (
     is_featured BOOLEAN DEFAULT false,
     category_id BIGINT REFERENCES public.categories(id) ON DELETE SET NULL,
     vendor_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-    status VARCHAR(50) DEFAULT 'active' CHECK (status IN ('active', 'pending', 'hidden', 'draft', 'sold')),
+    status VARCHAR(50) DEFAULT 'active' CHECK (status IN ('active', 'pending', 'hidden', 'draft', 'sold', 'rejected')),
+    rejection_reason TEXT,
+    moderated_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+    moderated_at TIMESTAMP WITH TIME ZONE,
     views_count INT DEFAULT 0,
     rating NUMERIC(3, 2) DEFAULT 0.00,
     reviews_count INT DEFAULT 0,
@@ -152,6 +156,8 @@ CREATE TABLE IF NOT EXISTS public.reviews (
     user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
     rating INT CHECK (rating >= 1 AND rating <= 5),
     comment TEXT,
+    status VARCHAR(50) DEFAULT 'approved' CHECK (status IN ('approved', 'pending', 'flagged', 'hidden')),
+    moderation_note TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -181,6 +187,56 @@ CREATE TABLE IF NOT EXISTS public.payouts (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 14. Abuse Reports (Moderation)
+CREATE TABLE IF NOT EXISTS public.abuse_reports (
+    id BIGSERIAL PRIMARY KEY,
+    reporter_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+    reported_product_id UUID REFERENCES public.products(id) ON DELETE CASCADE,
+    reported_user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+    report_reason VARCHAR(255) NOT NULL,
+    report_details TEXT,
+    status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'investigating', 'resolved', 'dismissed')),
+    moderator_notes TEXT,
+    resolved_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 15. Refund Requests (Moderation)
+CREATE TABLE IF NOT EXISTS public.refund_requests (
+    id BIGSERIAL PRIMARY KEY,
+    order_id UUID REFERENCES public.orders(id) ON DELETE CASCADE,
+    buyer_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+    vendor_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+    reason TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'declined')),
+    moderator_notes TEXT,
+    resolved_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 16. Product Comments (Moderation)
+CREATE TABLE IF NOT EXISTS public.product_comments (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID REFERENCES public.products(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+    comment TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'approved' CHECK (status IN ('approved', 'pending', 'hidden', 'flagged')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Helper Function for Role Checks
+CREATE OR REPLACE FUNCTION public.is_admin_or_moderator()
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid() AND role IN ('super_admin', 'admin', 'moderator')
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- Enable Row Level Security (RLS)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
@@ -188,8 +244,18 @@ ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cart_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.wishlists ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.abuse_reports ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.refund_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.product_comments ENABLE ROW LEVEL SECURITY;
 
 -- Base Public Select Policies
 CREATE POLICY "Public profiles are viewable by everyone" ON public.profiles FOR SELECT USING (true);
 CREATE POLICY "Public products are viewable by everyone" ON public.products FOR SELECT USING (status = 'active');
 CREATE POLICY "Reviews viewable by everyone" ON public.reviews FOR SELECT USING (true);
+
+-- Moderator & Admin Policies
+CREATE POLICY "Moderators and admins can manage abuse reports" ON public.abuse_reports FOR ALL USING (public.is_admin_or_moderator()) WITH CHECK (public.is_admin_or_moderator());
+CREATE POLICY "Moderators and admins can manage refund requests" ON public.refund_requests FOR ALL USING (public.is_admin_or_moderator()) WITH CHECK (public.is_admin_or_moderator());
+CREATE POLICY "Moderators and admins can manage all comments" ON public.product_comments FOR ALL USING (public.is_admin_or_moderator()) WITH CHECK (public.is_admin_or_moderator());
+CREATE POLICY "Moderators and admins can update moderation flags on profiles" ON public.profiles FOR UPDATE USING (public.is_admin_or_moderator());
+CREATE POLICY "Moderators and admins can view and moderate all products" ON public.products FOR ALL USING (public.is_admin_or_moderator()) WITH CHECK (public.is_admin_or_moderator());

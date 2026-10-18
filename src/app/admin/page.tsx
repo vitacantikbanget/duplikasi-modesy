@@ -1,7 +1,12 @@
-import { ShoppingCart, ShoppingBag, EyeOff, Users, Minus, X, ArrowRight, Star } from 'lucide-react';
-import Link from 'next/link';
+"use client";
 
-const StatCard = ({ title, value, icon: Icon, colorClass }: { title: string, value: string | number, icon: any, colorClass: string }) => (
+import { useState, useEffect } from 'react';
+import { ShoppingCart, ShoppingBag, EyeOff, Users, Minus, X, ArrowRight, Star, ShieldAlert, PackageCheck, AlertTriangle } from 'lucide-react';
+import Link from 'next/link';
+import { useAppContext } from '@/contexts/AppContext';
+import { fetchAdminProducts } from '@/lib/moderation';
+
+const StatCard = ({ title, value, icon: Icon, colorClass, href = "#" }: { title: string, value: string | number, icon: any, colorClass: string, href?: string }) => (
   <div className={`rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] text-white overflow-hidden flex flex-col ${colorClass}`}>
     <div className="p-5 flex justify-between items-start relative">
       <div className="z-10">
@@ -10,7 +15,7 @@ const StatCard = ({ title, value, icon: Icon, colorClass }: { title: string, val
       </div>
       <Icon className="w-16 h-16 absolute -right-2 top-4 opacity-20 transform transition-transform hover:scale-110 duration-300" />
     </div>
-    <Link href="#" className="bg-black/10 hover:bg-black/15 py-1.5 flex justify-center items-center text-sm transition-colors z-10">
+    <Link href={href} className="bg-black/10 hover:bg-black/15 py-1.5 flex justify-center items-center text-sm transition-colors z-10">
       More info <ArrowRight className="w-4 h-4 ml-1" />
     </Link>
   </div>
@@ -39,14 +44,63 @@ const WidgetPanel = ({ title, children, showViewAll = true }: { title: string, c
 );
 
 export default function AdminDashboard() {
+  const { role, userProfile } = useAppContext();
+  const isModerator = role === 'moderator';
+  const [pendingCount, setPendingCount] = useState(2);
+  const [totalProducts, setTotalProducts] = useState(47);
+
+  useEffect(() => {
+    async function load() {
+      const prods = await fetchAdminProducts();
+      setPendingCount(prods.filter(p => !p.isApproved && p.isActive).length);
+      setTotalProducts(prods.length > 0 ? prods.length : 47);
+    }
+    load();
+  }, []);
+
   return (
     <div className="space-y-4">
+      {/* Moderator Welcome Banner */}
+      {isModerator && (
+        <div className="bg-teal-50 border border-teal-200 rounded p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#00a99d] text-white flex items-center justify-center shrink-0">
+              <ShieldAlert className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-sm font-bold text-gray-800">
+                Panel Moderasi Aktif • {userProfile?.name || "Moderator"}
+              </h2>
+              <p className="text-xs text-gray-600">
+                Saat ini terdapat <strong className="text-teal-700 font-bold">{pendingCount} produk baru</strong> dalam antrean yang memerlukan tinjauan dan persetujuan Anda.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Link
+              href="/admin/pending-products"
+              className="px-3.5 py-1.5 bg-[#00a99d] hover:bg-[#008f85] text-white text-xs font-semibold rounded flex items-center gap-1.5 transition-colors shadow-xs"
+            >
+              <PackageCheck className="w-3.5 h-3.5" />
+              <span>Antrean Produk ({pendingCount})</span>
+            </Link>
+            <Link
+              href="/admin/abuse-reports"
+              className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded flex items-center gap-1.5 transition-colors shadow-xs"
+            >
+              <AlertTriangle className="w-3.5 h-3.5" />
+              <span>Abuse Reports</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Orders" value="41" icon={ShoppingCart} colorClass="bg-[#00a65a]" />
-        <StatCard title="Products" value="47" icon={ShoppingBag} colorClass="bg-[#605ca8]" />
-        <StatCard title="Pending Products" value="0" icon={EyeOff} colorClass="bg-[#dd4b39]" />
-        <StatCard title="Members" value="15" icon={Users} colorClass="bg-[#f39c12]" />
+        <StatCard title="Orders" value="41" icon={ShoppingCart} colorClass="bg-[#00a65a]" href="/admin/orders" />
+        <StatCard title="Products" value={totalProducts} icon={ShoppingBag} colorClass="bg-[#605ca8]" href="/admin/products" />
+        <StatCard title="Pending Products" value={pendingCount} icon={EyeOff} colorClass="bg-[#dd4b39]" href="/admin/pending-products" />
+        <StatCard title="Members" value="15" icon={Users} colorClass="bg-[#f39c12]" href="/admin/users" />
       </div>
 
       {/* Row 1 */}

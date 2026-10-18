@@ -767,9 +767,9 @@ export const ROLE_PROFILES: Record<UserRole, UserProfile | null> = {
     badgeLabel: "Admin",
   },
   moderator: {
-    name: "Moderator",
+    name: "Roger Novak",
     email: "moderator@codingest.net",
-    avatar: "https://i.pravatar.cc/150?u=admin",
+    avatar: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=150&q=80",
     role: "moderator",
     badgeLabel: "Moderator",
   },
@@ -912,8 +912,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     // Auto-detect role from URL path if matching dedicated portals
     let active: UserRole = "guest";
+    const savedRole = (cookieRole || localRole) as UserRole | null;
+
     if (pathname.startsWith("/admin")) {
-      active = "admin";
+      if (savedRole && ["moderator", "super_admin", "admin"].includes(savedRole)) {
+        active = savedRole;
+      } else {
+        active = "admin";
+      }
     } else if (pathname.startsWith("/dashboard")) {
       active = "vendor";
     } else if (pathname.startsWith("/member")) {

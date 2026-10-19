@@ -138,6 +138,12 @@ export function saveStoredProducts(products: AdminProductItem[]): void {
   }
 }
 
+export function notifyModerationChange(): void {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("modesy-moderation-updated"));
+  }
+}
+
 export async function fetchAdminProducts(): Promise<AdminProductItem[]> {
   try {
     const supabase = createClient();
@@ -162,6 +168,10 @@ export async function fetchAdminProducts(): Promise<AdminProductItem[]> {
           full_name,
           email,
           avatar_url
+        ),
+        product_images (
+          image_url,
+          is_main
         )
       `)
       .order("created_at", { ascending: false });
@@ -170,24 +180,30 @@ export async function fetchAdminProducts(): Promise<AdminProductItem[]> {
       return getStoredProducts();
     }
 
-    const mapped: AdminProductItem[] = dbProducts.map((p: any) => ({
-      id: p.id,
-      title: p.title || "Untitled Product",
-      slug: p.slug || "",
-      category: p.categories?.name || "General",
-      vendorName: p.profiles?.full_name || "Modesy Vendor",
-      vendorEmail: p.profiles?.email || "",
-      vendorAvatar: p.profiles?.avatar_url || "https://i.pravatar.cc/150?u=vendor",
-      price: p.price ?? 0,
-      stock: p.stock ?? 1,
-      sku: p.sku || `SKU-${p.id.slice(0, 6)}`,
-      imageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
-      isApproved: p.is_approved ?? false,
-      isActive: p.is_active ?? true,
-      rejectionReason: p.rejection_reason,
-      createdAt: new Date(p.created_at || Date.now()).toISOString().replace("T", " ").slice(0, 16),
-      description: p.description || "",
-    }));
+    const mapped: AdminProductItem[] = dbProducts.map((p: any) => {
+      const img = p.product_images?.find((i: any) => i.is_main)?.image_url 
+        || p.product_images?.[0]?.image_url 
+        || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80";
+
+      return {
+        id: p.id,
+        title: p.title || "Untitled Product",
+        slug: p.slug || "",
+        category: p.categories?.name || "General",
+        vendorName: p.profiles?.full_name || "Modesy Vendor",
+        vendorEmail: p.profiles?.email || "",
+        vendorAvatar: p.profiles?.avatar_url || "https://i.pravatar.cc/150?u=vendor",
+        price: p.price ?? 0,
+        stock: p.stock ?? 1,
+        sku: p.sku || `SKU-${p.id.slice(0, 6)}`,
+        imageUrl: img,
+        isApproved: p.is_approved ?? false,
+        isActive: p.is_active ?? true,
+        rejectionReason: p.rejection_reason,
+        createdAt: new Date(p.created_at || Date.now()).toISOString().replace("T", " ").slice(0, 16),
+        description: p.description || "",
+      };
+    });
 
     const stored = getStoredProducts();
     const merged = [...mapped];
@@ -212,7 +228,6 @@ export async function approveProductAction(productId: string): Promise<boolean> 
         is_approved: true,
         is_active: true,
         rejection_reason: null,
-        moderated_at: new Date().toISOString(),
       })
       .eq("id", productId);
   } catch (err) {
@@ -224,6 +239,7 @@ export async function approveProductAction(productId: string): Promise<boolean> 
     p.id === productId ? { ...p, isApproved: true, isActive: true, rejectionReason: null } : p
   );
   saveStoredProducts(updated);
+  notifyModerationChange();
   return true;
 }
 
@@ -236,7 +252,6 @@ export async function rejectProductAction(productId: string, reason: string): Pr
         is_approved: false,
         is_active: false,
         rejection_reason: reason,
-        moderated_at: new Date().toISOString(),
       })
       .eq("id", productId);
   } catch (err) {
@@ -248,6 +263,7 @@ export async function rejectProductAction(productId: string, reason: string): Pr
     p.id === productId ? { ...p, isApproved: false, isActive: false, rejectionReason: reason } : p
   );
   saveStoredProducts(updated);
+  notifyModerationChange();
   return true;
 }
 
@@ -269,6 +285,7 @@ export async function restoreProductAction(productId: string): Promise<boolean> 
     p.id === productId ? { ...p, isActive: true } : p
   );
   saveStoredProducts(updated);
+  notifyModerationChange();
   return true;
 }
 
@@ -291,6 +308,7 @@ export async function hideProductAction(productId: string, reason?: string): Pro
     p.id === productId ? { ...p, isActive: false, rejectionReason: reason || p.rejectionReason } : p
   );
   saveStoredProducts(updated);
+  notifyModerationChange();
   return true;
 }
 
@@ -305,6 +323,7 @@ export async function deleteProductAction(productId: string): Promise<boolean> {
   const stored = getStoredProducts();
   const updated = stored.filter((p) => p.id !== productId);
   saveStoredProducts(updated);
+  notifyModerationChange();
   return true;
 }
 
@@ -522,6 +541,7 @@ export async function resolveAbuseReportAction(
       : r
   );
   saveStoredAbuseReports(updated);
+  notifyModerationChange();
   return true;
 }
 
@@ -536,6 +556,7 @@ export async function deleteAbuseReportAction(reportId: number): Promise<boolean
   const stored = getStoredAbuseReports();
   const updated = stored.filter((r) => r.id !== reportId);
   saveStoredAbuseReports(updated);
+  notifyModerationChange();
   return true;
 }
 
@@ -737,6 +758,7 @@ export async function processRefundAction(
       : r
   );
   saveStoredRefundRequests(updated);
+  notifyModerationChange();
   return true;
 }
 
@@ -945,6 +967,7 @@ export async function updateReviewStatusAction(
     r.id === reviewId ? { ...r, status, moderationNote: moderationNote || r.moderationNote } : r
   );
   saveStoredReviews(updated);
+  notifyModerationChange();
   return true;
 }
 
@@ -1012,5 +1035,6 @@ export async function updateCommentStatusAction(
     c.id === commentId ? { ...c, status } : c
   );
   saveStoredComments(updated);
+  notifyModerationChange();
   return true;
 }

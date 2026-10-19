@@ -123,6 +123,19 @@ export default function AdminDashboard() {
       }
     }
     load();
+
+    const handleUpdate = () => {
+      load();
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("modesy-moderation-updated", handleUpdate);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("modesy-moderation-updated", handleUpdate);
+      }
+    };
   }, []);
 
   const pendingCount = pendingProducts.length;

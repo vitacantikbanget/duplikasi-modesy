@@ -41,6 +41,15 @@ export default function ProductCommentsPage() {
 
   useEffect(() => {
     loadComments();
+    const handleUpdate = () => loadComments();
+    if (typeof window !== "undefined") {
+      window.addEventListener("modesy-moderation-updated", handleUpdate);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("modesy-moderation-updated", handleUpdate);
+      }
+    };
   }, []);
 
   const showToast = (msg: string) => {

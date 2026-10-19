@@ -62,6 +62,15 @@ export default function PendingProductsPage() {
 
   useEffect(() => {
     loadProducts();
+    const handleUpdate = () => loadProducts();
+    if (typeof window !== "undefined") {
+      window.addEventListener("modesy-moderation-updated", handleUpdate);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("modesy-moderation-updated", handleUpdate);
+      }
+    };
   }, []);
 
   const showToast = (msg: string) => {

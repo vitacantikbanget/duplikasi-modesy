@@ -240,6 +240,19 @@ export default function AdminSidebar() {
       }
     }
     fetchCounts();
+
+    const handleUpdate = () => {
+      fetchCounts();
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("modesy-moderation-updated", handleUpdate);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("modesy-moderation-updated", handleUpdate);
+      }
+    };
   }, []);
 
   // Accordion state for dropdown items

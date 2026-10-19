@@ -52,6 +52,15 @@ export default function RefundRequestsPage() {
 
   useEffect(() => {
     loadRequests();
+    const handleUpdate = () => loadRequests();
+    if (typeof window !== "undefined") {
+      window.addEventListener("modesy-moderation-updated", handleUpdate);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("modesy-moderation-updated", handleUpdate);
+      }
+    };
   }, []);
 
   const showToast = (msg: string) => {

@@ -13,6 +13,106 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    return [
+      {
+        source: "/admin/products",
+        has: [
+          {
+            type: "query",
+            key: "list",
+            value: "featured",
+          },
+        ],
+        destination: "/admin/featured-products",
+        permanent: false,
+      },
+      {
+        source: "/admin/products",
+        has: [
+          {
+            type: "query",
+            key: "list",
+            value: "special",
+          },
+        ],
+        destination: "/admin/special-offers",
+        permanent: false,
+      },
+      {
+        source: "/admin/products",
+        has: [
+          {
+            type: "query",
+            key: "list",
+            value: "pending",
+          },
+        ],
+        destination: "/admin/pending-products",
+        permanent: false,
+      },
+      {
+        source: "/admin/products",
+        has: [
+          {
+            type: "query",
+            key: "list",
+            value: "hidden",
+          },
+        ],
+        destination: "/admin/hidden-products",
+        permanent: false,
+      },
+      {
+        source: "/admin/products",
+        has: [
+          {
+            type: "query",
+            key: "list",
+            value: "expired",
+          },
+        ],
+        destination: "/admin/expired-products",
+        permanent: false,
+      },
+      {
+        source: "/admin/products",
+        has: [
+          {
+            type: "query",
+            key: "list",
+            value: "sold",
+          },
+        ],
+        destination: "/admin/sold-products",
+        permanent: false,
+      },
+      {
+        source: "/admin/products",
+        has: [
+          {
+            type: "query",
+            key: "list",
+            value: "deleted",
+          },
+        ],
+        destination: "/admin/deleted-products",
+        permanent: false,
+      },
+      {
+        source: "/admin/products",
+        has: [
+          {
+            type: "query",
+            key: "list",
+            value: "drafts",
+          },
+        ],
+        destination: "/admin/drafts",
+        permanent: false,
+      },
+    ];
+  },
   async rewrites() {
     return [
       { source: "/clothing", destination: "/category/clothing" },

@@ -22,8 +22,8 @@ export default function AdminLayout({
         <AdminSidebar />
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           <AdminHeader />
-          <main className="flex-1 overflow-x-auto overflow-y-auto bg-[#f4f6f9] flex flex-col">
-            <div className="flex-1 p-4 md:p-6 min-w-fit">
+          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-[#f4f6f9] flex flex-col w-full max-w-full">
+            <div className="flex-1 p-4 md:p-6 w-full max-w-full">
               {children}
             </div>
             <footer className="bg-white border-t border-gray-200 p-4 text-[13px] text-gray-600 flex justify-between items-center">

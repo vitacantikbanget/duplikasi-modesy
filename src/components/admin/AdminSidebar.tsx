@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Home,
   Paintbrush,
@@ -90,6 +90,13 @@ const SidebarItem = ({
   onItemClick?: () => void;
 }) => {
   const pathname = usePathname();
+  const [currentSearch, setCurrentSearch] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentSearch(window.location.search);
+    }
+  }, [pathname]);
 
   const itemContent = (
     <>
@@ -106,9 +113,9 @@ const SidebarItem = ({
     </>
   );
 
-  const baseClass = `flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none ${active
-      ? "text-white font-medium bg-[#2a3038]/60"
-      : "text-[#8a99a8] hover:text-white hover:bg-[#2a3038]/40"
+  const baseClass = `flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none border-l-[3px] ${active
+      ? "text-white font-medium bg-[#2a3038]/60 border-[#00c0ef]"
+      : "text-[#8a99a8] hover:text-white hover:bg-[#2a3038]/40 border-transparent"
     }`;
 
   if (hasDropdown) {
@@ -125,18 +132,29 @@ const SidebarItem = ({
         {isOpen && subItems && subItems.length > 0 && (
           <ul className="bg-[#262b32] py-1.5 space-y-0.5">
             {subItems.map((sub, index) => {
-              const isSubActive = pathname === sub.href;
+              const isSubActive =
+                (pathname === sub.href && (!currentSearch || !sub.href.startsWith("/admin/products"))) ||
+                (sub.href === "/admin/featured-products" && currentSearch.includes("list=featured")) ||
+                (sub.href === "/admin/special-offers" && currentSearch.includes("list=special")) ||
+                (sub.href === "/admin/pending-products" && currentSearch.includes("list=pending")) ||
+                (sub.href === "/admin/hidden-products" && currentSearch.includes("list=hidden")) ||
+                (sub.href === "/admin/expired-products" && currentSearch.includes("list=expired")) ||
+                (sub.href === "/admin/sold-products" && currentSearch.includes("list=sold")) ||
+                (sub.href === "/admin/drafts" && currentSearch.includes("list=drafts")) ||
+                (sub.href === "/admin/deleted-products" && currentSearch.includes("list=deleted")) ||
+                (sub.href === "/admin/products" && pathname === "/admin/products" && !currentSearch.includes("list="));
+
               return (
                 <li key={index}>
                   <Link
                     href={sub.href}
                     onClick={onItemClick}
-                    className={`block pl-12 pr-6 py-1.5 text-[12.5px] transition-colors ${isSubActive
+                    className={`block pl-12 pr-6 py-2 text-[13px] transition-colors ${isSubActive
                         ? "text-white font-medium bg-[#1e2329]"
                         : "text-[#8a99a8] hover:text-white hover:bg-[#1e2329]/60"
                       }`}
                   >
-                    • {sub.label}
+                    {sub.label}
                   </Link>
                 </li>
               );
@@ -174,15 +192,37 @@ export default function AdminSidebar() {
   const pathname = usePathname();
   const { sidebarOpenMobile, sidebarCollapsed, closeMobileSidebar } = useAdminContext();
 
+  const productPaths = [
+    "/admin/products",
+    "/admin/featured-products",
+    "/admin/special-offers",
+    "/admin/pending-products",
+    "/admin/hidden-products",
+    "/admin/expired-products",
+    "/admin/sold-products",
+    "/admin/drafts",
+    "/admin/deleted-products",
+    "/admin/add-product",
+    "/admin/bulk-product-upload",
+  ];
+
+  const isProductsActive = productPaths.some((p) => pathname.startsWith(p));
+
   // Accordion state for dropdown items
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
-    orders: false,
-    products: false,
-    payments: false,
-    content: false,
-    membership: false,
-    settings: false,
+    orders: pathname.startsWith('/admin/orders') || pathname.startsWith('/admin/transactions'),
+    products: isProductsActive,
+    payments: pathname.startsWith('/admin/payments') || pathname.startsWith('/admin/payment'),
+    content: pathname.startsWith('/admin/blog') || pathname.startsWith('/admin/pages'),
+    membership: pathname.startsWith('/admin/users') || pathname.startsWith('/admin/vendors') || pathname.startsWith('/admin/administrators'),
+    settings: pathname.startsWith('/admin/settings'),
   });
+
+  useEffect(() => {
+    if (isProductsActive) {
+      setOpenMenus((prev) => ({ ...prev, products: true }));
+    }
+  }, [pathname, isProductsActive]);
 
   const toggleMenu = (key: string) => {
     setOpenMenus((prev) => ({
@@ -325,12 +365,20 @@ export default function AdminSidebar() {
               label="Products"
               hasDropdown
               isOpen={openMenus.products}
+              active={isProductsActive}
               onToggle={() => toggleMenu("products")}
               subItems={[
                 { label: "Products", href: "/admin/products" },
+                { label: "Featured Products", href: "/admin/featured-products" },
+                { label: "Special Offers", href: "/admin/special-offers" },
                 { label: "Pending Products", href: "/admin/pending-products" },
                 { label: "Hidden Products", href: "/admin/hidden-products" },
+                { label: "Expired Products", href: "/admin/expired-products" },
+                { label: "Sold Products", href: "/admin/sold-products" },
                 { label: "Drafts", href: "/admin/drafts" },
+                { label: "Deleted Products", href: "/admin/deleted-products" },
+                { label: "Add Product", href: "/admin/add-product" },
+                { label: "Bulk Product Upload", href: "/admin/bulk-product-upload" },
               ]}
               onItemClick={closeMobileSidebar}
             />
@@ -338,6 +386,7 @@ export default function AdminSidebar() {
               icon={Tag}
               label="Quote Requests"
               href="/admin/quote-requests"
+              active={isActive("/admin/quote-requests")}
               onItemClick={closeMobileSidebar}
             />
             <SidebarItem
@@ -351,18 +400,21 @@ export default function AdminSidebar() {
               icon={Tags}
               label="Tags"
               href="/admin/tags"
+              active={isActive("/admin/tags")}
               onItemClick={closeMobileSidebar}
             />
             <SidebarItem
               icon={Asterisk}
               label="Brands"
               href="/admin/brands"
+              active={isActive("/admin/brands")}
               onItemClick={closeMobileSidebar}
             />
             <SidebarItem
               icon={GripHorizontal}
               label="Custom Fields"
               href="/admin/custom-fields"
+              active={isActive("/admin/custom-fields")}
               onItemClick={closeMobileSidebar}
             />
           </SidebarSection>
@@ -439,6 +491,7 @@ export default function AdminSidebar() {
               icon={KeyRound}
               label="Roles & Permissions"
               href="/admin/roles"
+              active={isActive("/admin/roles")}
               onItemClick={closeMobileSidebar}
             />
           </SidebarSection>

@@ -15,8 +15,12 @@ export default function AdminHeader() {
   const router = useRouter();
 
   const isModerator = role === 'moderator';
-  const displayName = userProfile?.name || (isModerator ? 'Moderator' : 'Super Admin');
-  const avatarUrl = userProfile?.avatar || (isModerator ? 'https://i.pravatar.cc/150?u=moderator' : 'https://i.pravatar.cc/150?u=admin');
+  const displayName = isModerator
+    ? (userProfile?.name && userProfile.name !== "Super Admin" ? userProfile.name : "Roger Novak")
+    : (userProfile?.name || "Super Admin");
+  const avatarUrl = isModerator
+    ? (userProfile?.avatar || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=150&q=80")
+    : (userProfile?.avatar || "https://i.pravatar.cc/150?u=admin");
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -35,33 +39,34 @@ export default function AdminHeader() {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 sticky top-0 z-10 shrink-0">
+    <header className="bg-white border-b border-gray-200 h-[50px] flex items-center justify-between px-4 sticky top-0 z-10 shrink-0">
       <div className="flex items-center">
         <button 
           onClick={toggleSidebar}
           aria-label="Toggle sidebar"
-          className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none p-2 rounded-md cursor-pointer transition-colors"
+          className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none p-1.5 rounded cursor-pointer transition-colors"
         >
           <Menu className="w-5 h-5" />
         </button>
       </div>
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-3.5">
         <Link 
           href="/" 
-          className="hidden md:flex items-center text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 px-3 py-1.5 rounded transition-colors"
+          target="_blank"
+          className="flex items-center text-xs font-semibold text-white bg-[#00a65a] hover:bg-[#008d4c] px-3 py-1.5 rounded-[3px] transition-colors shadow-2xs"
         >
-          <Globe className="w-4 h-4 mr-1.5" />
-          View Site
+          <Globe className="w-3.5 h-3.5 mr-1.5" />
+          <span>View Site</span>
         </Link>
 
-        <div className="flex items-center cursor-pointer text-gray-600 hover:text-gray-900">
-          <Globe className="w-4 h-4 mr-1.5" />
-          <span className="text-sm font-medium mr-1">English</span>
-          <ChevronDown className="w-3 h-3" />
+        <div className="flex items-center cursor-pointer text-gray-700 hover:text-gray-900 text-xs font-medium">
+          <Globe className="w-3.5 h-3.5 mr-1.5 text-gray-500" />
+          <span className="mr-1">English</span>
+          <ChevronDown className="w-3 h-3 text-gray-400" />
         </div>
 
-        <div className="h-6 w-px bg-gray-200 mx-2"></div>
+        <div className="h-5 w-px bg-gray-200 mx-1"></div>
 
         {/* User Profile Dropdown */}
         <div className="relative" ref={dropdownRef}>
@@ -72,15 +77,10 @@ export default function AdminHeader() {
             <img 
               src={avatarUrl} 
               alt={displayName} 
-              className="w-8 h-8 rounded-full object-cover mr-2 border border-gray-200" 
+              className="w-[30px] h-[30px] rounded-full object-cover mr-2 border border-gray-200" 
             />
-            <div className="flex flex-col text-left mr-1 hidden sm:flex">
-              <span className="text-sm font-medium text-gray-700 leading-tight">{displayName}</span>
-              <span className={`text-[10px] font-semibold leading-none ${isModerator ? 'text-[#00a99d]' : 'text-blue-600'}`}>
-                {isModerator ? 'Moderator' : 'Admin'}
-              </span>
-            </div>
-            <ChevronDown className="w-3 h-3 text-gray-500 hidden sm:block ml-1" />
+            <span className="text-[13px] font-medium text-gray-700 hidden sm:inline-block mr-1">{displayName}</span>
+            <ChevronDown className="w-3 h-3 text-gray-400" />
           </div>
 
           {dropdownOpen && (

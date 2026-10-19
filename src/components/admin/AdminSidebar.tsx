@@ -152,13 +152,13 @@ const SidebarItem = ({
                   <Link
                     href={sub.href}
                     onClick={onItemClick}
-                    className={`flex items-center justify-between pl-12 pr-6 py-1.5 text-[12.5px] transition-colors ${
+                    className={`flex items-center justify-between pl-12 pr-6 py-2 text-[13px] transition-colors ${
                       isSubActive
                         ? "text-white font-medium bg-[#1e2329]"
                         : "text-[#8a99a8] hover:text-white hover:bg-[#1e2329]/60"
                     }`}
                   >
-                    <span>• {sub.label}</span>
+                    <span className="truncate">{sub.label}</span>
                     {sub.badge !== undefined && Number(sub.badge) > 0 && (
                       <span className={`text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full ${sub.badgeColor || "bg-[#dd4b39]"}`}>
                         {sub.badge}
@@ -378,6 +378,8 @@ export default function AdminSidebar() {
                   onToggle={() => toggleMenu("products")}
                   subItems={[
                     { label: "Products", href: "/admin/products" },
+                    { label: "Featured Products", href: "/admin/featured-products" },
+                    { label: "Special Offers", href: "/admin/special-offers" },
                     {
                       label: "Pending Products",
                       href: "/admin/pending-products",
@@ -385,7 +387,12 @@ export default function AdminSidebar() {
                       badgeColor: "bg-[#dd4b39]",
                     },
                     { label: "Hidden Products", href: "/admin/hidden-products" },
+                    { label: "Expired Products", href: "/admin/expired-products" },
+                    { label: "Sold Products", href: "/admin/sold-products" },
                     { label: "Drafts", href: "/admin/drafts" },
+                    { label: "Deleted Products", href: "/admin/deleted-products" },
+                    { label: "Add Product", href: "/admin/add-product" },
+                    { label: "Bulk Product Upload", href: "/admin/bulk-product-upload" },
                   ]}
                   onItemClick={closeMobileSidebar}
                 />
@@ -455,15 +462,6 @@ export default function AdminSidebar() {
                   active={isActive("/admin/abuse-reports")}
                   badge={counts.abuseReports}
                   badgeColor="bg-rose-600"
-                  onItemClick={closeMobileSidebar}
-                />
-                <SidebarItem
-                  icon={RotateCcw}
-                  label="Refund Requests"
-                  href="/admin/refund-requests"
-                  active={isActive("/admin/refund-requests")}
-                  badge={counts.refundRequests}
-                  badgeColor="bg-amber-600"
                   onItemClick={closeMobileSidebar}
                 />
               </SidebarSection>
@@ -545,6 +543,8 @@ export default function AdminSidebar() {
                   onToggle={() => toggleMenu("products")}
                   subItems={[
                     { label: "Products", href: "/admin/products" },
+                    { label: "Featured Products", href: "/admin/featured-products" },
+                    { label: "Special Offers", href: "/admin/special-offers" },
                     { 
                       label: "Pending Products", 
                       href: "/admin/pending-products",
@@ -552,7 +552,12 @@ export default function AdminSidebar() {
                       badgeColor: "bg-[#dd4b39]"
                     },
                     { label: "Hidden Products", href: "/admin/hidden-products" },
+                    { label: "Expired Products", href: "/admin/expired-products" },
+                    { label: "Sold Products", href: "/admin/sold-products" },
                     { label: "Drafts", href: "/admin/drafts" },
+                    { label: "Deleted Products", href: "/admin/deleted-products" },
+                    { label: "Add Product", href: "/admin/add-product" },
+                    { label: "Bulk Product Upload", href: "/admin/bulk-product-upload" },
                   ]}
                   onItemClick={closeMobileSidebar}
                 />

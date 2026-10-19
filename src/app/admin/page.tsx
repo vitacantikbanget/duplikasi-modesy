@@ -26,29 +26,33 @@ const StatCard = ({
   icon: Icon,
   colorClass,
   href = "#",
+  showMoreInfo = true,
 }: {
   title: string;
   value: string | number;
   icon: any;
   colorClass: string;
   href?: string;
+  showMoreInfo?: boolean;
 }) => (
   <div
-    className={`rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] text-white overflow-hidden flex flex-col ${colorClass}`}
+    className={`rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] text-white overflow-hidden flex flex-col relative ${colorClass}`}
   >
-    <div className="p-5 flex justify-between items-start relative">
+    <div className="p-5 flex justify-between items-start relative min-h-[95px]">
       <div className="z-10">
         <h3 className="text-[38px] font-bold leading-none mb-2">{value}</h3>
         <p className="text-[15px]">{title}</p>
       </div>
-      <Icon className="w-16 h-16 absolute -right-2 top-4 opacity-20 transform transition-transform hover:scale-110 duration-300" />
+      <Icon className="w-18 h-18 absolute -right-1 bottom-1 opacity-20 transform pointer-events-none" />
     </div>
-    <Link
-      href={href}
-      className="bg-black/10 hover:bg-black/15 py-1.5 flex justify-center items-center text-sm transition-colors z-10"
-    >
-      More info <ArrowRight className="w-4 h-4 ml-1" />
-    </Link>
+    {showMoreInfo && (
+      <Link
+        href={href}
+        className="bg-black/10 hover:bg-black/15 py-1.5 flex justify-center items-center text-sm transition-colors z-10"
+      >
+        More info <ArrowRight className="w-4 h-4 ml-1" />
+      </Link>
+    )}
   </div>
 );
 
@@ -125,55 +129,17 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-4">
-      {/* Moderator Welcome Banner */}
-      {isModerator && (
-        <div className="bg-teal-50 border border-teal-200 rounded p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#00a99d] text-white flex items-center justify-center shrink-0">
-              <ShieldAlert className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-gray-800">
-                Panel Moderasi Aktif • {userProfile?.name || "Roger Novak"}
-              </h2>
-              <p className="text-xs text-gray-600">
-                Saat ini terdapat{" "}
-                <strong className="text-teal-700 font-bold">
-                  {pendingCount} produk baru
-                </strong>{" "}
-                dalam antrean yang memerlukan tinjauan dan persetujuan Anda.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <Link
-              href="/admin/pending-products"
-              className="px-3.5 py-1.5 bg-[#00a99d] hover:bg-[#008f85] text-white text-xs font-semibold rounded flex items-center gap-1.5 transition-colors shadow-xs"
-            >
-              <PackageCheck className="w-3.5 h-3.5" />
-              <span>Antrean Produk ({pendingCount})</span>
-            </Link>
-            <Link
-              href="/admin/abuse-reports"
-              className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded flex items-center gap-1.5 transition-colors shadow-xs"
-            >
-              <AlertTriangle className="w-3.5 h-3.5" />
-              <span>Abuse Reports ({abuseCount})</span>
-            </Link>
-          </div>
-        </div>
-      )}
-
       {/* Stats Cards: Dynamic depending on role */}
       {isModerator ? (
-        /* MODERATOR STATS (No financial orders or sensitive member management) */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        /* MODERATOR STATS (Matching Official Modesy 100%: 2 wide cards, no 'More info' bar) */
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <StatCard
             title="Products"
             value={totalProducts}
             icon={ShoppingBag}
             colorClass="bg-[#605ca8]"
             href="/admin/products"
+            showMoreInfo={false}
           />
           <StatCard
             title="Pending Products"
@@ -181,20 +147,7 @@ export default function AdminDashboard() {
             icon={EyeOff}
             colorClass="bg-[#dd4b39]"
             href="/admin/pending-products"
-          />
-          <StatCard
-            title="Reviews"
-            value="3"
-            icon={Star}
-            colorClass="bg-[#00a65a]"
-            href="/admin/reviews"
-          />
-          <StatCard
-            title="Abuse Reports"
-            value={abuseCount}
-            icon={AlertTriangle}
-            colorClass="bg-[#f39c12]"
-            href="/admin/abuse-reports"
+            showMoreInfo={false}
           />
         </div>
       ) : (
@@ -234,349 +187,279 @@ export default function AdminDashboard() {
       {/* Dynamic Widget Panels */}
       {isModerator ? (
         /* ========================================================================= */
-        /* MODERATOR OVERVIEW (Products, Reviews, Comments, Abuse Reports)           */
+        /* MODERATOR OVERVIEW (Exact match to Official Modesy Moderator Dashboard)    */
+        /* 3 Full-Width Stacked Boxes: Latest Products, Latest Pending, Transactions */
         /* ========================================================================= */
-        <>
-          {/* Row 1: Moderation Products Queue & Catalog */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Latest Pending Products (Real Queue) */}
-            <WidgetPanel
-              title="Latest Pending Products"
-              viewAllHref="/admin/pending-products"
-            >
-              <table className="w-full text-[13px] text-left text-gray-700 m-0">
-                <thead className="border-b-2 border-gray-200">
-                  <tr>
-                    <th className="px-4 py-2 font-bold w-12 border-b border-[#f4f4f4]">
-                      #
-                    </th>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      Product
-                    </th>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      Vendor
-                    </th>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      Price
-                    </th>
-                    <th className="px-4 py-2 font-bold text-right border-b border-[#f4f4f4]">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pendingProducts.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={5}
-                        className="px-4 py-8 text-center text-gray-400 border-b border-[#f4f4f4]"
-                      >
-                        Semua produk telah ditinjau. Tidak ada antrean pending.
-                      </td>
-                    </tr>
-                  ) : (
-                    pendingProducts.slice(0, 4).map((p, idx) => (
-                      <tr
-                        key={p.id}
-                        className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]"
-                      >
-                        <td className="px-4 py-3 align-middle text-gray-400 text-xs">
-                          {idx + 1}
-                        </td>
-                        <td className="px-4 py-3 align-middle">
-                          <div className="flex items-center gap-2.5">
-                            <img
-                              src={p.imageUrl}
-                              alt={p.title}
-                              className="w-10 h-10 object-cover rounded shadow-xs border border-gray-200 shrink-0"
-                            />
-                            <div className="min-w-0">
-                              <p className="text-gray-800 font-medium text-xs line-clamp-1">
-                                {p.title}
-                              </p>
-                              <span className="text-[11px] text-gray-400">
-                                {p.category}
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 align-middle text-xs text-gray-600">
-                          {p.vendorName}
-                        </td>
-                        <td className="px-4 py-3 align-middle text-xs font-semibold text-emerald-600">
-                          ${p.price}
-                        </td>
-                        <td className="px-4 py-3 text-right align-middle">
+        <div className="space-y-4">
+          {/* Box 1: Latest Products (Full-width, scrollable, exactly matching screenshot) */}
+          <WidgetPanel
+            title="Latest Products"
+            viewAllHref="/admin/products"
+          >
+            <table className="w-full text-[13px] text-left text-gray-700 m-0 border-collapse">
+              <thead className="border-b border-[#f4f4f4] bg-white">
+                <tr>
+                  <th className="px-4 py-2 font-bold w-16 text-center text-[#333]">
+                    Id
+                  </th>
+                  <th className="px-4 py-2 font-bold text-[#333]">
+                    Name
+                  </th>
+                  <th className="px-4 py-2 font-bold text-right text-[#333] w-24">
+                    Details
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  {
+                    id: "47",
+                    name: "Colorful women scarves",
+                    date: "3 months ago",
+                    img: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=150&h=150&fit=crop",
+                  },
+                  {
+                    id: "46",
+                    name: "Women's ankle boot with different colors",
+                    date: "3 months ago",
+                    img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=150&h=150&fit=crop",
+                  },
+                  {
+                    id: "45",
+                    name: "Navy polka dot dress",
+                    date: "3 months ago",
+                    img: "https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=150&h=150&fit=crop",
+                  },
+                  {
+                    id: "44",
+                    name: "Vintage Oversized Denim Jacket 90s",
+                    date: "3 months ago",
+                    img: "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=150&h=150&fit=crop",
+                  },
+                  {
+                    id: "43",
+                    name: "Handcrafted Ceramic Artisan Coffee Mug",
+                    date: "3 months ago",
+                    img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=150&h=150&fit=crop",
+                  },
+                  {
+                    id: "42",
+                    name: "Wireless Noise Cancelling Studio Pro Headphones",
+                    date: "3 months ago",
+                    img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=150&fit=crop",
+                  },
+                  {
+                    id: "41",
+                    name: "Natural Organic Cotton Canvas Tote Bag",
+                    date: "3 months ago",
+                    img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&h=150&fit=crop",
+                  },
+                ].map((product) => (
+                  <tr
+                    key={product.id}
+                    className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]"
+                  >
+                    <td className="px-4 py-3 align-middle text-center text-gray-600 font-medium">
+                      {product.id}
+                    </td>
+                    <td className="px-4 py-3 align-middle">
+                      <div className="flex items-center">
+                        <img
+                          src={product.img}
+                          alt={product.name}
+                          className="w-[45px] h-[45px] object-cover shadow-xs mr-3 border border-gray-200 shrink-0"
+                        />
+                        <div>
                           <Link
-                            href="/admin/pending-products"
-                            className="bg-[#00c0ef] text-white text-[11px] font-bold px-2.5 py-[3px] rounded-[3px] hover:bg-[#00acd6] inline-block"
+                            href="/admin/products"
+                            className="text-[#3c8dbc] hover:text-[#72afd2] font-normal leading-snug block mb-0.5"
                           >
-                            Review
+                            {product.name}
                           </Link>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </WidgetPanel>
-
-            {/* Latest Products */}
-            <WidgetPanel
-              title="Latest Products"
-              viewAllHref="/admin/products"
-            >
-              <table className="w-full text-[13px] text-left text-gray-700 m-0">
-                <thead className="border-b-2 border-gray-200">
-                  <tr>
-                    <th className="px-4 py-2 font-bold w-12 border-b border-[#f4f4f4]">
-                      Id
-                    </th>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      Name
-                    </th>
-                    <th className="px-4 py-2 font-bold text-right border-b border-[#f4f4f4]">
-                      Details
-                    </th>
+                          <span className="text-[#999] text-[11px] block">
+                            {product.date}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-right align-middle">
+                      <Link
+                        href="/admin/products"
+                        className="bg-[#00c0ef] text-white text-[11px] font-bold px-2.5 py-[3px] rounded-[3px] hover:bg-[#00acd6] inline-block shadow-xs"
+                      >
+                        Details
+                      </Link>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {[
-                    {
-                      id: "47",
-                      name: "Colorful women scarves",
-                      date: "2 months ago",
-                      img: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=150&h=150&fit=crop",
-                    },
-                    {
-                      id: "46",
-                      name: "Women's ankle boot with different colors",
-                      date: "2 months ago",
-                      img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=150&h=150&fit=crop",
-                    },
-                    {
-                      id: "45",
-                      name: "Navy polka dot dress",
-                      date: "2 months ago",
-                      img: "https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=150&h=150&fit=crop",
-                    },
-                  ].map((product, i) => (
+                ))}
+              </tbody>
+            </table>
+          </WidgetPanel>
+
+          {/* Box 2: Latest Pending Products (Full-width, matching official Modesy structure) */}
+          <WidgetPanel
+            title="Latest Pending Products"
+            viewAllHref="/admin/pending-products"
+          >
+            <table className="w-full text-[13px] text-left text-gray-700 m-0 border-collapse">
+              <thead className="border-b border-[#f4f4f4] bg-white">
+                <tr>
+                  <th className="px-4 py-2 font-bold w-16 text-center text-[#333]">
+                    Id
+                  </th>
+                  <th className="px-4 py-2 font-bold text-[#333]">
+                    Name
+                  </th>
+                  <th className="px-4 py-2 font-bold text-right text-[#333] w-24">
+                    Details
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingProducts.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="px-4 py-8 text-center text-gray-400 border-b border-[#f4f4f4]"
+                    >
+                      No records found
+                    </td>
+                  </tr>
+                ) : (
+                  pendingProducts.map((p, idx) => (
                     <tr
-                      key={i}
+                      key={p.id}
                       className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]"
                     >
-                      <td className="px-4 py-3 align-middle">{product.id}</td>
+                      <td className="px-4 py-3 align-middle text-center text-gray-600 font-medium">
+                        {idx + 1}
+                      </td>
                       <td className="px-4 py-3 align-middle">
                         <div className="flex items-center">
                           <img
-                            src={product.img}
-                            alt={product.name}
-                            className="w-12 h-12 object-cover shadow-sm mr-3 border border-gray-200"
+                            src={p.imageUrl}
+                            alt={p.title}
+                            className="w-[45px] h-[45px] object-cover shadow-xs mr-3 border border-gray-200 shrink-0"
                           />
                           <div>
-                            <p className="text-[#3c8dbc] hover:text-[#72afd2] cursor-pointer mb-0.5">
-                              {product.name}
-                            </p>
-                            <p className="text-[#999] text-[11px]">
-                              {product.date}
-                            </p>
+                            <Link
+                              href="/admin/pending-products"
+                              className="text-[#3c8dbc] hover:text-[#72afd2] font-normal leading-snug block mb-0.5"
+                            >
+                              {p.title}
+                            </Link>
+                            <span className="text-[#999] text-[11px] block">
+                              {p.vendorName} • {p.category}
+                            </span>
                           </div>
                         </div>
                       </td>
                       <td className="px-4 py-3 text-right align-middle">
                         <Link
-                          href="/admin/products"
-                          className="bg-[#00c0ef] text-white text-[11px] font-bold px-2.5 py-[3px] rounded-[3px] hover:bg-[#00acd6] inline-block"
+                          href="/admin/pending-products"
+                          className="bg-[#00c0ef] text-white text-[11px] font-bold px-2.5 py-[3px] rounded-[3px] hover:bg-[#00acd6] inline-block shadow-xs"
                         >
                           Details
                         </Link>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </WidgetPanel>
-          </div>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </WidgetPanel>
 
-          {/* Row 2: Moderation Reviews & Comments */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Latest Reviews */}
-            <WidgetPanel
-              title="Latest Reviews"
-              viewAllHref="/admin/reviews"
-            >
-              <table className="w-full text-[13px] text-left text-gray-700 m-0">
-                <tbody>
-                  {[
-                    {
-                      id: "3",
-                      user: "Admin",
-                      text: "This skirt is beautiful and the floral pattern is very charming. The material feels nice and it drapes",
-                      date: "2 months ago",
-                      stars: 4,
-                    },
-                    {
-                      id: "2",
-                      user: "Admin",
-                      text: "The visuals are vibrant, and it really captures the essence of each vacation spot. It's both informative",
-                      date: "2 months ago",
-                      stars: 5,
-                    },
-                    {
-                      id: "1",
-                      user: "Admin",
-                      text: "The light blue color is soft and flattering, and the fabric feels high-quality and breathable. It fits",
-                      date: "2 months ago",
-                      stars: 5,
-                    },
-                  ].map((review, i) => (
-                    <tr
-                      key={i}
-                      className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]"
-                    >
-                      <td className="px-4 py-4 align-top w-12 text-center text-gray-500">
-                        {review.id}
-                      </td>
-                      <td className="px-4 py-4 align-top w-24 text-[#3c8dbc] font-medium">
-                        {review.user}
-                      </td>
-                      <td className="px-4 py-4 align-top">
-                        <div className="flex text-[#f39c12] mb-1">
-                          {[...Array(5)].map((_, idx) => (
-                            <Star
-                              key={idx}
-                              className={`w-3.5 h-3.5 ${
-                                idx < review.stars
-                                  ? "fill-current"
-                                  : "text-[#d2d6de]"
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <p className="text-gray-600 mb-1 leading-relaxed">
-                          {review.text}
-                        </p>
-                        <p className="text-[11px] text-[#999]">{review.date}</p>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </WidgetPanel>
-
-            {/* Latest Comments */}
-            <WidgetPanel
-              title="Latest Comments"
-              viewAllHref="/admin/comments"
-            >
-              <table className="w-full text-[13px] text-left text-gray-700 m-0">
-                <thead className="border-b-2 border-gray-200">
-                  <tr>
-                    <th className="px-4 py-2 font-bold w-12 border-b border-[#f4f4f4] text-center">
-                      Id
-                    </th>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      User
-                    </th>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      Comment
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]">
-                    <td className="px-4 py-3 align-top text-center text-gray-500">
-                      1
+          {/* Box 3: Latest Transactions (Featured Products) (Full-width, matching official Modesy) */}
+          <WidgetPanel
+            title="Latest Transactions (Featured Products)"
+            viewAllHref="/admin/transactions"
+          >
+            <table className="w-full text-[13px] text-left text-gray-700 m-0 border-collapse">
+              <thead className="border-b border-[#f4f4f4] bg-white">
+                <tr>
+                  <th className="px-4 py-2 font-bold w-16 text-center text-[#333]">
+                    Id
+                  </th>
+                  <th className="px-4 py-2 font-bold text-[#333]">
+                    Transaction Id
+                  </th>
+                  <th className="px-4 py-2 font-bold text-[#333]">
+                    User
+                  </th>
+                  <th className="px-4 py-2 font-bold text-[#333]">
+                    Total
+                  </th>
+                  <th className="px-4 py-2 font-bold text-[#333]">
+                    Payment Method
+                  </th>
+                  <th className="px-4 py-2 font-bold text-[#333]">
+                    Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  {
+                    id: "1",
+                    trxId: "trx_65019348",
+                    user: "Roger Novak",
+                    total: "$15.00",
+                    method: "Stripe",
+                    date: "3 months ago",
+                  },
+                  {
+                    id: "2",
+                    trxId: "trx_64910284",
+                    user: "John Doe",
+                    total: "$25.00",
+                    method: "PayPal",
+                    date: "3 months ago",
+                  },
+                  {
+                    id: "3",
+                    trxId: "trx_64820194",
+                    user: "Emma Stone",
+                    total: "$15.00",
+                    method: "Stripe",
+                    date: "3 months ago",
+                  },
+                  {
+                    id: "4",
+                    trxId: "trx_64730199",
+                    user: "Alex Rivera",
+                    total: "$30.00",
+                    method: "Bank Transfer",
+                    date: "3 months ago",
+                  },
+                ].map((trx) => (
+                  <tr
+                    key={trx.id}
+                    className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]"
+                  >
+                    <td className="px-4 py-3 align-middle text-center text-gray-600 font-medium">
+                      {trx.id}
                     </td>
-                    <td className="px-4 py-3 align-top whitespace-nowrap text-[#3c8dbc] font-medium">
-                      Peter Jone
+                    <td className="px-4 py-3 align-middle font-mono text-xs text-[#3c8dbc]">
+                      {trx.trxId}
                     </td>
-                    <td className="px-4 py-3">
-                      <p className="text-gray-700">good quality product, fast delivery.</p>
-                      <p className="text-[11px] text-[#999] mt-0.5">
-                        27 days ago
-                      </p>
+                    <td className="px-4 py-3 align-middle text-gray-700">
+                      {trx.user}
+                    </td>
+                    <td className="px-4 py-3 align-middle font-semibold text-emerald-600">
+                      {trx.total}
+                    </td>
+                    <td className="px-4 py-3 align-middle text-gray-600">
+                      {trx.method}
+                    </td>
+                    <td className="px-4 py-3 align-middle text-gray-500 text-xs">
+                      {trx.date}
                     </td>
                   </tr>
-                </tbody>
-              </table>
-            </WidgetPanel>
-          </div>
-
-          {/* Row 3: Recent Abuse Reports */}
-          <div className="grid grid-cols-1 gap-4">
-            <WidgetPanel
-              title="Recent Abuse Reports"
-              viewAllHref="/admin/abuse-reports"
-            >
-              <table className="w-full text-[13px] text-left text-gray-700 m-0">
-                <thead className="border-b-2 border-gray-200">
-                  <tr>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      Reported Item / Target
-                    </th>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      Reason
-                    </th>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      Reporter
-                    </th>
-                    <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">
-                      Status
-                    </th>
-                    <th className="px-4 py-2 font-bold text-right border-b border-[#f4f4f4]">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    {
-                      target: "Smart Watch Ultra GPS Edition",
-                      reason: "Harga promo tidak wajar / dugaan spesifikasi palsu",
-                      reporter: "Pembeli Terverifikasi",
-                      status: "Pending Review",
-                    },
-                    {
-                      target: "Designer Minimalist Sneaker",
-                      reason: "Dugaan pelanggaran hak cipta merek dagang",
-                      reporter: "Brand Protection Agent",
-                      status: "Investigating",
-                    },
-                  ].map((rep, idx) => (
-                    <tr
-                      key={idx}
-                      className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]"
-                    >
-                      <td className="px-4 py-3 font-medium text-gray-800">
-                        {rep.target}
-                      </td>
-                      <td className="px-4 py-3 text-gray-600 text-xs">
-                        {rep.reason}
-                      </td>
-                      <td className="px-4 py-3 text-[#3c8dbc] text-xs">
-                        {rep.reporter}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className="bg-amber-500 text-white px-2 py-0.5 rounded text-[10px] font-bold">
-                          {rep.status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <Link
-                          href="/admin/abuse-reports"
-                          className="bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold px-2.5 py-[3px] rounded-[3px] inline-block transition-colors"
-                        >
-                          Review Report
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </WidgetPanel>
-          </div>
-        </>
+                ))}
+              </tbody>
+            </table>
+          </WidgetPanel>
+        </div>
       ) : (
         /* ========================================================================= */
         /* SUPER ADMIN OVERVIEW (Orders, Transactions, Members)                      */

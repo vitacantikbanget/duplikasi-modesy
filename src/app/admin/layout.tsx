@@ -18,9 +18,8 @@ const MODERATOR_RESTRICTED_PREFIXES = [
   '/admin/seo-tools',
   '/admin/email-blacklist',
   '/admin/payment-settings',
+  '/admin/payouts',
   '/admin/theme',
-  '/admin/slider',
-  '/admin/homepage-manager',
 ];
 
 export default function AdminLayout({

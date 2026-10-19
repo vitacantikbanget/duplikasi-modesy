@@ -46,6 +46,7 @@ import {
   Circle,
   X,
   Store,
+  RotateCcw,
 } from "lucide-react";
 import { useAdminContext } from "@/contexts/AdminContext";
 import { useAppContext } from "@/contexts/AppContext";
@@ -454,6 +455,15 @@ export default function AdminSidebar() {
                   active={isActive("/admin/abuse-reports")}
                   badge={counts.abuseReports}
                   badgeColor="bg-rose-600"
+                  onItemClick={closeMobileSidebar}
+                />
+                <SidebarItem
+                  icon={RotateCcw}
+                  label="Refund Requests"
+                  href="/admin/refund-requests"
+                  active={isActive("/admin/refund-requests")}
+                  badge={counts.refundRequests}
+                  badgeColor="bg-amber-600"
                   onItemClick={closeMobileSidebar}
                 />
               </SidebarSection>

@@ -70,7 +70,7 @@ export default function RoleSwitcher() {
       tag: "Moderator",
       tagColor: "bg-teal-50 text-teal-800 border-teal-300",
       icon: Scale,
-      destination: "/admin/pending-products",
+      destination: "/admin",
       description: "Panel kerja moderator Modesy. Verifikasi produk pending, tangani laporan pelanggaran (abuse), moderasi ulasan & sengketa.",
     },
     {

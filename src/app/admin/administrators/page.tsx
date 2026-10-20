@@ -132,7 +132,7 @@ export default function AdminAdministratorsPage() {
   return (
     <div className="w-full text-[#333333] pb-12 font-sans">
       {/* Header Bar */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
           <h1 className="text-[24px] font-normal text-[#333333]">Administrators</h1>
         </div>

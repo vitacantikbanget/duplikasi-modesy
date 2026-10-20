@@ -58,7 +58,7 @@ export default function ThemePage() {
             
             <div>
               <label className="block text-[14px] text-[#3c8dbc] mb-3 font-normal">Navigation Template</label>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <RadioOption label="Navigation 1" checked={navTemplate === 'nav1'} onClick={() => setNavTemplate('nav1')} />
                   <div className="mt-2 border border-gray-200 rounded p-2 cursor-pointer bg-white" onClick={() => setNavTemplate('nav1')}>
@@ -132,7 +132,7 @@ export default function ThemePage() {
 
           {/* Product Image Display Mode Box */}
           <ThemeBox title="Product Image Display Mode">
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <RadioOption label="Fill Container (Crop to Fit)" checked={displayMode === 'fill'} onClick={() => setDisplayMode('fill')} />
                 <div className="mt-3 border border-[#f4f4f4] rounded shadow-sm w-[200px] cursor-pointer" onClick={() => setDisplayMode('fill')}>
@@ -182,7 +182,7 @@ export default function ThemePage() {
           
           {/* Featured Categories Box */}
           <ThemeBox title="Featured Categories">
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <RadioOption label="Grid Layout" checked={featuredCat === 'grid'} onClick={() => setFeaturedCat('grid')} />
                 <div className="mt-3 border border-gray-200 rounded p-2 flex gap-1 h-[140px] cursor-pointer" onClick={() => setFeaturedCat('grid')}>

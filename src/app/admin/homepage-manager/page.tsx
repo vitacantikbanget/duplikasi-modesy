@@ -933,7 +933,7 @@ export default function HomepageManagerPage() {
 
         <div className="p-5">
           <div className="overflow-x-auto min-h-[220px]">
-            <table className="w-full text-left text-[13.5px] border-collapse">
+            <table className="w-full min-w-[700px] text-left text-[13.5px] border-collapse">
               <thead>
                 <tr className="border-b-2 border-gray-200 text-[#333] font-semibold text-[13px]">
                   <th className="py-2.5 px-3 text-left w-14 cursor-pointer select-none">

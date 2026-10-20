@@ -144,19 +144,19 @@ export default function CountriesAdminPage() {
 
         {/* Right: Countries Table Box */}
         <div className="lg:col-span-2 bg-white rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] border-t-[3px] border-[#3c8dbc] border-x border-b border-[#d2d6de]/60 p-5">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-wrap justify-between items-center gap-3 mb-4">
             <h3 className="text-[#333333] text-[16px] font-semibold">Countries</h3>
             <input
               type="text"
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-[34px] px-3 border border-[#d2d6de] rounded-[3px] text-[13px] text-gray-700 focus:outline-none focus:border-[#3c8dbc] w-52"
+              className="h-[34px] px-3 border border-[#d2d6de] rounded-[3px] text-[13px] text-gray-700 focus:outline-none focus:border-[#3c8dbc] w-full sm:w-52"
             />
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-[13px] text-[#333333] border border-[#f4f4f4] border-collapse">
+            <table className="w-full min-w-[600px] text-left text-[13px] text-[#333333] border border-[#f4f4f4] border-collapse">
               <thead>
                 <tr className="bg-[#f4f4f4] text-[#333333] font-semibold text-[13px] border-b border-[#d2d6de]">
                   <th className="px-4 py-2.5 w-12 text-center">Id</th>

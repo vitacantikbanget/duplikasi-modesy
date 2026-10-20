@@ -287,7 +287,7 @@ export default function WalletDepositsPage() {
 
         {/* Table Content */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-[13px]">
+          <table className="w-full min-w-[850px] text-left border-collapse text-[13px]">
             <thead>
               <tr className="border-b border-[#f4f4f4] text-[#333333] font-medium">
                 <th className="py-3 px-4 w-[50px] font-semibold">Id</th>
@@ -478,8 +478,8 @@ export default function WalletDepositsPage() {
               </div>
 
               {/* Invoice Item Table */}
-              <div className="border border-gray-200 rounded-[3px] overflow-hidden">
-                <table className="w-full text-left text-xs">
+              <div className="border border-gray-200 rounded-[3px] overflow-x-auto">
+                <table className="w-full min-w-[320px] text-left text-xs">
                   <thead className="bg-gray-100 border-b border-gray-200 text-gray-700 font-semibold">
                     <tr>
                       <th className="py-2.5 px-3">Transaction Type</th>

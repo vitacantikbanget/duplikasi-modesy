@@ -165,7 +165,7 @@ export default function MembershipPlansPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-[13px] text-[#333333] border border-[#f4f4f4] border-collapse">
+            <table className="w-full min-w-[650px] text-left text-[13px] text-[#333333] border border-[#f4f4f4] border-collapse">
               <thead>
                 <tr className="bg-[#f4f4f4] text-[#333333] font-semibold text-[13px] border-b border-[#d2d6de]">
                   <th className="px-4 py-2.5 w-12 text-center">Id</th>

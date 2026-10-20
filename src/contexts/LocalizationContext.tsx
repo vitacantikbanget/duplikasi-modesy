@@ -21,7 +21,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Currency, Language, LanguageCode } from "@/types/localization";
 import { currencies, DEFAULT_CURRENCY } from "@/constants/currencies";
-import { DEFAULT_LANGUAGE } from "@/constants/languages";
+import { languages, DEFAULT_LANGUAGE } from "@/constants/languages";
 import { translations } from "@/constants/translations";
 
 export interface LocalizationContextType {
@@ -39,21 +39,43 @@ const LocalizationContext = createContext<LocalizationContextType | undefined>(u
 
 export function LocalizationProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrencyState] = useState<Currency>(DEFAULT_CURRENCY);
-  const [language, setLanguage] = useState<Language>(DEFAULT_LANGUAGE);
+  const [language, setLanguageState] = useState<Language>(DEFAULT_LANGUAGE);
   const [location, setLocation] = useState<string>("Location");
 
-  // Pulihkan mata uang yang tersimpan di localStorage
+  // Pulihkan preferensi bahasa & mata uang yang tersimpan di localStorage (default English)
   useEffect(() => {
     try {
+      const savedLang = localStorage.getItem("modesy_language");
+      if (savedLang) {
+        const foundLang = languages.find((l) => l.code === savedLang);
+        if (foundLang) setLanguageState(foundLang);
+      } else {
+        setLanguageState(DEFAULT_LANGUAGE);
+      }
+
       const saved = localStorage.getItem("modesy_currency");
       if (saved) {
         const found = currencies.find((c) => c.code === saved);
         if (found) setCurrencyState(found);
       }
     } catch (e) {
-      console.error("Gagal memuat preferensi mata uang:", e);
+      console.error("Gagal memuat preferensi:", e);
     }
   }, []);
+
+  /**
+   * Mengubah bahasa aktif dan menyimpannya ke localStorage
+   */
+  const setLanguage = (l: Language) => {
+    setLanguageState(l);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("modesy_language", l.code);
+      } catch (e) {
+        console.error("Gagal menyimpan bahasa ke localStorage:", e);
+      }
+    }
+  };
 
   /**
    * Mengubah mata uang aktif dan menyimpannya ke localStorage

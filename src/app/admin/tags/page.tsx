@@ -168,7 +168,7 @@ export default function AdminTagsPage() {
   return (
     <div className="w-full text-[#333333] pb-12 font-sans">
       {/* Top Header Row with Title and + Add Tag Button */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <h1 className="text-[24px] font-normal text-[#333333]">Tags</h1>
 
         <button

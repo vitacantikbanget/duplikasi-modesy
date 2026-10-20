@@ -83,7 +83,7 @@ const WidgetPanel: React.FC<WidgetPanelProps> = ({
 
       {!collapsed && (
         <>
-          <div className="p-0 flex-1 overflow-y-auto max-h-[360px] scrollbar-thin scrollbar-thumb-gray-200">
+          <div className="p-0 flex-1 overflow-x-auto overflow-y-auto max-h-[360px] scrollbar-thin scrollbar-thumb-gray-200">
             {children}
           </div>
           {showViewAll && (
@@ -103,28 +103,8 @@ const WidgetPanel: React.FC<WidgetPanelProps> = ({
 };
 
 export default function AdminDashboard() {
-  const [showDemoAlert, setShowDemoAlert] = useState(true);
-
   return (
     <div className="space-y-4 font-sans max-w-full">
-      {/* Demo Account Alert Banner (Exactly matching screenshot) */}
-      {showDemoAlert && (
-        <div className="px-4 py-2.5 bg-[#f8d7da] border border-[#f5c6cb] text-[#721c24] rounded-[3px] text-[13px] flex items-center justify-between shadow-2xs transition-all">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-[14px] leading-none">✕</span>
-            <span>You have no permission for this as demo account!</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setShowDemoAlert(false)}
-            className="text-[#721c24] hover:opacity-75 p-0.5 cursor-pointer"
-            aria-label="Dismiss alert"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-
       {/* 4 Stat Cards - Exact Colors & Numbers from Screenshot */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title="Orders" value="46" icon={ShoppingCart} colorClass="bg-[#00a65a]" href="/admin/orders" />
@@ -137,7 +117,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Latest Orders */}
         <WidgetPanel title="Latest Orders" viewAllHref="/admin/orders">
-          <table className="w-full text-[12.5px] text-left text-gray-700 m-0 border-collapse">
+          <table className="w-full min-w-[520px] text-[12.5px] text-left text-gray-700 m-0 border-collapse whitespace-nowrap">
             <thead className="border-b border-gray-200/80 bg-white">
               <tr>
                 <th className="px-4 py-2.5 font-semibold text-gray-800">Order</th>
@@ -183,7 +163,7 @@ export default function AdminDashboard() {
 
         {/* Latest Transactions */}
         <WidgetPanel title="Latest Transactions" viewAllHref="/admin/transactions">
-          <table className="w-full text-[12.5px] text-left text-gray-700 m-0 border-collapse">
+          <table className="w-full min-w-[550px] text-[12.5px] text-left text-gray-700 m-0 border-collapse whitespace-nowrap">
             <thead className="border-b border-gray-200/80 bg-white">
               <tr>
                 <th className="px-3 py-2.5 font-semibold text-gray-800 w-10">Id</th>
@@ -224,7 +204,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Latest Products */}
         <WidgetPanel title="Latest Products" viewAllHref="/admin/products">
-          <table className="w-full text-[12.5px] text-left text-gray-700 m-0 border-collapse">
+          <table className="w-full min-w-[480px] text-[12.5px] text-left text-gray-700 m-0 border-collapse">
             <thead className="border-b border-gray-200/80 bg-white">
               <tr>
                 <th className="px-4 py-2.5 font-semibold text-gray-800 w-12">Id</th>
@@ -286,7 +266,7 @@ export default function AdminDashboard() {
 
         {/* Latest Pending Products */}
         <WidgetPanel title="Latest Pending Products" viewAllHref="/admin/pending-products">
-          <table className="w-full text-[12.5px] text-left text-gray-700 m-0 border-collapse">
+          <table className="w-full min-w-[480px] text-[12.5px] text-left text-gray-700 m-0 border-collapse">
             <thead className="border-b border-gray-200/80 bg-white">
               <tr>
                 <th className="px-4 py-2.5 font-semibold text-gray-800 w-12">Id</th>

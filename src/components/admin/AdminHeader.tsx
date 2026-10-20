@@ -11,7 +11,7 @@
 
 "use client";
 
-import { Menu, Globe, ChevronDown, LayoutGrid, User, Wallet, ShoppingBasket, Tag, MessageSquare, Settings, LogOut } from 'lucide-react';
+import { Menu, Globe, Eye, ChevronDown, LayoutGrid, User, Wallet, ShoppingBasket, Tag, MessageSquare, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -54,13 +54,13 @@ export default function AdminHeader() {
       </div>
 
       <div className="flex items-center space-x-3">
-        {/* View Site Button - Exactly as in Screenshot */}
+        {/* View Site Button - Exactly as in Official Modesy (Eye icon) */}
         <Link
           href="/"
           target="_blank"
           className="flex items-center text-[12px] font-semibold text-white bg-[#00a65a] hover:bg-[#008d4c] px-3 py-1.5 rounded-sm transition-colors shadow-xs"
         >
-          <Globe className="w-3.5 h-3.5 mr-1.5" />
+          <Eye className="w-3.5 h-3.5 mr-1.5" />
           <span>View Site</span>
         </Link>
 

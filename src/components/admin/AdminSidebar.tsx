@@ -2,17 +2,22 @@
  * ============================================================================
  * AdminSidebar: Bilah Navigasi Samping Panel Admin (Modesy Admin Sidebar)
  * ============================================================================
- * Mengacu pada antarmuka AdminLTE gelap khas Modesy (warna latar `#222d32`):
- * 1. Struktur Menu Lengkap:
- *    - Navigation: Dashboard, Slider, Homepage Manager, dsb.
- *    - Management: Products, Categories, Orders, Payments, Users, Reviews, Support.
- *    - Settings: General Settings, Visual Settings, Route, Currency, Email, SEO.
- * 2. Menu Bertingkat (Accordion Sub-menus):
- *    - Membuka submenu bertingkat saat item menu diklik.
- *    - Mendeteksi tautan aktif (`usePathname`) dan otomatis membuka parent dropdown yang sesuai.
- * 3. Tata Letak Responsif:
- *    - Mode Desktop Kolaps: Menyusut menjadi lebar 50px hanya dengan ikon.
- *    - Mode Mobile Drawer: Berupa laci geser dengan tombol tutup silang (X) dan overlay latar belakang gelap.
+ * Mengacu pada antarmuka AdminLTE gelap khas Modesy (warna latar `#323B4A`):
+ * 1. Struktur Menu Lengkap & Ikon Resmi:
+ *    - Navigation: Home, Theme, Slider, Homepage Manager
+ *    - Orders: Orders, Digital Sales, Refund Requests
+ *    - Products: Products, Quote Requests, Categories, Tags, Brands, Custom Fields
+ *    - Payments: Payments, Earnings, Payouts
+ *    - Content: Pages, Blog, Location
+ *    - Membership: Membership, Roles & Permissions
+ *    - Management Tools: Help Center, Cache System, SEO Tools, Ad Spaces, Chat,
+ *      Contact Messages, Reviews, Comments, Newsletter, Affiliate, Abuse, Blacklist
+ *    - Settings: Preferences, Settings
+ * 2. Mode Kolaps (Sidebar Mini):
+ *    - Tetap mempertahankan icon saat ditutup (lebar 50px pada desktop).
+ *    - Menampilkan flyout menu dan tooltip saat hover pada mode kolaps.
+ * 3. Submenu Bersih:
+ *    - Lingkaran pada submenu telah dihapus sesuai instruksi.
  */
 
 "use client";
@@ -30,31 +35,31 @@ import {
   Flag,
   ShoppingBasket,
   Tag,
-  Folder,
+  FolderOpen,
   Tags,
   Asterisk,
-  ToggleLeft,
+  ToggleRight,
   CreditCard,
   Banknote,
-  DollarSign,
+  Wallet,
   FileText,
   Newspaper,
   MapPin,
   Users,
   KeyRound,
-  HelpCircle,
+  LifeBuoy,
   Database,
-  BarChart3,
+  Wrench,
   Megaphone,
-  MessagesSquare,
+  MessageSquare,
   Send,
-  StarHalf,
-  MessageCircle,
+  Star,
+  MessagesSquare,
   Mail,
-  Share2,
+  Link2,
   AlertTriangle,
   Ban,
-  Sliders,
+  List,
   Settings,
   ChevronLeft,
   X,
@@ -80,7 +85,7 @@ interface Section {
   items: MenuItem[];
 }
 
-// 8 Sections exactly as provided - strictly unchanged
+// 8 Sections with icons accurately mapped to official Modesy AdminLTE FontAwesome icons
 const SIDEBAR_SECTIONS: Section[] = [
   {
     title: "NAVIGATION",
@@ -141,10 +146,10 @@ const SIDEBAR_SECTIONS: Section[] = [
         ],
       },
       { id: "quote-requests", label: "Quote Requests", icon: Tag, href: "/admin/quote-requests" },
-      { id: "categories", label: "Categories", icon: Folder, href: "/admin/categories" },
+      { id: "categories", label: "Categories", icon: FolderOpen, href: "/admin/categories" },
       { id: "tags", label: "Tags", icon: Tags, href: "/admin/tags" },
       { id: "brands", label: "Brands", icon: Asterisk, href: "/admin/brands" },
-      { id: "custom-fields", label: "Custom Fields", icon: ToggleLeft, href: "/admin/custom-fields" },
+      { id: "custom-fields", label: "Custom Fields", icon: ToggleRight, href: "/admin/custom-fields" },
     ],
   },
   {
@@ -175,7 +180,7 @@ const SIDEBAR_SECTIONS: Section[] = [
       {
         id: "payouts",
         label: "Payouts",
-        icon: DollarSign,
+        icon: Wallet,
         hasDropdown: true,
         subItems: [
           { label: "Add Payout", href: "/admin/add-payout" },
@@ -237,7 +242,7 @@ const SIDEBAR_SECTIONS: Section[] = [
       {
         id: "help-center",
         label: "Help Center",
-        icon: HelpCircle,
+        icon: LifeBuoy,
         hasDropdown: true,
         subItems: [
           { label: "Support Tickets", href: "/admin/support-tickets" },
@@ -245,15 +250,15 @@ const SIDEBAR_SECTIONS: Section[] = [
         ],
       },
       { id: "cache-system", label: "Cache System", icon: Database, href: "/admin/cache-system" },
-      { id: "seo-tools", label: "SEO Tools", icon: BarChart3, href: "/admin/seo-tools" },
+      { id: "seo-tools", label: "SEO Tools", icon: Wrench, href: "/admin/seo-tools" },
       { id: "ad-spaces", label: "Ad Spaces", icon: Megaphone, href: "/admin/ad-spaces" },
-      { id: "chat-messages", label: "Chat Messages", icon: MessagesSquare, href: "/admin/chat-messages" },
+      { id: "chat-messages", label: "Chat Messages", icon: MessageSquare, href: "/admin/chat-messages" },
       { id: "contact-messages", label: "Contact Messages", icon: Send, href: "/admin/contact-messages" },
-      { id: "reviews", label: "Reviews", icon: StarHalf, href: "/admin/reviews" },
+      { id: "reviews", label: "Reviews", icon: Star, href: "/admin/reviews" },
       {
         id: "comments",
         label: "Comments",
-        icon: MessageCircle,
+        icon: MessagesSquare,
         hasDropdown: true,
         subItems: [
           { label: "Product Comments", href: "/admin/product-comments" },
@@ -261,7 +266,7 @@ const SIDEBAR_SECTIONS: Section[] = [
         ],
       },
       { id: "newsletter", label: "Newsletter", icon: Mail, href: "/admin/newsletter" },
-      { id: "affiliate", label: "Affiliate Program", icon: Share2, href: "/admin/affiliate" },
+      { id: "affiliate", label: "Affiliate Program", icon: Link2, href: "/admin/affiliate" },
       { id: "abuse-reports", label: "Abuse Reports", icon: AlertTriangle, href: "/admin/abuse-reports" },
       { id: "email-blacklist", label: "Email Blacklist", icon: Ban, href: "/admin/email-blacklist" },
     ],
@@ -269,7 +274,7 @@ const SIDEBAR_SECTIONS: Section[] = [
   {
     title: "SETTINGS",
     items: [
-      { id: "preferences", label: "Preferences", icon: Sliders, href: "/admin/preferences" },
+      { id: "preferences", label: "Preferences", icon: List, href: "/admin/preferences" },
       {
         id: "settings",
         label: "Settings",
@@ -353,7 +358,7 @@ export default function AdminSidebar() {
         />
       )}
 
-      {/* Main Sidebar - Exact #323B4A Dark Slate-Navy from User Screenshot */}
+      {/* Main Sidebar - #323B4A Dark Slate-Navy khas Modesy */}
       <aside
         className={`bg-[#323B4A] text-[#8a99a8] h-screen flex flex-col z-50 transition-all duration-300 ease-in-out shrink-0 select-none font-sans
           ${sidebarOpenMobile
@@ -361,20 +366,26 @@ export default function AdminSidebar() {
             : "fixed inset-y-0 left-0 -translate-x-full md:translate-x-0 md:static"
           }
           ${sidebarCollapsed
-            ? "md:-ml-[230px] md:opacity-0 md:pointer-events-none"
-            : "md:ml-0 md:opacity-100 md:w-[230px]"
+            ? "md:w-[50px] md:min-w-[50px]"
+            : "md:w-[230px] md:min-w-[230px]"
           }
         `}
       >
-        {/* Header / Brand Logo: Centered Modesy Panel */}
-        <div className="pt-6 pb-4 px-6 flex items-center justify-center relative">
+        {/* Header / Brand Logo: Modesy Panel (atau 'M' saat ditutup/kolaps) */}
+        <div className={`pt-5 pb-4 flex items-center justify-center relative border-b border-[#28303c]/40 ${sidebarCollapsed ? "px-1" : "px-6"}`}>
           <Link
             href="/admin"
             onClick={closeMobileSidebar}
-            className="text-[21px] tracking-normal text-center text-white block w-full hover:opacity-95 transition-opacity"
+            className="text-white block hover:opacity-95 transition-opacity text-center overflow-hidden"
           >
-            <span className="font-bold">Modesy</span>{" "}
-            <span className="font-light text-white/95">Panel</span>
+            {sidebarCollapsed ? (
+              <span className="text-[20px] font-bold tracking-tight text-white inline-block">M</span>
+            ) : (
+              <span className="text-[21px] tracking-normal inline-block whitespace-nowrap">
+                <span className="font-bold">Modesy</span>{" "}
+                <span className="font-light text-white/95">Panel</span>
+              </span>
+            )}
           </Link>
           {/* Close button on mobile */}
           <button
@@ -386,66 +397,117 @@ export default function AdminSidebar() {
           </button>
         </div>
 
-        {/* User Panel - Matching Screenshot (Orb avatar + Admin + green dot Online) */}
-        <div className="px-6 py-3 flex items-center bg-transparent">
-          <div className="relative shrink-0">
-            <img
-              src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=100&auto=format&fit=crop&q=80"
-              alt="Admin"
-              className="w-[46px] h-[46px] rounded-full object-cover shadow-sm"
-            />
-          </div>
-          <div className="ml-3.5 overflow-hidden">
-            <p className="text-[14px] font-bold text-white leading-tight mb-1 truncate">
-              Admin
-            </p>
-            <div className="flex items-center text-[11px] text-white/90">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#00a65a] mr-1.5 shrink-0 inline-block"></span>
-              Online
+        {/* User Panel - Disembunyikan saat sidebar ditutup */}
+        {!sidebarCollapsed && (
+          <div className="px-6 py-3 flex items-center bg-transparent border-b border-[#28303c]/30">
+            <div className="relative shrink-0">
+              <img
+                src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=100&auto=format&fit=crop&q=80"
+                alt="Admin"
+                className="w-[46px] h-[46px] rounded-full object-cover shadow-sm"
+              />
+            </div>
+            <div className="ml-3.5 overflow-hidden">
+              <p className="text-[14px] font-bold text-white leading-tight mb-1 truncate">
+                Admin
+              </p>
+              <div className="flex items-center text-[11px] text-white/90">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#00a65a] mr-1.5 shrink-0 inline-block"></span>
+                Online
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Navigation Menu */}
-        <div className="flex-1 overflow-y-auto pb-8 scrollbar-thin scrollbar-thumb-[#242b37] scrollbar-track-transparent">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden pb-8 scrollbar-thin scrollbar-thumb-[#242b37] scrollbar-track-transparent">
           <ul className="space-y-0 text-[13.5px] list-none p-0 m-0">
             {SIDEBAR_SECTIONS.map((section, sIdx) => (
               <li key={sIdx} className="list-none">
-                {/* Section Header: Soft grayish blue uppercase tracking-wider */}
-                <div className="px-6 pt-5 pb-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-[#637487] select-none">
-                  {section.title}
-                </div>
+                {/* Section Header: Soft grayish blue uppercase tracking-wider or subtle divider when collapsed */}
+                {!sidebarCollapsed ? (
+                  <div className="px-6 pt-5 pb-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-[#637487] select-none">
+                    {section.title}
+                  </div>
+                ) : (
+                  <div className="my-2 border-t border-[#3c4656]/40 mx-2" />
+                )}
 
                 {/* Section Items */}
                 <ul className="space-y-0 list-none p-0 m-0">
                   {section.items.map((item) => {
                     const active = isItemActive(item);
-                    const isOpen = !!openMenus[item.id];
+                    const isOpen = !sidebarCollapsed && !!openMenus[item.id];
                     const Icon = item.icon;
 
                     if (item.hasDropdown && item.subItems) {
                       return (
-                        <li key={item.id} className="relative">
+                        <li key={item.id} className="relative group">
                           <button
                             type="button"
-                            onClick={() => toggleDropdown(item.id)}
-                            className={`w-full flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer text-left select-none ${active
-                                ? "text-white font-medium"
+                            title={sidebarCollapsed ? item.label : undefined}
+                            onClick={() => {
+                              if (!sidebarCollapsed) {
+                                toggleDropdown(item.id);
+                              }
+                            }}
+                            className={`w-full flex items-center transition-colors cursor-pointer text-left select-none ${
+                              sidebarCollapsed
+                                ? "justify-center px-0 py-2.5"
+                                : "justify-between px-6 py-[9px]"
+                            } ${
+                              active
+                                ? "text-white font-medium bg-[#28303c]/40"
                                 : "text-[#8a99a8] hover:text-white hover:bg-[#28303c]/50"
-                              }`}
+                            }`}
                           >
-                            <div className="flex items-center min-w-0 pr-2">
-                              <Icon className="w-[16px] h-[16px] mr-3.5 shrink-0" strokeWidth={active ? 2.2 : 1.8} />
-                              <span className="truncate">{item.label}</span>
+                            <div className={`flex items-center min-w-0 ${sidebarCollapsed ? "justify-center" : "pr-2"}`}>
+                              <Icon
+                                className={`w-[16px] h-[16px] shrink-0 ${sidebarCollapsed ? "m-0" : "mr-3.5"} ${active ? "text-white" : "text-[#8a99a8]"}`}
+                                strokeWidth={active ? 2.2 : 1.8}
+                              />
+                              {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
                             </div>
-                            <ChevronLeft
-                              className={`w-3.5 h-3.5 shrink-0 opacity-60 transition-transform duration-200 ${isOpen ? "-rotate-90 text-white opacity-90" : "rotate-0"
+                            {!sidebarCollapsed && (
+                              <ChevronLeft
+                                className={`w-3.5 h-3.5 shrink-0 opacity-60 transition-transform duration-200 ${
+                                  isOpen ? "-rotate-90 text-white opacity-90" : "rotate-0"
                                 }`}
-                            />
+                              />
+                            )}
                           </button>
 
-                          {/* Submenu Dropdown Tree */}
-                          {isOpen && (
+                          {/* Hover Flyout Dropdown saat Sidebar Ditutup (Collapsed) */}
+                          {sidebarCollapsed && (
+                            <div className="hidden group-hover:block absolute left-[50px] top-0 bg-[#28303c] min-w-[210px] shadow-2xl rounded-r-[3px] py-1.5 z-50 border-l border-[#222933]">
+                              <div className="px-4 py-2 font-semibold text-white text-[13px] border-b border-[#323B4A]">
+                                {item.label}
+                              </div>
+                              <ul className="py-1 list-none m-0">
+                                {item.subItems.map((sub, subIdx) => {
+                                  const subActive = isSubActive(sub.href);
+                                  return (
+                                    <li key={subIdx}>
+                                      <Link
+                                        href={sub.href}
+                                        onClick={closeMobileSidebar}
+                                        className={`block px-4 py-2 text-[12.5px] transition-colors ${
+                                          subActive
+                                            ? "text-white font-medium bg-[#222933]"
+                                            : "text-[#8a99a8] hover:text-white hover:bg-[#222933]/50"
+                                        }`}
+                                      >
+                                        <span className="truncate">{sub.label}</span>
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                          )}
+
+                          {/* Submenu Dropdown Tree saat Sidebar Terbuka (Tanpa Lingkaran Bulat) */}
+                          {!sidebarCollapsed && isOpen && (
                             <ul className="bg-[#28303c] py-1.5 space-y-0.5 list-none m-0">
                               {item.subItems.map((sub, subIdx) => {
                                 const subActive = isSubActive(sub.href);
@@ -454,17 +516,12 @@ export default function AdminSidebar() {
                                     <Link
                                       href={sub.href}
                                       onClick={closeMobileSidebar}
-                                      className={`flex items-center pl-11 pr-6 py-2 text-[12.5px] transition-colors ${subActive
+                                      className={`flex items-center pl-10 pr-5 py-2 text-[12.5px] transition-colors ${
+                                        subActive
                                           ? "text-white font-medium bg-[#222933]"
                                           : "text-[#8a99a8] hover:text-white hover:bg-[#222933]/50"
-                                        }`}
+                                      }`}
                                     >
-                                      <span
-                                        className={`inline-block w-1.5 h-1.5 rounded-full border mr-2.5 shrink-0 transition-colors ${subActive
-                                            ? "border-white bg-white"
-                                            : "border-[#8a99a8] bg-transparent"
-                                          }`}
-                                      />
                                       <span className="truncate">{sub.label}</span>
                                     </Link>
                                   </li>
@@ -477,23 +534,36 @@ export default function AdminSidebar() {
                     }
 
                     return (
-                      <li key={item.id}>
+                      <li key={item.id} className="relative group">
                         <Link
                           href={item.href || "#"}
                           onClick={closeMobileSidebar}
-                          className={`flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none ${active
-                              ? "text-white font-semibold"
+                          title={sidebarCollapsed ? item.label : undefined}
+                          className={`flex items-center transition-colors cursor-pointer select-none ${
+                            sidebarCollapsed
+                              ? "justify-center px-0 py-2.5"
+                              : "justify-between px-6 py-[9px]"
+                          } ${
+                            active
+                              ? "text-white font-semibold bg-[#28303c]/40"
                               : "text-[#8a99a8] hover:text-white hover:bg-[#28303c]/50"
-                            }`}
+                          }`}
                         >
-                          <div className="flex items-center min-w-0">
+                          <div className={`flex items-center min-w-0 ${sidebarCollapsed ? "justify-center" : ""}`}>
                             <Icon
-                              className={`w-[16px] h-[16px] mr-3.5 shrink-0 ${active ? "text-white" : "text-[#8a99a8]"}`}
+                              className={`w-[16px] h-[16px] shrink-0 ${sidebarCollapsed ? "m-0" : "mr-3.5"} ${active ? "text-white" : "text-[#8a99a8]"}`}
                               strokeWidth={active ? 2.3 : 1.8}
                             />
-                            <span className="truncate">{item.label}</span>
+                            {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
                           </div>
                         </Link>
+
+                        {/* Tooltip Flyout saat Sidebar Ditutup (Collapsed) */}
+                        {sidebarCollapsed && (
+                          <div className="hidden group-hover:block absolute left-[50px] top-1/2 -translate-y-1/2 bg-[#28303c] text-white text-[12px] font-medium px-3 py-1.5 rounded-r-[3px] shadow-xl z-50 whitespace-nowrap pointer-events-none border-l border-[#222933]">
+                            {item.label}
+                          </div>
+                        )}
                       </li>
                     );
                   })}

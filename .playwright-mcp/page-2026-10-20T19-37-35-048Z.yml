@@ -1,0 +1,15 @@
+- generic [ref=e2]:
+  - link "Modesy Panel" [ref=e4] [cursor=pointer]:
+    - /url: https://modesy.codingest.net/admin/login
+  - generic [ref=e5]:
+    - heading "Login" [level=4] [ref=e6]
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - textbox "Email" [ref=e9]: admin@codingest.net
+        - generic: ✉
+      - generic [ref=e10]:
+        - textbox "Password" [ref=e11]: "1234"
+        - generic: 
+      - button "Login" [ref=e21] [cursor=pointer]
+  - link "Go to the Homepage" [ref=e23] [cursor=pointer]:
+    - /url: https://modesy.codingest.net/

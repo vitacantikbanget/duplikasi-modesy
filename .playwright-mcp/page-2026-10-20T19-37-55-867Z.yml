@@ -1,0 +1,1011 @@
+- generic [ref=f10e2]:
+  - banner [ref=f10e3]:
+    - navigation [ref=f10e5]:
+      - button [ref=f10e6] [cursor=pointer]:
+        - generic [aria-hidden] [ref=f10e7]: 
+      - list [ref=f10e9]:
+        - listitem [ref=f10e10]:
+          - link " View Site" [ref=f10e11] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/
+            - generic [ref=f10e12]: 
+            - text: View Site
+        - listitem [ref=f10e13]:
+          - link " English " [ref=f10e14] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f10e15]: 
+            - text: English
+            - generic [ref=f10e16]: 
+        - listitem [ref=f10e17]:
+          - link "Admin " [ref=f10e18] [cursor=pointer]:
+            - /url: "#"
+            - text: Admin
+            - generic [ref=f10e19]: 
+  - complementary [ref=f10e20]:
+    - generic [ref=f10e24]:
+      - link "Modesy Panel" [ref=f10e25] [cursor=pointer]:
+        - /url: https://modesy.codingest.net/admin/
+      - generic [ref=f10e29]:
+        - paragraph [ref=f10e30]: Admin
+        - link " Online" [ref=f10e31] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=f10e32]: 
+          - text: Online
+      - list [ref=f10e33]:
+        - listitem [ref=f10e34]: Navigation
+        - listitem [ref=f10e35]:
+          - link " Home" [ref=f10e36] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/
+            - generic [ref=f10e37]: 
+            - generic [ref=f10e38]: Home
+        - listitem [ref=f10e39]:
+          - link " Theme" [ref=f10e40] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/theme
+            - generic [ref=f10e41]: 
+            - generic [ref=f10e42]: Theme
+        - listitem [ref=f10e43]:
+          - link " Slider" [ref=f10e44] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/slider
+            - generic [ref=f10e45]: 
+            - generic [ref=f10e46]: Slider
+        - listitem [ref=f10e47]:
+          - link " Homepage Manager" [ref=f10e48] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/homepage-manager
+            - generic [ref=f10e49]: 
+            - generic [ref=f10e50]: Homepage Manager
+        - listitem [ref=f10e51]: Orders
+        - listitem [ref=f10e52]:
+          - link " Orders " [ref=f10e53] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f10e54]: 
+            - generic [ref=f10e55]: Orders
+            - generic [ref=f10e56]: 
+        - listitem [ref=f10e58]:
+          - link " Digital Sales" [ref=f10e59] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/digital-sales
+            - generic [ref=f10e60]: 
+            - generic [ref=f10e61]: Digital Sales
+        - listitem [ref=f10e62]:
+          - link " Refund Requests" [ref=f10e63] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/refund-requests
+            - generic [ref=f10e64]: 
+            - generic [ref=f10e65]: Refund Requests
+        - listitem [ref=f10e66]: Products
+        - listitem [ref=f10e67]:
+          - link "Products " [ref=f10e68] [cursor=pointer]:
+            - /url: "#"
+            - generic [aria-hidden] [ref=f10e69]: 
+            - generic [ref=f10e70]: Products
+            - generic [ref=f10e71]: 
+        - listitem [ref=f10e73]:
+          - link " Quote Requests" [ref=f10e74] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/quote-requests
+            - generic [ref=f10e75]: 
+            - generic [ref=f10e76]: Quote Requests
+        - listitem [ref=f10e77]:
+          - link " Categories" [ref=f10e78] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/categories
+            - generic [ref=f10e79]: 
+            - generic [ref=f10e80]: Categories
+        - listitem [ref=f10e81]:
+          - link " Tags" [ref=f10e82] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/tags
+            - generic [ref=f10e83]: 
+            - generic [ref=f10e84]: Tags
+        - listitem [ref=f10e85]:
+          - link "* Brands" [ref=f10e86] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/brands
+            - generic [ref=f10e87]: "*"
+            - generic [ref=f10e88]: Brands
+        - listitem [ref=f10e89]:
+          - link " Custom Fields" [ref=f10e90] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/custom-fields
+            - generic [ref=f10e91]: 
+            - generic [ref=f10e92]: Custom Fields
+        - listitem [ref=f10e93]: Payments
+        - listitem [ref=f10e94]:
+          - link "Payments " [ref=f10e95] [cursor=pointer]:
+            - /url: "#"
+            - generic [aria-hidden] [ref=f10e96]: 
+            - generic [ref=f10e97]: Payments
+            - generic [ref=f10e98]: 
+        - listitem [ref=f10e100]:
+          - link "Earnings " [ref=f10e101] [cursor=pointer]:
+            - /url: "#"
+            - generic [aria-hidden] [ref=f10e102]: 
+            - generic [ref=f10e103]: Earnings
+            - generic [ref=f10e104]: 
+        - listitem [ref=f10e106]:
+          - link "Payouts " [ref=f10e107] [cursor=pointer]:
+            - /url: "#"
+            - generic [aria-hidden] [ref=f10e108]: 
+            - generic [ref=f10e109]: Payouts
+            - generic [ref=f10e110]: 
+        - listitem [ref=f10e112]: Content
+        - listitem [ref=f10e113]:
+          - link " Pages" [ref=f10e114] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/pages
+            - generic [ref=f10e115]: 
+            - generic [ref=f10e116]: Pages
+        - listitem [ref=f10e117]:
+          - link " Blog " [ref=f10e118] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f10e119]: 
+            - generic [ref=f10e120]: Blog
+            - generic [ref=f10e121]: 
+        - listitem [ref=f10e123]:
+          - link " Location " [ref=f10e124] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f10e125]: 
+            - generic [ref=f10e126]: Location
+            - generic [ref=f10e127]: 
+        - listitem [ref=f10e129]: Membership
+        - listitem [ref=f10e130]:
+          - link " Membership " [ref=f10e131] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f10e132]: 
+            - generic [ref=f10e133]: Membership
+            - generic [ref=f10e134]: 
+        - listitem [ref=f10e136]:
+          - link " Roles & Permissions" [ref=f10e137] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/roles-permissions
+            - generic [ref=f10e138]: 
+            - generic [ref=f10e139]: Roles & Permissions
+        - listitem [ref=f10e140]: Management Tools
+        - listitem [ref=f10e141]:
+          - link " Help Center " [ref=f10e142] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f10e143]: 
+            - generic [ref=f10e144]: Help Center
+            - generic [ref=f10e145]: 
+        - listitem [ref=f10e147]:
+          - link " Cache System" [ref=f10e148] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/cache-system
+            - generic [ref=f10e149]: 
+            - generic [ref=f10e150]: Cache System
+        - listitem [ref=f10e151]:
+          - link " SEO Tools" [ref=f10e152] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/seo-tools
+            - generic [ref=f10e153]: 
+            - generic [ref=f10e154]: SEO Tools
+        - listitem [ref=f10e155]:
+          - link " Ad Spaces" [ref=f10e156] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/ad-spaces
+            - generic [ref=f10e157]: 
+            - generic [ref=f10e158]: Ad Spaces
+        - listitem [ref=f10e159]:
+          - link "Chat Messages" [ref=f10e160] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/chat-messages
+            - generic [aria-hidden] [ref=f10e161]: 
+        - listitem [ref=f10e163]:
+          - link "Contact Messages" [ref=f10e164] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/contact-messages
+            - generic [aria-hidden] [ref=f10e165]: 
+        - listitem [ref=f10e167]:
+          - link " Reviews" [ref=f10e168] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/reviews
+            - generic [ref=f10e169]: 
+            - generic [ref=f10e170]: Reviews
+        - listitem [ref=f10e171]:
+          - link " Comments " [ref=f10e172] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f10e173]: 
+            - generic [ref=f10e174]: Comments
+            - generic [ref=f10e175]: 
+        - listitem [ref=f10e177]:
+          - link "Newsletter" [ref=f10e178] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/newsletter
+            - generic [aria-hidden] [ref=f10e179]: 
+        - listitem [ref=f10e181]:
+          - link "Affiliate Program" [ref=f10e182] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/affiliate-program
+            - generic [aria-hidden] [ref=f10e183]: 
+        - listitem [ref=f10e185]:
+          - link "Abuse Reports" [ref=f10e186] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/abuse-reports
+            - generic [aria-hidden] [ref=f10e187]: 
+        - listitem [ref=f10e189]:
+          - link "Email Blacklist" [ref=f10e190] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/email-blacklist
+            - generic [aria-hidden] [ref=f10e191]: 
+        - listitem [ref=f10e193]: Settings
+        - listitem [ref=f10e194]:
+          - link " Preferences" [ref=f10e195] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/preferences
+            - generic [ref=f10e196]: 
+            - generic [ref=f10e197]: Preferences
+        - listitem [ref=f10e198]:
+          - link " Settings " [ref=f10e199] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f10e200]: 
+            - generic [ref=f10e201]: Settings
+            - generic [ref=f10e202]: 
+        - listitem [ref=f10e204]:
+          - button " Download Database Backup" [ref=f10e207] [cursor=pointer]:
+            - generic [ref=f10e208]: 
+            - text: Download Database Backup
+        - listitem [ref=f10e209]
+  - generic [ref=f10e212]:
+    - generic [ref=f10e215]:
+      - generic [ref=f10e217]:
+        - generic [ref=f10e218]:
+          - heading "2" [level=3] [ref=f10e219]
+          - link [ref=f10e220] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/orders
+            - paragraph [ref=f10e221]: Orders
+        - link "" [ref=f10e223] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/orders
+      - generic [ref=f10e226]:
+        - generic [ref=f10e227]:
+          - heading "2" [level=3] [ref=f10e228]
+          - link [ref=f10e229] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/products
+            - paragraph [ref=f10e230]: Products
+        - link "" [ref=f10e232] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/products
+      - generic [ref=f10e235]:
+        - generic [ref=f10e236]:
+          - heading "0" [level=3] [ref=f10e237]
+          - link [ref=f10e238] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/products?list=pending
+            - paragraph [ref=f10e239]: Pending Products
+        - link "" [ref=f10e241] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/products?list=pending
+      - generic [ref=f10e244]:
+        - generic [ref=f10e245]:
+          - heading "1" [level=3] [ref=f10e246]
+          - link [ref=f10e247] [cursor=pointer]:
+            - /url: https://modesy.codingest.net/admin/users
+            - paragraph [ref=f10e248]: Members
+        - link "" [ref=f10e250] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/users
+    - generic [ref=f10e252]:
+      - generic [ref=f10e254]:
+        - generic [ref=f10e255]:
+          - heading "Latest Orders" [level=3] [ref=f10e256]
+          - generic [ref=f10e257]:
+            - button "" [ref=f10e258] [cursor=pointer]
+            - button "" [ref=f10e260] [cursor=pointer]
+        - table [ref=f10e264]:
+          - rowgroup [ref=f10e265]:
+            - row [ref=f10e266]:
+              - columnheader "Order" [ref=f10e267]
+              - columnheader "Total" [ref=f10e268]
+              - columnheader "Status" [ref=f10e269]
+              - columnheader "Date" [ref=f10e270]
+              - columnheader "Details" [ref=f10e271]
+          - rowgroup [ref=f10e272]:
+            - row [ref=f10e273]:
+              - cell "#10049" [ref=f10e274]
+              - cell "$304.75" [ref=f10e275]
+              - cell "Processing" [ref=f10e276]
+              - cell "2026-10-20 / 10:36" [ref=f10e277]
+              - cell [ref=f10e278]:
+                - link "Details" [ref=f10e279] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/49
+            - row [ref=f10e280]:
+              - cell "#10048" [ref=f10e281]
+              - cell "$84.35" [ref=f10e282]
+              - cell "Processing" [ref=f10e283]
+              - cell "2026-10-20 / 02:37" [ref=f10e284]
+              - cell [ref=f10e285]:
+                - link "Details" [ref=f10e286] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/48
+            - row [ref=f10e287]:
+              - cell "#10047" [ref=f10e288]
+              - cell "$33.35" [ref=f10e289]
+              - cell "Completed" [ref=f10e290]
+              - cell "2026-10-19 / 18:53" [ref=f10e291]
+              - cell [ref=f10e292]:
+                - link "Details" [ref=f10e293] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/47
+            - row [ref=f10e294]:
+              - cell "#10046" [ref=f10e295]
+              - cell "$84.35" [ref=f10e296]
+              - cell "Completed" [ref=f10e297]
+              - cell "2026-10-17 / 19:08" [ref=f10e298]
+              - cell [ref=f10e299]:
+                - link "Details" [ref=f10e300] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/46
+            - row [ref=f10e301]:
+              - cell "#10045" [ref=f10e302]
+              - cell "$60.20" [ref=f10e303]
+              - cell "Processing" [ref=f10e304]
+              - cell "2026-10-17 / 08:08" [ref=f10e305]
+              - cell [ref=f10e306]:
+                - link "Details" [ref=f10e307] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/45
+            - row [ref=f10e308]:
+              - cell "#10044" [ref=f10e309]
+              - cell "$154" [ref=f10e310]
+              - cell "Processing" [ref=f10e311]
+              - cell "2026-10-14 / 20:42" [ref=f10e312]
+              - cell [ref=f10e313]:
+                - link "Details" [ref=f10e314] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/44
+            - row [ref=f10e315]:
+              - cell "#10043" [ref=f10e316]
+              - cell "$1,519.45" [ref=f10e317]
+              - cell "Processing" [ref=f10e318]
+              - cell "2026-10-14 / 19:49" [ref=f10e319]
+              - cell [ref=f10e320]:
+                - link "Details" [ref=f10e321] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/43
+            - row [ref=f10e322]:
+              - cell "#10042" [ref=f10e323]
+              - cell "$236.25" [ref=f10e324]
+              - cell "Processing" [ref=f10e325]
+              - cell "2026-10-12 / 19:26" [ref=f10e326]
+              - cell [ref=f10e327]:
+                - link "Details" [ref=f10e328] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/42
+            - row [ref=f10e329]:
+              - cell "#10041" [ref=f10e330]
+              - cell "$60.20" [ref=f10e331]
+              - cell "Processing" [ref=f10e332]
+              - cell "2026-10-05 / 15:38" [ref=f10e333]
+              - cell [ref=f10e334]:
+                - link "Details" [ref=f10e335] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/41
+            - row [ref=f10e336]:
+              - cell "#10040" [ref=f10e337]
+              - cell "$138" [ref=f10e338]
+              - cell "Processing" [ref=f10e339]
+              - cell "2026-09-29 / 12:00" [ref=f10e340]
+              - cell [ref=f10e341]:
+                - link "Details" [ref=f10e342] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/40
+            - row [ref=f10e343]:
+              - cell "#10039" [ref=f10e344]
+              - cell "$94" [ref=f10e345]
+              - cell "Processing" [ref=f10e346]
+              - cell "2026-09-29 / 00:34" [ref=f10e347]
+              - cell [ref=f10e348]:
+                - link "Details" [ref=f10e349] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/39
+            - row [ref=f10e350]:
+              - cell "#10038" [ref=f10e351]
+              - cell "$381.85" [ref=f10e352]
+              - cell "Processing" [ref=f10e353]
+              - cell "2026-09-28 / 22:48" [ref=f10e354]
+              - cell [ref=f10e355]:
+                - link "Details" [ref=f10e356] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/38
+            - row [ref=f10e357]:
+              - cell "#10037" [ref=f10e358]
+              - cell "$71.95" [ref=f10e359]
+              - cell "Processing" [ref=f10e360]
+              - cell "2026-09-28 / 15:39" [ref=f10e361]
+              - cell [ref=f10e362]:
+                - link "Details" [ref=f10e363] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/37
+            - row [ref=f10e364]:
+              - cell "#10036" [ref=f10e365]
+              - cell "$336" [ref=f10e366]
+              - cell "Processing" [ref=f10e367]
+              - cell "2026-09-28 / 06:49" [ref=f10e368]
+              - cell [ref=f10e369]:
+                - link "Details" [ref=f10e370] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/36
+            - row [ref=f10e371]:
+              - cell "#10035" [ref=f10e372]
+              - cell "$99.30" [ref=f10e373]
+              - cell "Processing" [ref=f10e374]
+              - cell "2026-09-26 / 21:14" [ref=f10e375]
+              - cell [ref=f10e376]:
+                - link "Details" [ref=f10e377] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/order-details/35
+        - link "View All" [ref=f10e379] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/orders
+      - generic [ref=f10e381]:
+        - generic [ref=f10e382]:
+          - heading "Latest Transactions" [level=3] [ref=f10e383]
+          - generic [ref=f10e384]:
+            - button "" [ref=f10e385] [cursor=pointer]
+            - button "" [ref=f10e387] [cursor=pointer]
+        - table [ref=f10e391]:
+          - rowgroup [ref=f10e392]:
+            - row [ref=f10e393]:
+              - columnheader "Id" [ref=f10e394]
+              - columnheader "Order" [ref=f10e395]
+              - columnheader "Payment Amount" [ref=f10e396]
+              - columnheader "Payment Method" [ref=f10e397]
+              - columnheader "Status" [ref=f10e398]
+              - columnheader "Date" [ref=f10e399]
+          - rowgroup [ref=f10e400]:
+            - row [ref=f10e401]:
+              - cell "21" [ref=f10e402]
+              - cell "#10047" [ref=f10e403]
+              - cell "$33.35" [ref=f10e404]
+              - cell "Wallet Balance" [ref=f10e405]
+              - cell "Succeeded" [ref=f10e406]
+              - cell "2026-10-19 / 18:53" [ref=f10e407]
+            - row [ref=f10e408]:
+              - cell "20" [ref=f10e409]
+              - cell "#10046" [ref=f10e410]
+              - cell "$84.35" [ref=f10e411]
+              - cell "Wallet Balance" [ref=f10e412]
+              - cell "Succeeded" [ref=f10e413]
+              - cell "2026-10-17 / 19:08" [ref=f10e414]
+            - row [ref=f10e415]:
+              - cell "19" [ref=f10e416]
+              - cell "#10042" [ref=f10e417]
+              - cell "$236.25" [ref=f10e418]
+              - cell "Wallet Balance" [ref=f10e419]
+              - cell "Succeeded" [ref=f10e420]
+              - cell "2026-10-12 / 19:26" [ref=f10e421]
+            - row [ref=f10e422]:
+              - cell "18" [ref=f10e423]
+              - cell "#10033" [ref=f10e424]
+              - cell "$191.10" [ref=f10e425]
+              - cell "Wallet Balance" [ref=f10e426]
+              - cell "Succeeded" [ref=f10e427]
+              - cell "2026-09-23 / 17:23" [ref=f10e428]
+            - row [ref=f10e429]:
+              - cell "17" [ref=f10e430]
+              - cell "#10031" [ref=f10e431]
+              - cell "$257" [ref=f10e432]
+              - cell "Wallet Balance" [ref=f10e433]
+              - cell "Succeeded" [ref=f10e434]
+              - cell "2026-09-23 / 02:08" [ref=f10e435]
+            - row [ref=f10e436]:
+              - cell "16" [ref=f10e437]
+              - cell "#10029" [ref=f10e438]
+              - cell "$259.05" [ref=f10e439]
+              - cell "Wallet Balance" [ref=f10e440]
+              - cell "Succeeded" [ref=f10e441]
+              - cell "2026-09-22 / 06:40" [ref=f10e442]
+            - row [ref=f10e443]:
+              - cell "15" [ref=f10e444]
+              - cell "#10025" [ref=f10e445]
+              - cell "₦149479.73" [ref=f10e446]
+              - cell "PayStack" [ref=f10e447]
+              - cell "success" [ref=f10e448]
+              - cell "2026-09-16 / 10:38" [ref=f10e449]
+            - row [ref=f10e450]:
+              - cell "14" [ref=f10e451]
+              - cell "#10019" [ref=f10e452]
+              - cell "$182.10" [ref=f10e453]
+              - cell "Wallet Balance" [ref=f10e454]
+              - cell "Succeeded" [ref=f10e455]
+              - cell "2026-09-09 / 11:39" [ref=f10e456]
+            - row [ref=f10e457]:
+              - cell "13" [ref=f10e458]
+              - cell "#10018" [ref=f10e459]
+              - cell "$149.50" [ref=f10e460]
+              - cell "Wallet Balance" [ref=f10e461]
+              - cell "Succeeded" [ref=f10e462]
+              - cell "2026-09-09 / 05:59" [ref=f10e463]
+            - row [ref=f10e464]:
+              - cell "12" [ref=f10e465]
+              - cell "#10017" [ref=f10e466]
+              - cell "$87" [ref=f10e467]
+              - cell "Wallet Balance" [ref=f10e468]
+              - cell "Succeeded" [ref=f10e469]
+              - cell "2026-09-06 / 02:16" [ref=f10e470]
+            - row [ref=f10e471]:
+              - cell "11" [ref=f10e472]
+              - cell "#10016" [ref=f10e473]
+              - cell "$84" [ref=f10e474]
+              - cell "Wallet Balance" [ref=f10e475]
+              - cell "Succeeded" [ref=f10e476]
+              - cell "2026-09-06 / 02:15" [ref=f10e477]
+            - row [ref=f10e478]:
+              - cell "10" [ref=f10e479]
+              - cell "#10015" [ref=f10e480]
+              - cell "$41.40" [ref=f10e481]
+              - cell "Wallet Balance" [ref=f10e482]
+              - cell "Succeeded" [ref=f10e483]
+              - cell "2026-09-06 / 02:14" [ref=f10e484]
+            - row [ref=f10e485]:
+              - cell "9" [ref=f10e486]
+              - cell "#10011" [ref=f10e487]
+              - cell "$194.20" [ref=f10e488]
+              - cell "Wallet Balance" [ref=f10e489]
+              - cell "Succeeded" [ref=f10e490]
+              - cell "2026-08-31 / 18:56" [ref=f10e491]
+            - row [ref=f10e492]:
+              - cell "8" [ref=f10e493]
+              - cell "#10010" [ref=f10e494]
+              - cell "$245.60" [ref=f10e495]
+              - cell "Wallet Balance" [ref=f10e496]
+              - cell "Succeeded" [ref=f10e497]
+              - cell "2026-08-31 / 17:37" [ref=f10e498]
+            - row [ref=f10e499]:
+              - cell "7" [ref=f10e500]
+              - cell "#10008" [ref=f10e501]
+              - cell "$28.75" [ref=f10e502]
+              - cell "Wallet Balance" [ref=f10e503]
+              - cell "Succeeded" [ref=f10e504]
+              - cell "2026-08-05 / 13:57" [ref=f10e505]
+        - link "View All" [ref=f10e507] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/transactions
+    - generic [ref=f10e508]:
+      - generic [ref=f10e510]:
+        - generic [ref=f10e511]:
+          - heading "Latest Products" [level=3] [ref=f10e512]
+          - generic [ref=f10e513]:
+            - button "" [ref=f10e514] [cursor=pointer]
+            - button "" [ref=f10e516] [cursor=pointer]
+        - table [ref=f10e520]:
+          - rowgroup [ref=f10e521]:
+            - row [ref=f10e522]:
+              - columnheader "Id" [ref=f10e523]
+              - columnheader "Name" [ref=f10e524]
+              - columnheader "Details" [ref=f10e525]
+          - rowgroup [ref=f10e526]:
+            - row [ref=f10e527]:
+              - cell "47" [ref=f10e528]
+              - cell "Colorful women scarves 3 months ago" [ref=f10e529]:
+                - link [ref=f10e531] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/colorful-women-scarves-47
+                - link "Colorful women scarves" [ref=f10e532] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/colorful-women-scarves-47
+                - generic [ref=f10e533]: 3 months ago
+              - cell [ref=f10e534]:
+                - link "Details" [ref=f10e535] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/47
+            - row [ref=f10e536]:
+              - cell "46" [ref=f10e537]
+              - cell "Women's ankle boot with different colors 3 months ago" [ref=f10e538]:
+                - link [ref=f10e540] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/womens-ankle-boot-with-different-colors-46
+                - link "Women's ankle boot with different colors" [ref=f10e541] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/womens-ankle-boot-with-different-colors-46
+                - generic [ref=f10e542]: 3 months ago
+              - cell [ref=f10e543]:
+                - link "Details" [ref=f10e544] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/46
+            - row [ref=f10e545]:
+              - cell "45" [ref=f10e546]
+              - cell "Navy polka dot dress 3 months ago" [ref=f10e547]:
+                - link [ref=f10e549] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/navy-polka-dot-dress-45
+                - link "Navy polka dot dress" [ref=f10e550] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/navy-polka-dot-dress-45
+                - generic [ref=f10e551]: 3 months ago
+              - cell [ref=f10e552]:
+                - link "Details" [ref=f10e553] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/45
+            - row [ref=f10e554]:
+              - cell "44" [ref=f10e555]
+              - cell "Modern grey couch and pillows 3 months ago" [ref=f10e556]:
+                - link [ref=f10e558] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/modern-grey-couch-and-pillows-44
+                - link "Modern grey couch and pillows" [ref=f10e559] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/modern-grey-couch-and-pillows-44
+                - generic [ref=f10e560]: 3 months ago
+              - cell [ref=f10e561]:
+                - link "Details" [ref=f10e562] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/44
+            - row [ref=f10e563]:
+              - cell "43" [ref=f10e564]
+              - cell "Black fashion women backpack 3 months ago" [ref=f10e565]:
+                - link [ref=f10e567] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/black-fashion-women-backpack-43
+                - link "Black fashion women backpack" [ref=f10e568] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/black-fashion-women-backpack-43
+                - generic [ref=f10e569]: 3 months ago
+              - cell [ref=f10e570]:
+                - link "Details" [ref=f10e571] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/43
+            - row [ref=f10e572]:
+              - cell "42" [ref=f10e573]
+              - cell "Handcrafted decorative pillow for a luxurious touch 3 months ago" [ref=f10e574]:
+                - link [ref=f10e576] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/handcrafted-decorative-pillow-for-a-luxurious-touch-42
+                - link "Handcrafted decorative pillow for a luxurious touch" [ref=f10e577] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/handcrafted-decorative-pillow-for-a-luxurious-touch-42
+                - generic [ref=f10e578]: 3 months ago
+              - cell [ref=f10e579]:
+                - link "Details" [ref=f10e580] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/42
+            - row [ref=f10e581]:
+              - cell "41" [ref=f10e582]
+              - cell "Black midi skirt with white flowers 3 months ago" [ref=f10e583]:
+                - link [ref=f10e585] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/black-midi-skirt-with-white-flowers-41
+                - link "Black midi skirt with white flowers" [ref=f10e586] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/black-midi-skirt-with-white-flowers-41
+                - generic [ref=f10e587]: 3 months ago
+              - cell [ref=f10e588]:
+                - link "Details" [ref=f10e589] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/41
+            - row [ref=f10e590]:
+              - cell "40" [ref=f10e591]
+              - cell "Women kipling bailey saddle handbag 3 months ago" [ref=f10e592]:
+                - link [ref=f10e594] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/women-kipling-bailey-saddle-handbag-40
+                - link "Women kipling bailey saddle handbag" [ref=f10e595] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/women-kipling-bailey-saddle-handbag-40
+                - generic [ref=f10e596]: 3 months ago
+              - cell [ref=f10e597]:
+                - link "Details" [ref=f10e598] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/40
+            - row [ref=f10e599]:
+              - cell "39" [ref=f10e600]
+              - cell "Animal colorful digital prints 3 months ago" [ref=f10e601]:
+                - link [ref=f10e603] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/animal-colorful-digital-prints-39
+                - link "Animal colorful digital prints" [ref=f10e604] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/animal-colorful-digital-prints-39
+                - generic [ref=f10e605]: 3 months ago
+              - cell [ref=f10e606]:
+                - link "Details" [ref=f10e607] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/39
+            - row [ref=f10e608]:
+              - cell "38" [ref=f10e609]
+              - cell "Floral women sundress 3 months ago" [ref=f10e610]:
+                - link [ref=f10e612] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/floral-women-sundress-38
+                - link "Floral women sundress" [ref=f10e613] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/floral-women-sundress-38
+                - generic [ref=f10e614]: 3 months ago
+              - cell [ref=f10e615]:
+                - link "Details" [ref=f10e616] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/38
+            - row [ref=f10e617]:
+              - cell "37" [ref=f10e618]
+              - cell "Seychelles women's brown ankle bootie 3 months ago" [ref=f10e619]:
+                - link [ref=f10e621] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/seychelles-womens-brown-ankle-bootie-37
+                - link "Seychelles women's brown ankle bootie" [ref=f10e622] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/seychelles-womens-brown-ankle-bootie-37
+                - generic [ref=f10e623]: 3 months ago
+              - cell [ref=f10e624]:
+                - link "Details" [ref=f10e625] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/37
+            - row [ref=f10e626]:
+              - cell "36" [ref=f10e627]
+              - cell "Ship illustration royalty free image 3 months ago" [ref=f10e628]:
+                - link [ref=f10e630] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/ship-illustration-royalty-free-image-36
+                - link "Ship illustration royalty free image" [ref=f10e631] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/ship-illustration-royalty-free-image-36
+                - generic [ref=f10e632]: 3 months ago
+              - cell [ref=f10e633]:
+                - link "Details" [ref=f10e634] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/36
+            - row [ref=f10e635]:
+              - cell "35" [ref=f10e636]
+              - cell "Men outerwear navy color 3 months ago" [ref=f10e637]:
+                - link [ref=f10e639] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/men-outerwear-navy-color-35
+                - link "Men outerwear navy color" [ref=f10e640] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/men-outerwear-navy-color-35
+                - generic [ref=f10e641]: 3 months ago
+              - cell [ref=f10e642]:
+                - link "Details" [ref=f10e643] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/35
+            - row [ref=f10e644]:
+              - cell "34" [ref=f10e645]
+              - cell "Men's lace formal casual fashion shoe 3 months ago" [ref=f10e646]:
+                - link [ref=f10e648] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/mens-lace-formal-casual-fashion-shoe-34
+                - link "Men's lace formal casual fashion shoe" [ref=f10e649] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/mens-lace-formal-casual-fashion-shoe-34
+                - generic [ref=f10e650]: 3 months ago
+              - cell [ref=f10e651]:
+                - link "Details" [ref=f10e652] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/34
+            - row [ref=f10e653]:
+              - cell "33" [ref=f10e654]
+              - cell "Animation of popular vacation spots 3 months ago" [ref=f10e655]:
+                - link [ref=f10e657] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/animation-of-popular-vacation-spots-33
+                - link "Animation of popular vacation spots" [ref=f10e658] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/animation-of-popular-vacation-spots-33
+                - generic [ref=f10e659]: 3 months ago
+              - cell [ref=f10e660]:
+                - link "Details" [ref=f10e661] [cursor=pointer]:
+                  - /url: https://modesy.codingest.net/admin/product-details/33
+        - link "View All" [ref=f10e663] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/products
+      - generic [ref=f10e665]:
+        - generic [ref=f10e666]:
+          - heading "Latest Pending Products" [level=3] [ref=f10e667]
+          - generic [ref=f10e668]:
+            - button "" [ref=f10e669] [cursor=pointer]
+            - button "" [ref=f10e671] [cursor=pointer]
+        - table [ref=f10e675]:
+          - rowgroup [ref=f10e676]:
+            - row [ref=f10e677]:
+              - columnheader "Id" [ref=f10e678]
+              - columnheader "Name" [ref=f10e679]
+              - columnheader "Details" [ref=f10e680]
+          - rowgroup
+        - link "View All" [ref=f10e682] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/products?list=pending
+    - generic [ref=f10e683]:
+      - generic [ref=f10e685]:
+        - generic [ref=f10e686]:
+          - heading "Latest Transactions (Featured Products)" [level=3] [ref=f10e687]
+          - generic [ref=f10e688]:
+            - button "" [ref=f10e689] [cursor=pointer]
+            - button "" [ref=f10e691] [cursor=pointer]
+        - table [ref=f10e695]:
+          - rowgroup [ref=f10e696]:
+            - row [ref=f10e697]:
+              - columnheader "Id" [ref=f10e698]
+              - columnheader "Payment Method" [ref=f10e699]
+              - columnheader "Payment Amount" [ref=f10e700]
+              - columnheader "Status" [ref=f10e701]
+              - columnheader "Date" [ref=f10e702]
+          - rowgroup [ref=f10e703]:
+            - row [ref=f10e704]:
+              - cell "15" [ref=f10e705]
+              - cell "PayPal" [ref=f10e706]
+              - cell "$9.45" [ref=f10e707]
+              - cell "COMPLETED" [ref=f10e708]
+              - cell "2026-08-04 / 10:34" [ref=f10e709]
+            - row [ref=f10e710]:
+              - cell "14" [ref=f10e711]
+              - cell "Stripe" [ref=f10e712]
+              - cell "$9.45" [ref=f10e713]
+              - cell "Paid" [ref=f10e714]
+              - cell "2026-08-04 / 10:33" [ref=f10e715]
+            - row [ref=f10e716]:
+              - cell "13" [ref=f10e717]
+              - cell "Stripe" [ref=f10e718]
+              - cell "$9.45" [ref=f10e719]
+              - cell "Paid" [ref=f10e720]
+              - cell "2026-08-04 / 10:31" [ref=f10e721]
+            - row [ref=f10e722]:
+              - cell "12" [ref=f10e723]
+              - cell "PayPal" [ref=f10e724]
+              - cell "$31.50" [ref=f10e725]
+              - cell "COMPLETED" [ref=f10e726]
+              - cell "2026-08-04 / 10:30" [ref=f10e727]
+            - row [ref=f10e728]:
+              - cell "11" [ref=f10e729]
+              - cell "PayTabs" [ref=f10e730]
+              - cell "$8.40" [ref=f10e731]
+              - cell "Authorised" [ref=f10e732]
+              - cell "2026-08-04 / 10:27" [ref=f10e733]
+            - row [ref=f10e734]:
+              - cell "10" [ref=f10e735]
+              - cell "dLocal Go" [ref=f10e736]
+              - cell "R$ 51.53" [ref=f10e737]
+              - cell "Completed" [ref=f10e738]
+              - cell "2026-08-04 / 10:25" [ref=f10e739]
+            - row [ref=f10e740]:
+              - cell "9" [ref=f10e741]
+              - cell "Midtrans" [ref=f10e742]
+              - cell "Rp137996.29" [ref=f10e743]
+              - cell "capture" [ref=f10e744]
+              - cell "2026-08-04 / 10:18" [ref=f10e745]
+            - row [ref=f10e746]:
+              - cell "8" [ref=f10e747]
+              - cell "Stripe" [ref=f10e748]
+              - cell "$42" [ref=f10e749]
+              - cell "Paid" [ref=f10e750]
+              - cell "2026-08-04 / 10:16" [ref=f10e751]
+            - row [ref=f10e752]:
+              - cell "7" [ref=f10e753]
+              - cell "Iyzico" [ref=f10e754]
+              - cell "345.72₺" [ref=f10e755]
+              - cell "SUCCESS" [ref=f10e756]
+              - cell "2026-08-04 / 10:13" [ref=f10e757]
+            - row [ref=f10e758]:
+              - cell "6" [ref=f10e759]
+              - cell "Flutterwave" [ref=f10e760]
+              - cell "$7.35" [ref=f10e761]
+              - cell "Successful" [ref=f10e762]
+              - cell "2026-08-04 / 10:11" [ref=f10e763]
+            - row [ref=f10e764]:
+              - cell "5" [ref=f10e765]
+              - cell "Razorpay" [ref=f10e766]
+              - cell "₹555.24" [ref=f10e767]
+              - cell "captured" [ref=f10e768]
+              - cell "2026-08-04 / 10:09" [ref=f10e769]
+            - row [ref=f10e770]:
+              - cell "4" [ref=f10e771]
+              - cell "PayPal" [ref=f10e772]
+              - cell "$31.50" [ref=f10e773]
+              - cell "COMPLETED" [ref=f10e774]
+              - cell "2026-08-04 / 10:06" [ref=f10e775]
+            - row [ref=f10e776]:
+              - cell "3" [ref=f10e777]
+              - cell "PayStack" [ref=f10e778]
+              - cell "₦16073.55" [ref=f10e779]
+              - cell "success" [ref=f10e780]
+              - cell "2026-08-03 / 23:29" [ref=f10e781]
+            - row [ref=f10e782]:
+              - cell "2" [ref=f10e783]
+              - cell "Stripe" [ref=f10e784]
+              - cell "$8.40" [ref=f10e785]
+              - cell "Paid" [ref=f10e786]
+              - cell "2026-08-03 / 22:09" [ref=f10e787]
+            - row [ref=f10e788]:
+              - cell "1" [ref=f10e789]
+              - cell "PayPal" [ref=f10e790]
+              - cell "$6.30" [ref=f10e791]
+              - cell "COMPLETED" [ref=f10e792]
+              - cell "2026-08-03 / 22:06" [ref=f10e793]
+        - link "View All" [ref=f10e795] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/promotion-payments
+      - generic [ref=f10e797]:
+        - generic [ref=f10e798]:
+          - heading "Latest Reviews" [level=3] [ref=f10e799]
+          - generic [ref=f10e800]:
+            - button "" [ref=f10e801] [cursor=pointer]
+            - button "" [ref=f10e803] [cursor=pointer]
+        - table [ref=f10e807]:
+          - rowgroup [ref=f10e808]:
+            - row [ref=f10e809]:
+              - columnheader "Id" [ref=f10e810]
+              - columnheader "Username" [ref=f10e811]
+              - columnheader "Review" [ref=f10e812]
+          - rowgroup [ref=f10e813]:
+            - row [ref=f10e814]:
+              - cell "8" [ref=f10e815]
+              - cell "Admin" [ref=f10e816]
+              - cell "     dfg 15 days ago" [ref=f10e817]:
+                - generic [ref=f10e819]:
+                  - generic [ref=f10e820]: 
+                  - generic [ref=f10e821]: 
+                  - generic [ref=f10e822]: 
+                  - generic [ref=f10e823]: 
+                  - generic [ref=f10e824]: 
+                - text: dfg
+                - generic [ref=f10e825]: 15 days ago
+            - row [ref=f10e826]:
+              - cell "7" [ref=f10e827]
+              - cell "Admin" [ref=f10e828]
+              - cell "     The summer fashion lace top is absolutely beautiful! The lace detailing gives it a very elegant and 3 months ago" [ref=f10e829]:
+                - generic [ref=f10e831]:
+                  - generic [ref=f10e832]: 
+                  - generic [ref=f10e833]: 
+                  - generic [ref=f10e834]: 
+                  - generic [ref=f10e835]: 
+                  - generic [ref=f10e836]: 
+                - text: The summer fashion lace top is absolutely beautiful! The lace detailing gives it a very elegant and
+                - generic [ref=f10e837]: 3 months ago
+            - row [ref=f10e838]:
+              - cell "6" [ref=f10e839]
+              - cell "Trendshop" [ref=f10e840]
+              - cell "     The material feels durable, and the design is sleek enough to match both casual and formal outfits. 3 months ago" [ref=f10e841]:
+                - generic [ref=f10e843]:
+                  - generic [ref=f10e844]: 
+                  - generic [ref=f10e845]: 
+                  - generic [ref=f10e846]: 
+                  - generic [ref=f10e847]: 
+                  - generic [ref=f10e848]: 
+                - text: The material feels durable, and the design is sleek enough to match both casual and formal outfits.
+                - generic [ref=f10e849]: 3 months ago
+            - row [ref=f10e850]:
+              - cell "5" [ref=f10e851]
+              - cell "Trendshop" [ref=f10e852]
+              - cell "    The floral women sundress is really pretty and perfect for summer. The fabric feels light and comfortable, 3 months ago" [ref=f10e853]:
+                - generic [ref=f10e855]:
+                  - generic [ref=f10e856]: 
+                  - generic [ref=f10e857]: 
+                  - generic [ref=f10e858]: 
+                  - generic [ref=f10e859]: 
+                - text: The floral women sundress is really pretty and perfect for summer. The fabric feels light and comfortable,
+                - generic [ref=f10e860]: 3 months ago
+            - row [ref=f10e861]:
+              - cell "4" [ref=f10e862]
+              - cell "Peter Jone" [ref=f10e863]
+              - cell "     Test 1 2 months ago" [ref=f10e864]:
+                - generic [ref=f10e866]:
+                  - generic [ref=f10e867]: 
+                  - generic [ref=f10e868]: 
+                  - generic [ref=f10e869]: 
+                  - generic [ref=f10e870]: 
+                  - generic [ref=f10e871]: 
+                - text: Test 1
+                - generic [ref=f10e872]: 2 months ago
+            - row [ref=f10e873]:
+              - cell "3" [ref=f10e874]
+              - cell "Admin" [ref=f10e875]
+              - cell "    This skirt is beautiful and the floral pattern is very charming. The material feels nice and it drapes 3 months ago" [ref=f10e876]:
+                - generic [ref=f10e878]:
+                  - generic [ref=f10e879]: 
+                  - generic [ref=f10e880]: 
+                  - generic [ref=f10e881]: 
+                  - generic [ref=f10e882]: 
+                - text: This skirt is beautiful and the floral pattern is very charming. The material feels nice and it drapes
+                - generic [ref=f10e883]: 3 months ago
+            - row [ref=f10e884]:
+              - cell "2" [ref=f10e885]
+              - cell "Admin" [ref=f10e886]
+              - cell "     The visuals are vibrant, and it really captures the essence of each vacation spot. It’s both informative 3 months ago" [ref=f10e887]:
+                - generic [ref=f10e889]:
+                  - generic [ref=f10e890]: 
+                  - generic [ref=f10e891]: 
+                  - generic [ref=f10e892]: 
+                  - generic [ref=f10e893]: 
+                  - generic [ref=f10e894]: 
+                - text: The visuals are vibrant, and it really captures the essence of each vacation spot. It’s both informative
+                - generic [ref=f10e895]: 3 months ago
+            - row [ref=f10e896]:
+              - cell "1" [ref=f10e897]
+              - cell "Admin" [ref=f10e898]
+              - cell "     The light blue color is soft and flattering, and the fabric feels high-quality and breathable. It fits 3 months ago" [ref=f10e899]:
+                - generic [ref=f10e901]:
+                  - generic [ref=f10e902]: 
+                  - generic [ref=f10e903]: 
+                  - generic [ref=f10e904]: 
+                  - generic [ref=f10e905]: 
+                  - generic [ref=f10e906]: 
+                - text: The light blue color is soft and flattering, and the fabric feels high-quality and breathable. It fits
+                - generic [ref=f10e907]: 3 months ago
+        - link "View All" [ref=f10e909] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/reviews
+    - generic [ref=f10e910]:
+      - generic [ref=f10e912]:
+        - generic [ref=f10e913]:
+          - heading "Latest Comments" [level=3] [ref=f10e914]
+          - generic [ref=f10e915]:
+            - button "" [ref=f10e916] [cursor=pointer]
+            - button "" [ref=f10e918] [cursor=pointer]
+        - table [ref=f10e922]:
+          - rowgroup [ref=f10e923]:
+            - row [ref=f10e924]:
+              - columnheader "Id" [ref=f10e925]
+              - columnheader "User" [ref=f10e926]
+              - columnheader "Comment" [ref=f10e927]
+          - rowgroup [ref=f10e928]:
+            - row [ref=f10e929]:
+              - cell "1" [ref=f10e930]
+              - cell "Peter Jone" [ref=f10e931]
+              - cell "good 1 month ago" [ref=f10e932]:
+                - text: good
+                - generic [ref=f10e933]: 1 month ago
+        - link "View All" [ref=f10e935] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/product-comments
+      - generic [ref=f10e937]:
+        - generic [ref=f10e938]:
+          - heading "Latest Members" [level=3] [ref=f10e939]
+          - generic [ref=f10e940]:
+            - button "" [ref=f10e941] [cursor=pointer]
+            - button "" [ref=f10e943] [cursor=pointer]
+        - list [ref=f10e946]:
+          - listitem [ref=f10e947]:
+            - link [ref=f10e948] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/laolierzi-laolierzi
+              - img "user" [ref=f10e949]
+            - link "laolierzi laolierzi" [ref=f10e950] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/laolierzi-laolierzi
+            - generic [ref=f10e951]: 15 hours ago
+          - listitem [ref=f10e952]:
+            - link [ref=f10e953] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/risma-eka
+              - img "user" [ref=f10e954]
+            - link "Risma eka" [ref=f10e955] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/risma-eka
+            - generic [ref=f10e956]: 6 days ago
+          - listitem [ref=f10e957]:
+            - link [ref=f10e958] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/samuwel-etoto
+              - img "user" [ref=f10e959]
+            - link "Samuwel Etoto" [ref=f10e960] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/samuwel-etoto
+            - generic [ref=f10e961]: 7 days ago
+          - listitem [ref=f10e962]:
+            - link [ref=f10e963] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/oubaida-benhocine
+              - img "user" [ref=f10e964]
+            - link "oubaida benhocine" [ref=f10e965] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/oubaida-benhocine
+            - generic [ref=f10e966]: 8 days ago
+          - listitem [ref=f10e967]:
+            - link [ref=f10e968] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/emohh-asss
+              - img "user" [ref=f10e969]
+            - link "emohh asss" [ref=f10e970] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/emohh-asss
+            - generic [ref=f10e971]: 9 days ago
+          - listitem [ref=f10e972]:
+            - link [ref=f10e973] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/goldie-glad
+              - img "user" [ref=f10e974]
+            - link "goldie glad" [ref=f10e975] [cursor=pointer]:
+              - /url: https://modesy.codingest.net/profile/goldie-glad
+            - generic [ref=f10e976]: 11 days ago
+        - link "View All" [ref=f10e978] [cursor=pointer]:
+          - /url: https://modesy.codingest.net/admin/users
+    - text:       
+  - contentinfo [ref=f10e979]:
+    - generic [ref=f10e980]: Version 2.7
+    - strong [ref=f10e981]: Copyright 2025 Modesy - All Rights Reserved.

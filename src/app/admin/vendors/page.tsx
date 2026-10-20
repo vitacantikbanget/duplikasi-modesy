@@ -230,7 +230,7 @@ export default function AdminVendorsPage() {
       )}
 
       {/* Tabs Bar */}
-      <div className="flex items-center gap-2 mb-4 border-b border-gray-200">
+      <div className="flex flex-wrap items-center gap-2 mb-4 border-b border-gray-200">
         <button
           type="button"
           onClick={() => setActiveTab("vendors")}

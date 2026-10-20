@@ -209,8 +209,8 @@ export default function AdminBulkProductUploadPage() {
             </div>
 
             {/* Reference Table */}
-            <div className="overflow-y-auto max-h-[400px] border border-gray-200 rounded-[3px]">
-              <table className="w-full text-left text-xs border-collapse">
+            <div className="overflow-x-auto overflow-y-auto max-h-[400px] border border-gray-200 rounded-[3px]">
+              <table className="w-full min-w-[300px] text-left text-xs border-collapse">
                 <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 font-semibold text-gray-700">
                   <tr>
                     <th className="py-2 px-3 w-16">ID</th>

@@ -1318,9 +1318,9 @@ export default function DraftsPage() {
           </div>
         </form>
 
-        {/* Drafts Table */}
-        <div className="w-full overflow-hidden">
-          <table className="w-full text-left text-[12.5px] border-collapse table-fixed">
+        {/* Drafts Table with responsive horizontal scroll */}
+        <div className="w-full overflow-x-auto">
+          <table className="w-full min-w-[950px] text-left text-[12.5px] border-collapse table-fixed">
             <thead>
               <tr className="border-b-2 border-gray-200 text-[#333333] font-semibold text-[13px]">
                 <th className="py-2.5 px-3 text-left w-8">

@@ -324,20 +324,20 @@ export default function CurrencySettingsPage() {
                   </select>
                   <span>entries</span>
                 </div>
-                <div className="flex items-center gap-2 text-[13px]">
+                <div className="flex flex-wrap items-center gap-2 text-[13px] w-full sm:w-auto">
                   <span>Search:</span>
                   <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="h-[30px] w-48 border border-[#d2d6de] rounded-[3px] px-2 text-[13px] bg-white focus:outline-none focus:border-[#3c8dbc]"
+                    className="h-[30px] w-full sm:w-48 border border-[#d2d6de] rounded-[3px] px-2 text-[13px] bg-white focus:outline-none focus:border-[#3c8dbc]"
                   />
                 </div>
               </div>
 
               {/* Table */}
               <div className="overflow-x-auto min-h-[300px]">
-                <table className="table-auto w-full text-left text-[13px] text-gray-700">
+                <table className="table-auto w-full min-w-[700px] text-left text-[13px] text-gray-700">
                   <thead>
                     <tr className="bg-[#f4f4f4] text-[#333333] font-semibold text-[13px] border-b border-[#d2d6de]">
                       <th className="px-3 py-2.5 w-[50px]">Id</th>

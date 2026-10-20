@@ -295,7 +295,7 @@ export default function AdminBrandsPage() {
   return (
     <div className="w-full text-[#333333] font-sans pb-16">
       {/* Header Row */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <h1 className="text-[22px] font-normal text-[#333333]">Brands</h1>
         <button
           onClick={() => setIsAddModalOpen(true)}
@@ -368,7 +368,7 @@ export default function AdminBrandsPage() {
 
         {/* Table Content */}
         <div className="overflow-x-auto" ref={dropdownRef}>
-          <table className="w-full text-left border-collapse text-[13px]">
+          <table className="w-full min-w-[750px] text-left border-collapse text-[13px]">
             <thead>
               <tr className="border-b border-[#f4f4f4] text-[#333333] font-medium">
                 <th className="py-3 px-4 w-[60px] font-semibold">Id</th>

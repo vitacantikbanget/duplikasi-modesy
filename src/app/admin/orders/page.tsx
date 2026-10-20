@@ -357,7 +357,7 @@ export default function AdminOrdersPage() {
 
         {/* Orders Table */}
         <div className="overflow-x-auto min-h-[400px]">
-          <table className="w-full text-left text-[13.5px] border-collapse">
+          <table className="w-full min-w-[900px] text-left text-[13.5px] border-collapse">
             <thead>
               <tr className="border-b-2 border-gray-200 text-[#333] font-semibold text-[13px]">
                 <th className="py-2.5 px-3 text-left">Order</th>

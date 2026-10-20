@@ -1,0 +1,410 @@
+- generic [ref=f11e2]:
+  - complementary [ref=f11e3]:
+    - link "Modesy Panel" [ref=f11e5] [cursor=pointer]:
+      - /url: /admin
+    - generic [ref=f11e6]:
+      - img "Admin" [ref=f11e8]
+      - generic [ref=f11e9]:
+        - paragraph [ref=f11e10]: Admin
+        - generic [ref=f11e11]: Online
+    - list [ref=f11e14]:
+      - listitem [ref=f11e15]:
+        - generic [ref=f11e16]: NAVIGATION
+        - list [ref=f11e17]:
+          - listitem [ref=f11e18]:
+            - link "Home" [ref=f11e19] [cursor=pointer]:
+              - /url: /admin
+          - listitem [ref=f11e25]:
+            - link "Theme" [ref=f11e26] [cursor=pointer]:
+              - /url: /admin/theme
+          - listitem [ref=f11e33]:
+            - link "Slider" [ref=f11e34] [cursor=pointer]:
+              - /url: /admin/slider
+          - listitem [ref=f11e38]:
+            - link "Homepage Manager" [ref=f11e39] [cursor=pointer]:
+              - /url: /admin/homepage-manager
+      - listitem [ref=f11e46]:
+        - generic [ref=f11e47]: ORDERS
+        - list [ref=f11e48]:
+          - listitem [ref=f11e49]:
+            - button "Orders" [ref=f11e50] [cursor=pointer]
+          - listitem [ref=f11e60]:
+            - link "Digital Sales" [ref=f11e61] [cursor=pointer]:
+              - /url: /admin/digital-sales
+          - listitem [ref=f11e67]:
+            - link "Refund Requests" [ref=f11e68] [cursor=pointer]:
+              - /url: /admin/refund-requests
+      - listitem [ref=f11e73]:
+        - generic [ref=f11e74]: PRODUCTS
+        - list [ref=f11e75]:
+          - listitem [ref=f11e76]:
+            - button "Products" [ref=f11e77] [cursor=pointer]
+          - listitem [ref=f11e88]:
+            - link "Quote Requests" [ref=f11e89] [cursor=pointer]:
+              - /url: /admin/quote-requests
+          - listitem [ref=f11e95]:
+            - link "Categories" [ref=f11e96] [cursor=pointer]:
+              - /url: /admin/categories
+          - listitem [ref=f11e101]:
+            - link "Tags" [ref=f11e102] [cursor=pointer]:
+              - /url: /admin/tags
+          - listitem [ref=f11e109]:
+            - link "Brands" [ref=f11e110] [cursor=pointer]:
+              - /url: /admin/brands
+          - listitem [ref=f11e116]:
+            - link "Custom Fields" [ref=f11e117] [cursor=pointer]:
+              - /url: /admin/custom-fields
+      - listitem [ref=f11e123]:
+        - generic [ref=f11e124]: PAYMENTS
+        - list [ref=f11e125]:
+          - listitem [ref=f11e126]:
+            - button "Payments" [ref=f11e127] [cursor=pointer]
+          - listitem [ref=f11e134]:
+            - button "Earnings" [ref=f11e135] [cursor=pointer]
+          - listitem [ref=f11e143]:
+            - button "Payouts" [ref=f11e144] [cursor=pointer]
+      - listitem [ref=f11e151]:
+        - generic [ref=f11e152]: CONTENT
+        - list [ref=f11e153]:
+          - listitem [ref=f11e154]:
+            - link "Pages" [ref=f11e155] [cursor=pointer]:
+              - /url: /admin/pages
+          - listitem [ref=f11e161]:
+            - button "Blog" [ref=f11e162] [cursor=pointer]
+          - listitem [ref=f11e170]:
+            - button "Location" [ref=f11e171] [cursor=pointer]
+      - listitem [ref=f11e179]:
+        - generic [ref=f11e180]: MEMBERSHIP
+        - list [ref=f11e181]:
+          - listitem [ref=f11e182]:
+            - button "Membership" [ref=f11e183] [cursor=pointer]
+          - listitem [ref=f11e193]:
+            - link "Roles & Permissions" [ref=f11e194] [cursor=pointer]:
+              - /url: /admin/roles
+      - listitem [ref=f11e200]:
+        - generic [ref=f11e201]: MANAGEMENT TOOLS
+        - list [ref=f11e202]:
+          - listitem [ref=f11e203]:
+            - button "Help Center" [ref=f11e204] [cursor=pointer]
+          - listitem [ref=f11e212]:
+            - link "Cache System" [ref=f11e213] [cursor=pointer]:
+              - /url: /admin/cache-system
+          - listitem [ref=f11e220]:
+            - link "SEO Tools" [ref=f11e221] [cursor=pointer]:
+              - /url: /admin/seo-tools
+          - listitem [ref=f11e226]:
+            - link "Ad Spaces" [ref=f11e227] [cursor=pointer]:
+              - /url: /admin/ad-spaces
+          - listitem [ref=f11e233]:
+            - link "Chat Messages" [ref=f11e234] [cursor=pointer]:
+              - /url: /admin/chat-messages
+          - listitem [ref=f11e240]:
+            - link "Contact Messages" [ref=f11e241] [cursor=pointer]:
+              - /url: /admin/contact-messages
+          - listitem [ref=f11e247]:
+            - link "Reviews" [ref=f11e248] [cursor=pointer]:
+              - /url: /admin/reviews
+          - listitem [ref=f11e253]:
+            - button "Comments" [ref=f11e254] [cursor=pointer]
+          - listitem [ref=f11e261]:
+            - link "Newsletter" [ref=f11e262] [cursor=pointer]:
+              - /url: /admin/newsletter
+          - listitem [ref=f11e268]:
+            - link "Affiliate Program" [ref=f11e269] [cursor=pointer]:
+              - /url: /admin/affiliate
+          - listitem [ref=f11e278]:
+            - link "Abuse Reports" [ref=f11e279] [cursor=pointer]:
+              - /url: /admin/abuse-reports
+          - listitem [ref=f11e284]:
+            - link "Email Blacklist" [ref=f11e285] [cursor=pointer]:
+              - /url: /admin/email-blacklist
+      - listitem [ref=f11e291]:
+        - generic [ref=f11e292]: SETTINGS
+        - list [ref=f11e293]:
+          - listitem [ref=f11e294]:
+            - link "Preferences" [ref=f11e295] [cursor=pointer]:
+              - /url: /admin/preferences
+          - listitem [ref=f11e299]:
+            - button "Settings" [ref=f11e300] [cursor=pointer]
+  - generic [ref=f11e308]:
+    - banner [ref=f11e309]:
+      - button "Toggle sidebar" [ref=f11e311] [cursor=pointer]
+      - generic [ref=f11e313]:
+        - link "View Site" [ref=f11e314] [cursor=pointer]:
+          - /url: /
+        - generic [ref=f11e319] [cursor=pointer]: English
+        - generic [ref=f11e327] [cursor=pointer]:
+          - img "Admin" [ref=f11e328]
+          - generic [ref=f11e329]: Admin
+    - main [ref=f11e332]:
+      - generic [ref=f11e334]:
+        - generic [ref=f11e335]:
+          - generic [ref=f11e336]:
+            - generic [ref=f11e337]: ✕
+            - generic [ref=f11e338]: You have no permission for this as demo account!
+          - button "Dismiss alert" [ref=f11e339] [cursor=pointer]
+        - generic [ref=f11e343]:
+          - generic [ref=f11e344]:
+            - generic [ref=f11e345]:
+              - heading "46" [level=3] [ref=f11e346]
+              - paragraph [ref=f11e347]: Orders
+            - link "More info" [ref=f11e348] [cursor=pointer]:
+              - /url: /admin/orders
+          - generic [ref=f11e352]:
+            - generic [ref=f11e353]:
+              - heading "47" [level=3] [ref=f11e354]
+              - paragraph [ref=f11e355]: Products
+            - link "More info" [ref=f11e356] [cursor=pointer]:
+              - /url: /admin/products
+          - generic [ref=f11e360]:
+            - generic [ref=f11e361]:
+              - heading "0" [level=3] [ref=f11e362]
+              - paragraph [ref=f11e363]: Pending Products
+            - link "More info" [ref=f11e364] [cursor=pointer]:
+              - /url: /admin/pending-products
+          - generic [ref=f11e368]:
+            - generic [ref=f11e369]:
+              - heading "19" [level=3] [ref=f11e370]
+              - paragraph [ref=f11e371]: Members
+            - link "More info" [ref=f11e372] [cursor=pointer]:
+              - /url: /admin/users
+        - generic [ref=f11e376]:
+          - generic [ref=f11e377]:
+            - generic [ref=f11e378]:
+              - heading "Latest Orders" [level=3] [ref=f11e379]
+              - generic [ref=f11e380]:
+                - button "Minimize" [ref=f11e381] [cursor=pointer]
+                - button "Close" [ref=f11e383] [cursor=pointer]
+            - table [ref=f11e388]:
+              - rowgroup [ref=f11e389]:
+                - row [ref=f11e390]:
+                  - columnheader "Order" [ref=f11e391]
+                  - columnheader "Total" [ref=f11e392]
+                  - columnheader "Status" [ref=f11e393]
+                  - columnheader "Date" [ref=f11e394]
+                  - columnheader "Details" [ref=f11e395]
+              - rowgroup [ref=f11e396]:
+                - row [ref=f11e397]:
+                  - cell [ref=f11e398] [cursor=pointer]:
+                    - link "#10046" [ref=f11e399]:
+                      - /url: /admin/orders
+                  - cell "$84.35" [ref=f11e400]
+                  - cell "Completed" [ref=f11e401]
+                  - cell "2026-10-17 / 19:08" [ref=f11e402]
+                  - cell [ref=f11e403]:
+                    - link "Details" [ref=f11e404] [cursor=pointer]:
+                      - /url: /admin/orders
+                - row [ref=f11e405]:
+                  - cell [ref=f11e406] [cursor=pointer]:
+                    - link "#10045" [ref=f11e407]:
+                      - /url: /admin/orders
+                  - cell "$60.20" [ref=f11e408]
+                  - cell "Processing" [ref=f11e409]
+                  - cell "2026-10-17 / 08:08" [ref=f11e410]
+                  - cell [ref=f11e411]:
+                    - link "Details" [ref=f11e412] [cursor=pointer]:
+                      - /url: /admin/orders
+                - row [ref=f11e413]:
+                  - cell [ref=f11e414] [cursor=pointer]:
+                    - link "#10044" [ref=f11e415]:
+                      - /url: /admin/orders
+                  - cell "$154" [ref=f11e416]
+                  - cell "Processing" [ref=f11e417]
+                  - cell "2026-10-14 / 20:42" [ref=f11e418]
+                  - cell [ref=f11e419]:
+                    - link "Details" [ref=f11e420] [cursor=pointer]:
+                      - /url: /admin/orders
+                - row [ref=f11e421]:
+                  - cell [ref=f11e422] [cursor=pointer]:
+                    - link "#10043" [ref=f11e423]:
+                      - /url: /admin/orders
+                  - cell "$1,519.45" [ref=f11e424]
+                  - cell "Processing" [ref=f11e425]
+                  - cell "2026-10-14 / 19:49" [ref=f11e426]
+                  - cell [ref=f11e427]:
+                    - link "Details" [ref=f11e428] [cursor=pointer]:
+                      - /url: /admin/orders
+                - row [ref=f11e429]:
+                  - cell [ref=f11e430] [cursor=pointer]:
+                    - link "#10042" [ref=f11e431]:
+                      - /url: /admin/orders
+                  - cell "$236.25" [ref=f11e432]
+                  - cell "Processing" [ref=f11e433]
+                  - cell "2026-10-12 / 19:26" [ref=f11e434]
+                  - cell [ref=f11e435]:
+                    - link "Details" [ref=f11e436] [cursor=pointer]:
+                      - /url: /admin/orders
+                - row [ref=f11e437]:
+                  - cell [ref=f11e438] [cursor=pointer]:
+                    - link "#10041" [ref=f11e439]:
+                      - /url: /admin/orders
+                  - cell "$60.20" [ref=f11e440]
+                  - cell "Processing" [ref=f11e441]
+                  - cell "2026-10-05 / 15:38" [ref=f11e442]
+                  - cell [ref=f11e443]:
+                    - link "Details" [ref=f11e444] [cursor=pointer]:
+                      - /url: /admin/orders
+            - link "View All" [ref=f11e446] [cursor=pointer]:
+              - /url: /admin/orders
+          - generic [ref=f11e447]:
+            - generic [ref=f11e448]:
+              - heading "Latest Transactions" [level=3] [ref=f11e449]
+              - generic [ref=f11e450]:
+                - button "Minimize" [ref=f11e451] [cursor=pointer]
+                - button "Close" [ref=f11e453] [cursor=pointer]
+            - table [ref=f11e458]:
+              - rowgroup [ref=f11e459]:
+                - row [ref=f11e460]:
+                  - columnheader "Id" [ref=f11e461]
+                  - columnheader "Order" [ref=f11e462]
+                  - columnheader "Payment Amount" [ref=f11e463]
+                  - columnheader "Payment Method" [ref=f11e464]
+                  - columnheader "Status" [ref=f11e465]
+                  - columnheader "Date" [ref=f11e466]
+              - rowgroup [ref=f11e467]:
+                - row [ref=f11e468]:
+                  - cell "20" [ref=f11e469]
+                  - cell [ref=f11e470] [cursor=pointer]:
+                    - link "#10046" [ref=f11e471]:
+                      - /url: /admin/orders
+                  - cell "$84.35" [ref=f11e472]
+                  - cell "Wallet Balance" [ref=f11e473]
+                  - cell "Succeeded" [ref=f11e474]
+                  - cell "2026-10-17 / 19:08" [ref=f11e475]
+                - row [ref=f11e476]:
+                  - cell "19" [ref=f11e477]
+                  - cell [ref=f11e478] [cursor=pointer]:
+                    - link "#10042" [ref=f11e479]:
+                      - /url: /admin/orders
+                  - cell "$236.25" [ref=f11e480]
+                  - cell "Wallet Balance" [ref=f11e481]
+                  - cell "Succeeded" [ref=f11e482]
+                  - cell "2026-10-12 / 19:26" [ref=f11e483]
+                - row [ref=f11e484]:
+                  - cell "18" [ref=f11e485]
+                  - cell [ref=f11e486] [cursor=pointer]:
+                    - link "#10033" [ref=f11e487]:
+                      - /url: /admin/orders
+                  - cell "$191.10" [ref=f11e488]
+                  - cell "Wallet Balance" [ref=f11e489]
+                  - cell "Succeeded" [ref=f11e490]
+                  - cell "2026-09-23 / 17:23" [ref=f11e491]
+                - row [ref=f11e492]:
+                  - cell "17" [ref=f11e493]
+                  - cell [ref=f11e494] [cursor=pointer]:
+                    - link "#10031" [ref=f11e495]:
+                      - /url: /admin/orders
+                  - cell "$257" [ref=f11e496]
+                  - cell "Wallet Balance" [ref=f11e497]
+                  - cell "Succeeded" [ref=f11e498]
+                  - cell "2026-09-23 / 02:08" [ref=f11e499]
+                - row [ref=f11e500]:
+                  - cell "16" [ref=f11e501]
+                  - cell [ref=f11e502] [cursor=pointer]:
+                    - link "#10029" [ref=f11e503]:
+                      - /url: /admin/orders
+                  - cell "$259.05" [ref=f11e504]
+                  - cell "Wallet Balance" [ref=f11e505]
+                  - cell "Succeeded" [ref=f11e506]
+                  - cell "2026-09-22 / 06:40" [ref=f11e507]
+                - row [ref=f11e508]:
+                  - cell "15" [ref=f11e509]
+                  - cell [ref=f11e510] [cursor=pointer]:
+                    - link "#10025" [ref=f11e511]:
+                      - /url: /admin/orders
+                  - cell "#149479.73" [ref=f11e512]
+                  - cell "PayStack" [ref=f11e513]
+                  - cell "success" [ref=f11e514]
+                  - cell "2026-09-16 / 10:38" [ref=f11e515]
+                - row [ref=f11e516]:
+                  - cell "14" [ref=f11e517]
+                  - cell [ref=f11e518] [cursor=pointer]:
+                    - link "#10019" [ref=f11e519]:
+                      - /url: /admin/orders
+                  - cell "$182.10" [ref=f11e520]
+                  - cell "Wallet Balance" [ref=f11e521]
+                  - cell "Succeeded" [ref=f11e522]
+                  - cell "2026-09-09 / 11:39" [ref=f11e523]
+            - link "View All" [ref=f11e525] [cursor=pointer]:
+              - /url: /admin/transactions
+        - generic [ref=f11e526]:
+          - generic [ref=f11e527]:
+            - generic [ref=f11e528]:
+              - heading "Latest Products" [level=3] [ref=f11e529]
+              - generic [ref=f11e530]:
+                - button "Minimize" [ref=f11e531] [cursor=pointer]
+                - button "Close" [ref=f11e533] [cursor=pointer]
+            - table [ref=f11e538]:
+              - rowgroup [ref=f11e539]:
+                - row [ref=f11e540]:
+                  - columnheader "Id" [ref=f11e541]
+                  - columnheader "Name" [ref=f11e542]
+                  - columnheader "Details" [ref=f11e543]
+              - rowgroup [ref=f11e544]:
+                - row [ref=f11e545]:
+                  - cell "47" [ref=f11e546]
+                  - cell [ref=f11e547]:
+                    - generic [ref=f11e548]:
+                      - img "Colorful women scarves" [ref=f11e549]
+                      - generic [ref=f11e550]:
+                        - paragraph [ref=f11e551] [cursor=pointer]:
+                          - link "Colorful women scarves" [ref=f11e552]:
+                            - /url: /admin/products
+                        - paragraph [ref=f11e553]: 3 months ago
+                  - cell [ref=f11e554]:
+                    - link "Details" [ref=f11e555] [cursor=pointer]:
+                      - /url: /admin/products
+                - row [ref=f11e556]:
+                  - cell "46" [ref=f11e557]
+                  - cell [ref=f11e558]:
+                    - generic [ref=f11e559]:
+                      - img "Women's ankle boot with different colors" [ref=f11e560]
+                      - generic [ref=f11e561]:
+                        - paragraph [ref=f11e562] [cursor=pointer]:
+                          - link "Women's ankle boot with different colors" [ref=f11e563]:
+                            - /url: /admin/products
+                        - paragraph [ref=f11e564]: 3 months ago
+                  - cell [ref=f11e565]:
+                    - link "Details" [ref=f11e566] [cursor=pointer]:
+                      - /url: /admin/products
+                - row [ref=f11e567]:
+                  - cell "45" [ref=f11e568]
+                  - cell [ref=f11e569]:
+                    - generic [ref=f11e570]:
+                      - img "Navy polka dot dress" [ref=f11e571]
+                      - generic [ref=f11e572]:
+                        - paragraph [ref=f11e573] [cursor=pointer]:
+                          - link "Navy polka dot dress" [ref=f11e574]:
+                            - /url: /admin/products
+                        - paragraph [ref=f11e575]: 3 months ago
+                  - cell [ref=f11e576]:
+                    - link "Details" [ref=f11e577] [cursor=pointer]:
+                      - /url: /admin/products
+            - link "View All" [ref=f11e579] [cursor=pointer]:
+              - /url: /admin/products
+          - generic [ref=f11e580]:
+            - generic [ref=f11e581]:
+              - heading "Latest Pending Products" [level=3] [ref=f11e582]
+              - generic [ref=f11e583]:
+                - button "Minimize" [ref=f11e584] [cursor=pointer]
+                - button "Close" [ref=f11e586] [cursor=pointer]
+            - table [ref=f11e591]:
+              - rowgroup [ref=f11e592]:
+                - row [ref=f11e593]:
+                  - columnheader "Id" [ref=f11e594]
+                  - columnheader "Name" [ref=f11e595]
+                  - columnheader "Details" [ref=f11e596]
+              - rowgroup [ref=f11e597]:
+                - row [ref=f11e598]:
+                  - cell "No records found." [ref=f11e599]
+            - link "View All" [ref=f11e601] [cursor=pointer]:
+              - /url: /admin/pending-products
+      - generic [ref=f11e602]:
+        - generic [ref=f11e603]:
+          - strong [ref=f11e604]:
+            - text: Copyright © 2025
+            - link "Modesy" [ref=f11e605] [cursor=pointer]:
+              - /url: https://modesy.codingest.net
+            - text: .
+          - text: All rights reserved.
+        - generic [ref=f11e606]: Version 2.7

@@ -88,14 +88,14 @@ export default function KnowledgeBasePage() {
         <div className="p-3.5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <h2 className="font-semibold text-gray-800 text-[14px]">Articles ({filtered.length})</h2>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search articles..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 pr-3 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#3c8dbc] w-48"
+                className="pl-8 pr-3 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:border-[#3c8dbc] w-full sm:w-48"
               />
               <Search className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-2.5" />
             </div>
@@ -103,7 +103,7 @@ export default function KnowledgeBasePage() {
             <button
               type="button"
               onClick={() => setShowAddModal(true)}
-              className="bg-[#00c0ef] hover:bg-[#00acd6] text-white text-xs font-semibold px-3 py-1.5 rounded-[3px] shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="bg-[#00c0ef] hover:bg-[#00acd6] text-white text-xs font-semibold px-3 py-1.5 rounded-[3px] shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
             >
               <Plus className="w-3.5 h-3.5" />
               Add Article
@@ -112,7 +112,7 @@ export default function KnowledgeBasePage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
+          <table className="w-full min-w-[700px] text-left border-collapse text-xs">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 uppercase font-semibold">
                 <th className="px-3.5 py-2.5 w-12">ID</th>

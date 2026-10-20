@@ -935,9 +935,9 @@ function AdminProductsView() {
           </div>
         </form>
 
-        {/* Products Table with 1-frame layout */}
-        <div className="w-full overflow-hidden">
-          <table className="w-full text-left text-[12.5px] border-collapse table-fixed">
+        {/* Products Table with responsive horizontal scroll */}
+        <div className="w-full overflow-x-auto">
+          <table className="w-full min-w-[950px] text-left text-[12.5px] border-collapse table-fixed">
             <thead>
               <tr className="border-b-2 border-gray-200 text-[#333333] font-semibold text-[12px]">
                 <th className="py-2.5 px-2 text-left w-7">

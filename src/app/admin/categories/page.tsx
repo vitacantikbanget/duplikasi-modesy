@@ -779,7 +779,7 @@ export default function AdminCategoriesPage() {
       <div key={item.id} className="w-full">
         {/* Category Row */}
         <div
-          className={`flex items-center justify-between py-2.5 px-4 border-b border-[#f4f4f4] hover:bg-gray-50/70 transition-colors select-none ${
+          className={`flex flex-wrap items-center justify-between gap-2 py-2.5 px-4 border-b border-[#f4f4f4] hover:bg-gray-50/70 transition-colors select-none ${
             level > 0 ? "bg-gray-50/30" : "bg-white"
           }`}
           style={{ paddingLeft: `${Math.max(16, level * 28 + 16)}px` }}
@@ -961,7 +961,7 @@ export default function AdminCategoriesPage() {
         </form>
 
         {/* Categories Tree List matching Screenshot 1 */}
-        <div className="border border-[#e9ecef] rounded-[3px] overflow-hidden">
+        <div className="border border-[#e9ecef] rounded-[3px] overflow-x-auto">
           {filteredCategories.length === 0 ? (
             <div className="py-8 text-center text-gray-500 text-[13px]">
               No categories found.

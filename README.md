@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Modesy Marketplace - Multi-Vendor E-Commerce Platform
 
-## Getting Started
+Duplikasi web resmi marketplace **Modesy** (`https://modesy.codingest.net/`) berbasis Next.js 16 (Turbopack) dengan integrasi basis data live **Supabase**, sistem manajemen hak akses multi-peran (**Role-Based Access Control / RBAC**), serta panel kerja khusus peran **Moderator (Roger Novak)** yang 100% presisi dan identik dengan versi resmi Modesy.
 
-First, run the development server:
+---
 
+## 🌟 Fitur Utama & Kesesuaian Resmi (Paritas Modesy)
+
+### 1. Panel Khusus Moderator (Roger Novak)
+- **Tampilan Dashboard Identik:**
+  - 2 Card KPI Utama: `Products` (Ungu `#605ca8`) dan `Pending Products` (Merah `#dd4b39`) tanpa bar *"More info"* tambahan sesuai web resmi.
+  - 3 Panel Stacked Lebar Penuh:
+    1. **Latest Products**: Tabel produk lengkap dengan thumbnail 45x45, judul biru `#3c8dbc`, stempel waktu relatif, dan tombol aksi cyan `#00c0ef` (`Details`).
+    2. **Latest Pending Products**: Antrean produk menunggu tinjauan moderator.
+    3. **Latest Transactions (Featured Products)**: Riwayat transaksi promosi produk berbayar.
+- **Header Standar Modesy:**
+  - Ketinggian 50px, tombol **View Site** hijau `#00a65a`, selektor bahasa, serta profil pengguna bersih satu baris (`Roger Novak`).
+- **Sidebar Khusus Moderator (3 Seksi Tanpa Bullet):**
+  - **NAVIGATION:** `Home`, `Slider`, `Homepage Manager`.
+  - **PRODUCTS (11 Sub-Item Lengkap):**
+    `Products`, `Featured Products`, `Special Offers`, `Pending Products` *(dengan badge)*, `Hidden Products`, `Expired Products`, `Sold Products`, `Drafts`, `Deleted Products`, `Add Product`, `Bulk Product Upload`.
+    Serta menu pelengkap: `Quote Requests`, `Categories`, `Tags`, `Custom Fields`.
+  - **MANAGEMENT TOOLS:**
+    `Contact Messages`, `Reviews`, `Comments` (dropdown *Product Comments* & *Blog Comments*), dan `Abuse Reports`.
+
+### 2. Otomatisasi Moderasi & Supabase RLS
+- **Auto-Hide pada Laporan Pelanggaran:** Menyelesaikan laporan di `/admin/abuse-reports` dapat langsung menonaktifkan status produk (`is_active = false`) di tabel `products` Supabase.
+- **Auto-Update Status Pesanan pada Sengketa Refund:** Menyetujui refund di `/admin/refund-requests` otomatis memperbarui status pesanan terkait menjadi `payment_status = 'refunded'` dan `order_status = 'cancelled'` di tabel `orders` Supabase.
+- **Sinkronisasi Counter Badge Real-Time:** Menggunakan event-driven listener (`modesy-moderation-updated`), badge pada sidebar dan angka kartu di dashboard langsung berkurang tanpa perlu refresh halaman manual.
+- **Proteksi Rute Sensitif (403 Forbidden):** Rute konfigurasi khusus Super Admin (Roles, Payouts, Gateways, System Settings) terlindungi dengan layar `AccessDenied` informatif.
+
+### 3. Modul Multi-Role Lainnya
+- **Guest / Tamu:** Storefront publik, katalog produk, filter kategori, slider hero otomatis.
+- **Member (Peter Jone):** Keranjang belanja, riwayat pesanan, profil pembeli, ulasan.
+- **Vendor (Trendshop):** Panel toko mandiri di `/dashboard` (produk, penjualan, dompet).
+- **Super Admin (Admin):** Akses penuh tanpa batas ke seluruh konfigurasi sistem Modesy.
+
+---
+
+## 🛠️ Stack Teknologi
+
+- **Frontend Framework:** Next.js 16.4.0 (Turbopack, App Router)
+- **Library UI:** React 19, Tailwind CSS v4, Lucide React
+- **Database & Auth:** Supabase (PostgreSQL, Row-Level Security, Supabase SSR Client)
+- **State Management:** React Context API (`AppContext`, `AdminContext`) & persistent cookie `demo_role`
+
+---
+
+## 🚀 Panduan Memulai
+
+### 1. Instalasi Dependensi
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Konfigurasi Lingkungan (`.env.local`)
+Pastikan kredensial Supabase terpasang:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://gdxiprpzucxomkhfqsgz.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Menjalankan Server Pengembangan
+```bash
+npm run dev
+```
+Buka browser pada: [http://localhost:3000](http://localhost:3000)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Menjalankan Build Produksi
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🔑 Akun Demo & Pengujian Peran
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Gunakan tombol **1-Klik Demo** pada halaman login (`/admin/login`) atau **Role Switcher Widget** di pojok kiri bawah:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Peran (Role) | Email Demo | Password | URL Tujuan |
+| :--- | :--- | :--- | :--- |
+| **Moderator (Roger Novak)** | `moderator@codingest.net` | `1234` | `/admin` |
+| **Super Admin** | `admin@codingest.net` | `1234` | `/admin` |
+| **Vendor (Trendshop)** | `trendshop@codingest.net` | `1234` | `/dashboard` |
+| **Member (Peter Jone)** | `member@codingest.net` | `1234` | `/orders` |
+| **Guest / Publik** | *(tanpa login)* | - | `/` |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📁 Struktur Rute Administrasi & Moderasi
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/app/admin/
+├── page.tsx                    # Dashboard adaptif (Moderator vs Super Admin)
+├── layout.tsx                  # Layout Guard & proteksi rute 403
+├── products/                   # Katalog produk aktif
+├── pending-products/           # Antrean verifikasi produk vendor
+├── hidden-products/            # Produk tersembunyi / dinonaktifkan
+├── featured-products/          # Produk unggulan homepage
+├── special-offers/             # Produk promo & diskon
+├── expired-products/           # Produk habis masa tayang
+├── sold-products/              # Produk terjual
+├── drafts/                     # Draf produk vendor
+├── deleted-products/           # Tempat sampah (soft-deleted)
+├── add-product/                # Formulir tambah produk
+├── bulk-product-upload/        # Impor produk massal CSV/Excel
+├── quote-requests/             # Permintaan negosiasi harga (B2B)
+├── categories/                 # Manajemen pohon kategori
+├── tags/                       # Tag pencarian produk
+├── custom-fields/              # Bidang atribut kustom
+├── abuse-reports/              # Laporan pelanggaran & auto-hide
+├── refund-requests/            # Sengketa pengembalian dana & auto-order
+├── reviews/                    # Moderasi ulasan bintang 1-5
+├── comments/                   # Moderasi komentar produk
+├── contact-messages/           # Pesan kontak pengunjung publik
+├── blog-comments/              # Moderasi komentar artikel blog
+├── slider/                     # Manajemen slider beranda
+└── homepage-manager/           # Pengaturan tata letak homepage
+```
+
+---
+
+## 📄 Lisensi
+Hak Cipta Desain Asli © [Modesy by Codingest](https://codecanyon.net/item/modesy-buy-sell-used-stuff/22714108). Dibuat untuk keperluan pengembangan, riset, dan duplikasi fungsionalitas marketplace.

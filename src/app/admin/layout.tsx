@@ -2,8 +2,25 @@
 
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
+import AccessDenied from "@/components/admin/AccessDenied";
 import { AdminProvider } from "@/contexts/AdminContext";
+import { useAppContext } from "@/contexts/AppContext";
 import { usePathname } from "next/navigation";
+
+const MODERATOR_RESTRICTED_PREFIXES = [
+  '/admin/roles',
+  '/admin/administrators',
+  '/admin/settings',
+  '/admin/visual-settings',
+  '/admin/email-settings',
+  '/admin/preferences',
+  '/admin/cache-system',
+  '/admin/seo-tools',
+  '/admin/email-blacklist',
+  '/admin/payment-settings',
+  '/admin/payouts',
+  '/admin/theme',
+];
 
 export default function AdminLayout({
   children,
@@ -11,10 +28,18 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { role } = useAppContext();
 
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
+
+  const isModerator = role === 'moderator';
+  const isRestricted =
+    isModerator &&
+    MODERATOR_RESTRICTED_PREFIXES.some(
+      (prefix) => pathname === prefix || pathname.startsWith(prefix + '/')
+    );
 
   return (
     <AdminProvider>
@@ -24,7 +49,11 @@ export default function AdminLayout({
           <AdminHeader />
           <main className="flex-1 overflow-x-hidden overflow-y-auto bg-[#f4f6f9] flex flex-col w-full max-w-full">
             <div className="flex-1 p-4 md:p-6 w-full max-w-full">
-              {children}
+              {isRestricted ? (
+                <AccessDenied restrictedPath={pathname} />
+              ) : (
+                children
+              )}
             </div>
             <footer className="bg-white border-t border-gray-200 p-4 text-[13px] text-gray-600 flex justify-between items-center">
               <div>

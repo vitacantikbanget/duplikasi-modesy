@@ -1,420 +1,526 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Info, Check, X, AlertCircle, CheckCircle } from "lucide-react";
+import {
+  RotateCcw,
+  Search,
+  CheckCircle2,
+  X,
+  ChevronRight,
+  ExternalLink,
+  Store,
+  User,
+  Clock,
+  Check,
+  Ban,
+  DollarSign,
+  AlertCircle,
+  RotateCw,
+  ShoppingCart,
+  ShieldCheck,
+} from "lucide-react";
+import {
+  AdminRefundRequestItem,
+  RefundStatus,
+  fetchRefundRequests,
+  processRefundAction,
+} from "@/lib/moderation";
+import { useAppContext } from "@/contexts/AppContext";
 
-interface RefundRequestItem {
-  id: number;
-  orderNumber: string;
-  orderId: string;
-  productTitle: string;
-  productSlug?: string;
-  total: string;
-  commissionRate: string;
-  earnedAmount: string;
-  buyer: string;
-  buyerSlug?: string;
-  seller: string;
-  sellerSlug?: string;
-  status: "Processing" | "Refund Approved" | "Declined";
-  updated: string;
-  date: string;
-  reason?: string;
-  explanation?: string;
-}
+export default function RefundRequestsPage() {
+  const { role } = useAppContext();
+  const [requests, setRequests] = useState<AdminRefundRequestItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("All");
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-const INITIAL_REFUND_REQUESTS: RefundRequestItem[] = [
-  {
-    id: 1,
-    orderNumber: "#10029",
-    orderId: "10029",
-    productTitle: "Women kipling bailey saddle handbag",
-    productSlug: "women-kipling-bailey-saddle-handbag-40",
-    total: "$59",
-    commissionRate: "5%",
-    earnedAmount: "Not Added to Vendor Balance",
-    buyer: "Admin",
-    buyerSlug: "admin",
-    seller: "Admin",
-    sellerSlug: "admin",
-    status: "Processing",
-    updated: "5 days ago",
-    date: "2026-10-13 / 17:50",
-    reason: "Item arrived damaged or defective",
-    explanation: "The strap metal hook was broken upon unboxing. Buyer requested a refund as the item cannot be used as intended.",
-  },
-  {
-    id: 2,
-    orderNumber: "#10007",
-    orderId: "10007",
-    productTitle: "Animal colorful digital prints",
-    productSlug: "animal-colorful-digital-prints-39",
-    total: "$31.90",
-    commissionRate: "10%",
-    earnedAmount: "$24.65",
-    buyer: "Peter Jone",
-    buyerSlug: "peter-jones",
-    seller: "Trendshop",
-    sellerSlug: "trendshop",
-    status: "Processing",
-    updated: "1 month ago",
-    date: "2026-09-09 / 11:12",
-    reason: "Downloaded file corrupted",
-    explanation: "The zip file cannot be extracted on macOS and Windows with archive utility error. Customer requested a full refund.",
-  },
-  {
-    id: 3,
-    orderNumber: "#10018",
-    orderId: "10018",
-    productTitle: "Navy polka dot dress",
-    productSlug: "navy-polka-dot-dress-45",
-    total: "$143",
-    commissionRate: "15%",
-    earnedAmount: "Not Added to Vendor Balance",
-    buyer: "Trendshop",
-    buyerSlug: "trendshop",
-    seller: "Trendshop",
-    sellerSlug: "trendshop",
-    status: "Processing",
-    updated: "1 month ago",
-    date: "2026-09-09 / 06:01",
-    reason: "Wrong size delivered",
-    explanation: "Ordered size Large but received Small according to the tag. Buyer submitted photo proof for refund processing.",
-  },
-  {
-    id: 4,
-    orderNumber: "#10011",
-    orderId: "10011",
-    productTitle: "Floral women sundress",
-    productSlug: "floral-women-sundress-38",
-    total: "$80",
-    commissionRate: "15%",
-    earnedAmount: "Not Added to Vendor Balance",
-    buyer: "Admin",
-    buyerSlug: "admin",
-    seller: "Admin",
-    sellerSlug: "admin",
-    status: "Processing",
-    updated: "5 days ago",
-    date: "2026-09-04 / 08:36",
-    reason: "Order canceled prior to shipment",
-    explanation: "Customer canceled order before dispatch. Vendor did not ship yet, requesting balance adjustment.",
-  },
-];
+  // Modal State
+  const [activeRequest, setActiveRequest] = useState<AdminRefundRequestItem | null>(null);
+  const [decisionStatus, setDecisionStatus] = useState<RefundStatus>("approved");
+  const [decisionNotes, setDecisionNotes] = useState("");
+  const [autoUpdateOrder, setAutoUpdateOrder] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
-export default function AdminRefundRequestsPage() {
-  const [refundRequests, setRefundRequests] = useState<RefundRequestItem[]>(INITIAL_REFUND_REQUESTS);
-  const [selectedRequest, setSelectedRequest] = useState<RefundRequestItem | null>(null);
-  const [notification, setNotification] = useState<string | null>(null);
-
-  const handleApproveRefund = (item: RefundRequestItem) => {
-    const confirmed = confirm(
-      `Are you sure you want to approve the refund for order ${item.orderNumber}?\n\nThe system will change the order status to "Refund Approved" and deduct the order amount from the seller's balance.`
-    );
-
-    if (confirmed) {
-      setRefundRequests((prev) =>
-        prev.map((r) =>
-          r.id === item.id ? { ...r, status: "Refund Approved", updated: "Just now" } : r
-        )
-      );
-      setNotification(`Refund for order ${item.orderNumber} has been approved successfully.`);
-      setTimeout(() => setNotification(null), 5000);
-    }
+  const loadRequests = async () => {
+    setLoading(true);
+    const data = await fetchRefundRequests();
+    setRequests(data);
+    setLoading(false);
   };
 
-  const handleDeclineRefund = (item: RefundRequestItem) => {
-    const confirmed = confirm(
-      `Are you sure you want to decline the refund request for order ${item.orderNumber}?`
+  useEffect(() => {
+    loadRequests();
+    const handleUpdate = () => loadRequests();
+    if (typeof window !== "undefined") {
+      window.addEventListener("modesy-moderation-updated", handleUpdate);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("modesy-moderation-updated", handleUpdate);
+      }
+    };
+  }, []);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  const filteredRequests = requests.filter((r) => {
+    const matchStatus = statusFilter === "All" || r.status === statusFilter;
+    const q = searchTerm.toLowerCase();
+    const matchSearch =
+      r.orderNumber.toLowerCase().includes(q) ||
+      r.buyerName.toLowerCase().includes(q) ||
+      r.vendorName.toLowerCase().includes(q) ||
+      r.reason.toLowerCase().includes(q);
+    return matchStatus && matchSearch;
+  });
+
+  const totalCount = requests.length;
+  const pendingCount = requests.filter((r) => r.status === "pending").length;
+  const approvedCount = requests.filter((r) => r.status === "approved").length;
+  const declinedCount = requests.filter((r) => r.status === "declined").length;
+
+  const handleOpenModal = (req: AdminRefundRequestItem) => {
+    setActiveRequest(req);
+    setDecisionStatus(req.status === "pending" ? "approved" : req.status);
+    setDecisionNotes(req.moderatorNotes || "");
+    setAutoUpdateOrder(true);
+  };
+
+  const handleSaveDecision = async () => {
+    if (!activeRequest) return;
+    setSubmitting(true);
+
+    await processRefundAction(
+      activeRequest.id,
+      activeRequest.orderId,
+      decisionStatus,
+      decisionNotes.trim() ? decisionNotes.trim() : undefined,
+      autoUpdateOrder
     );
 
-    if (confirmed) {
-      setRefundRequests((prev) =>
-        prev.map((r) =>
-          r.id === item.id ? { ...r, status: "Declined", updated: "Just now" } : r
-        )
-      );
-      if (selectedRequest?.id === item.id) {
-        setSelectedRequest(null);
-      }
-      setNotification(`Refund request for order ${item.orderNumber} was declined.`);
-      setTimeout(() => setNotification(null), 5000);
+    setSubmitting(false);
+    setActiveRequest(null);
+
+    let text = `Permintaan refund #${activeRequest.id} (Pesanan ${activeRequest.orderNumber}) berhasil di-${decisionStatus.toUpperCase()}.`;
+    if (decisionStatus === "approved" && autoUpdateOrder) {
+      text += " Status pembayaran pesanan diupdate ke 'Refunded'.";
+    }
+    showToast(text);
+    loadRequests();
+  };
+
+  const getStatusBadge = (status: RefundStatus) => {
+    switch (status) {
+      case "pending":
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+            Pending Review
+          </span>
+        );
+      case "approved":
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+            Approved
+          </span>
+        );
+      case "declined":
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-100 text-rose-800 border border-rose-200">
+            Declined
+          </span>
+        );
     }
   };
 
   return (
-    <div className="w-full text-[#333333] pb-12">
-      {/* Title */}
-      <div className="mb-4">
-        <h1 className="text-[24px] font-normal text-[#333333]">Refund Requests</h1>
-      </div>
-
-      {/* Success Notification Alert */}
-      {notification && (
-        <div className="mb-4 bg-emerald-50 border border-emerald-300 text-emerald-800 px-4 py-3 rounded-[3px] text-sm flex items-center justify-between shadow-xs">
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
-            <span>{notification}</span>
-          </div>
+    <div className="space-y-4 font-sans text-gray-800">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed top-5 right-5 z-50 bg-[#00a99d] text-white px-4 py-3 rounded shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-200 text-sm">
+          <CheckCircle2 className="w-5 h-5 shrink-0" />
+          <span>{toastMessage}</span>
           <button
-            onClick={() => setNotification(null)}
-            className="text-xs text-emerald-700 font-semibold hover:underline cursor-pointer"
+            onClick={() => setToastMessage(null)}
+            className="ml-2 hover:opacity-80 p-0.5"
           >
-            Dismiss
+            <X className="w-4 h-4" />
           </button>
         </div>
       )}
 
-      {/* Main Content Box (AdminLTE White Box) */}
-      <div className="bg-white rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] border border-[#d2d6de] p-5">
-        {/* Table Container */}
-        <div className="overflow-x-auto min-h-[220px]">
-          <table className="w-full text-left text-[13.5px] border-collapse whitespace-nowrap">
+      {/* Page Header & Breadcrumb */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-gray-200">
+        <div>
+          <h1 className="text-xl font-bold text-gray-800 tracking-tight flex items-center gap-2">
+            <RotateCcw className="w-6 h-6 text-amber-600" />
+            Refund Requests
+            <span className="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">
+              {pendingCount} Antrean
+            </span>
+          </h1>
+          <p className="text-xs text-gray-500 mt-0.5">
+            Penyelesaian sengketa pengembalian dana antara pembeli dan penjual marketplace Modesy
+          </p>
+        </div>
+
+        <nav className="text-xs text-gray-500 flex items-center gap-1.5 self-start sm:self-auto">
+          <Link href="/admin" className="hover:text-blue-600">
+            Admin
+          </Link>
+          <ChevronRight className="w-3 h-3 text-gray-400" />
+          <span>Management Tools</span>
+          <ChevronRight className="w-3 h-3 text-gray-400" />
+          <span className="text-gray-800 font-medium">Refund Requests</span>
+        </nav>
+      </div>
+
+      {/* KPI Summary Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="bg-white border border-gray-200 rounded p-3 shadow-xs">
+          <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+            Total Sengketa
+          </span>
+          <p className="text-xl font-bold text-gray-900 mt-0.5">{totalCount}</p>
+        </div>
+
+        <div className="bg-amber-50/60 border border-amber-200 rounded p-3 shadow-xs">
+          <span className="text-[11px] font-semibold text-amber-700 uppercase tracking-wider">
+            Perlu Ditinjau
+          </span>
+          <p className="text-xl font-bold text-amber-900 mt-0.5">{pendingCount}</p>
+        </div>
+
+        <div className="bg-emerald-50/60 border border-emerald-200 rounded p-3 shadow-xs">
+          <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">
+            Disetujui (Approved)
+          </span>
+          <p className="text-xl font-bold text-emerald-900 mt-0.5">{approvedCount}</p>
+        </div>
+
+        <div className="bg-rose-50/60 border border-rose-200 rounded p-3 shadow-xs">
+          <span className="text-[11px] font-semibold text-rose-700 uppercase tracking-wider">
+            Ditolak (Declined)
+          </span>
+          <p className="text-xl font-bold text-rose-900 mt-0.5">{declinedCount}</p>
+        </div>
+      </div>
+
+      {/* Filter and Search Bar */}
+      <div className="bg-white border border-gray-200 rounded p-3.5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative">
+            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Cari No. Order, Pembeli, Vendor..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="text-xs pl-9 pr-3 py-1.5 border border-gray-300 rounded focus:border-[#00a99d] focus:outline-none w-64"
+            />
+          </div>
+
+          <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded p-0.5 text-xs">
+            {["All", "pending", "approved", "declined"].map((st) => (
+              <button
+                key={st}
+                type="button"
+                onClick={() => setStatusFilter(st)}
+                className={`px-2.5 py-1 rounded capitalize transition-colors font-medium ${
+                  statusFilter === st
+                    ? "bg-[#00a99d] text-white shadow-xs"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
+                }`}
+              >
+                {st === "All" ? "Semua Status" : st}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 self-end md:self-auto">
+          <button
+            type="button"
+            onClick={loadRequests}
+            className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded text-xs transition-colors"
+          >
+            <RotateCw className="w-3.5 h-3.5" />
+            <span>Refresh</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Table Container */}
+      <div className="bg-white border border-gray-200 rounded shadow-xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b-2 border-gray-200 text-[#333333] font-semibold text-[13px]">
-                <th className="py-2.5 px-3 text-left">Product</th>
-                <th className="py-2.5 px-3 text-left">Total</th>
-                <th className="py-2.5 px-3 text-left">Commission Rate</th>
-                <th className="py-2.5 px-3 text-left">Earned Amount</th>
-                <th className="py-2.5 px-3 text-left">Buyer</th>
-                <th className="py-2.5 px-3 text-left">Seller</th>
-                <th className="py-2.5 px-3 text-left">Status</th>
-                <th className="py-2.5 px-3 text-left">Updated</th>
-                <th className="py-2.5 px-3 text-left">Date</th>
-                <th className="py-2.5 px-3 text-left">Options</th>
+              <tr className="bg-[#f8f9fa] border-b border-gray-200 text-gray-600 uppercase text-[11px] font-semibold tracking-wider">
+                <th className="py-3 px-4 w-12 text-center">ID</th>
+                <th className="py-3 px-4">No. Pesanan & Nilai</th>
+                <th className="py-3 px-4">Pembeli (Buyer)</th>
+                <th className="py-3 px-4">Penjual (Vendor)</th>
+                <th className="py-3 px-4">Alasan Sengketa Refund</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">Waktu Pengajuan</th>
+                <th className="py-3 px-4 text-center w-32">Aksi Putusan</th>
               </tr>
             </thead>
-            <tbody>
-              {refundRequests.map((item) => (
-                <tr
-                  key={item.id}
-                  className="border-b border-[#f4f4f4] hover:bg-gray-50/70 transition-colors text-[13px]"
-                >
-                  {/* Product */}
-                  <td className="py-3 px-3">
-                    <Link
-                      href={`/admin/orders?search=${item.orderId}`}
-                      className="text-[#0088cc] hover:text-[#005580] hover:underline font-normal transition-colors"
-                    >
-                      {item.orderNumber} - {item.productTitle}
-                    </Link>
-                  </td>
-
-                  {/* Total */}
-                  <td className="py-3 px-3 text-gray-700">
-                    {item.total}
-                  </td>
-
-                  {/* Commission Rate */}
-                  <td className="py-3 px-3 text-gray-700">
-                    {item.commissionRate}
-                  </td>
-
-                  {/* Earned Amount */}
-                  <td className="py-3 px-3 text-gray-700">
-                    {item.earnedAmount}
-                  </td>
-
-                  {/* Buyer */}
-                  <td className="py-3 px-3">
-                    <Link
-                      href={`/admin/users?search=${encodeURIComponent(item.buyer)}`}
-                      className="text-[#0088cc] hover:text-[#005580] hover:underline transition-colors"
-                    >
-                      {item.buyer}
-                    </Link>
-                  </td>
-
-                  {/* Seller */}
-                  <td className="py-3 px-3">
-                    <Link
-                      href={`/admin/users?search=${encodeURIComponent(item.seller)}`}
-                      className="text-[#0088cc] hover:text-[#005580] hover:underline transition-colors"
-                    >
-                      {item.seller}
-                    </Link>
-                  </td>
-
-                  {/* Status Badge */}
-                  <td className="py-3 px-3">
-                    {item.status === "Processing" ? (
-                      <span className="bg-[#d2d6de] text-[#555] text-[11px] font-semibold px-2 py-0.5 rounded-[2px]">
-                        Processing
-                      </span>
-                    ) : item.status === "Refund Approved" ? (
-                      <span className="bg-[#00a65a] text-white text-[11px] font-semibold px-2 py-0.5 rounded-[2px]">
-                        Approved
-                      </span>
-                    ) : (
-                      <span className="bg-[#dd4b39] text-white text-[11px] font-semibold px-2 py-0.5 rounded-[2px]">
-                        Declined
-                      </span>
-                    )}
-                  </td>
-
-                  {/* Updated */}
-                  <td className="py-3 px-3 text-gray-600">
-                    {item.updated}
-                  </td>
-
-                  {/* Date */}
-                  <td className="py-3 px-3 text-gray-600 text-[12px] whitespace-nowrap">
-                    {item.date}
-                  </td>
-
-                  {/* Options (Details & Approve Refund Buttons matching screenshot) */}
-                  <td className="py-3 px-3 whitespace-nowrap">
-                    <div className="flex items-center gap-1.5">
-                      {/* Details Button */}
-                      <button
-                        type="button"
-                        onClick={() => setSelectedRequest(item)}
-                        className="h-[30px] px-2.5 border border-[#d2d6de] bg-white hover:bg-gray-50 text-[#333] text-[12px] rounded-[3px] flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
-                      >
-                        <Info className="w-3.5 h-3.5 text-gray-500" />
-                        <span>Details</span>
-                      </button>
-
-                      {/* Approve Refund Button */}
-                      {item.status === "Processing" ? (
-                        <button
-                          type="button"
-                          onClick={() => handleApproveRefund(item)}
-                          className="h-[30px] px-2.5 border border-[#d2d6de] bg-white hover:bg-gray-50 text-[#333] hover:text-emerald-700 text-[12px] rounded-[3px] flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
-                        >
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>Approve Refund</span>
-                        </button>
-                      ) : (
-                        <span className="text-xs text-gray-400 italic px-2">Completed</span>
-                      )}
-                    </div>
+            <tbody className="divide-y divide-gray-100">
+              {loading ? (
+                <tr>
+                  <td colSpan={8} className="py-12 text-center text-gray-400">
+                    Memuat data sengketa refund dari Supabase...
                   </td>
                 </tr>
-              ))}
+              ) : filteredRequests.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-12 text-center text-gray-500">
+                    Tidak ada permintaan pengembalian dana yang ditemukan.
+                  </td>
+                </tr>
+              ) : (
+                filteredRequests.map((req) => (
+                  <tr key={req.id} className="hover:bg-gray-50/80 transition-colors">
+                    {/* ID */}
+                    <td className="py-3 px-4 text-center font-bold text-gray-500">
+                      #{req.id}
+                    </td>
+
+                    {/* Order & Amount */}
+                    <td className="py-3 px-4">
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <ShoppingCart className="w-3.5 h-3.5 text-[#00a99d]" />
+                          <span className="font-bold text-gray-800">{req.orderNumber}</span>
+                        </div>
+                        <p className="text-[11px] text-gray-600 font-mono mt-0.5">
+                          Total: <strong className="text-gray-900">${Number(req.totalAmount).toFixed(2)}</strong>
+                        </p>
+                        <span className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.2 rounded border border-gray-200">
+                          {req.paymentStatus}
+                        </span>
+                      </div>
+                    </td>
+
+                    {/* Pembeli */}
+                    <td className="py-3 px-4">
+                      <div className="flex items-start gap-1.5">
+                        <div className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
+                          <User className="w-3 h-3" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900">{req.buyerName}</p>
+                          <p className="text-[10px] text-gray-400">{req.buyerEmail}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Penjual */}
+                    <td className="py-3 px-4">
+                      <div className="flex items-start gap-1.5">
+                        <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                          <Store className="w-3 h-3" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900">{req.vendorName}</p>
+                          <p className="text-[10px] text-gray-400">{req.vendorEmail}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Alasan */}
+                    <td className="py-3 px-4 max-w-xs">
+                      <div>
+                        <p className="text-gray-700 text-[11.5px] leading-relaxed line-clamp-2">
+                          "{req.reason}"
+                        </p>
+                        {req.moderatorNotes && (
+                          <p className="text-[11px] text-teal-700 bg-teal-50 border border-teal-200 rounded px-1.5 py-0.5 mt-1 italic line-clamp-1">
+                            Putusan: {req.moderatorNotes}
+                          </p>
+                        )}
+                      </div>
+                    </td>
+
+                    {/* Status */}
+                    <td className="py-3 px-4">{getStatusBadge(req.status)}</td>
+
+                    {/* Waktu */}
+                    <td className="py-3 px-4 text-gray-500 text-[11px]">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-gray-400" />
+                        <span>{req.createdAt}</span>
+                      </div>
+                    </td>
+
+                    {/* Aksi */}
+                    <td className="py-3 px-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenModal(req)}
+                        className="bg-[#00a99d] hover:bg-[#008f85] text-white text-[11px] font-semibold px-2.5 py-1.5 rounded flex items-center justify-center gap-1 shadow-2xs transition-colors w-full"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span>Tinjau</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
-
-        {/* Number of Entries count matching screenshot */}
-        <div className="mt-4 pt-3 border-t border-[#f4f4f4] text-[13px] text-gray-700 font-semibold">
-          Number of Entries: {refundRequests.length}
-        </div>
       </div>
 
-      {/* Warning Alert Box matching Modesy screenshot exactly */}
-      <div className="mt-6 bg-[#d9edf7] border border-[#bce8f1] text-[#31708f] px-4 py-3.5 rounded-[3px] text-[13px] leading-relaxed shadow-xs flex items-start gap-2.5">
-        <AlertCircle className="w-4 h-4 text-[#31708f] shrink-0 mt-0.5" />
-        <div>
-          <span className="font-bold">Warning!</span> To complete a refund request, you must return the buyer's money. If you click the "Approve Refund" button, the system will change the order status to "Refund Approved" and deduct the order amount from the seller's balance.
-        </div>
-      </div>
-
-      {/* REFUND DETAILS MODAL */}
-      {selectedRequest && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-2xs">
-          <div className="bg-white rounded-[4px] shadow-2xl w-full max-w-lg overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-4 border-b border-[#f4f4f4] flex items-center justify-between bg-gray-50">
-              <h3 className="text-[17px] font-semibold text-[#333333]">
-                Refund Request #{selectedRequest.id} ({selectedRequest.orderNumber})
-              </h3>
+      {/* Modal Tinjau Keputusan Refund */}
+      {activeRequest && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full border border-gray-200 overflow-hidden">
+            {/* Modal Header */}
+            <div className="px-5 py-3.5 bg-gray-800 text-white flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <RotateCcw className="w-5 h-5 text-amber-400" />
+                <h3 className="text-sm font-bold">
+                  Tinjau Permintaan Refund #{activeRequest.id}
+                </h3>
+              </div>
               <button
                 type="button"
-                onClick={() => setSelectedRequest(null)}
-                className="text-gray-400 hover:text-gray-600 cursor-pointer p-1"
+                onClick={() => setActiveRequest(null)}
+                className="text-gray-400 hover:text-white p-1"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-6 space-y-3.5 text-[13.5px]">
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Product:</span>
-                <span className="font-semibold text-gray-800 text-right max-w-[280px]">
-                  {selectedRequest.orderNumber} - {selectedRequest.productTitle}
-                </span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Order Total:</span>
-                <span className="font-bold text-gray-800">{selectedRequest.total}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Commission Rate:</span>
-                <span className="text-gray-700">{selectedRequest.commissionRate}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Earned Amount:</span>
-                <span className="text-gray-700">{selectedRequest.earnedAmount}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Buyer:</span>
-                <span className="font-medium text-gray-800">{selectedRequest.buyer}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Seller:</span>
-                <span className="font-medium text-gray-800">{selectedRequest.seller}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Status:</span>
-                <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                  selectedRequest.status === "Processing"
-                    ? "bg-gray-100 text-gray-700"
-                    : selectedRequest.status === "Refund Approved"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
-                }`}>
-                  {selectedRequest.status}
-                </span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Refund Reason:</span>
-                <span className="font-medium text-red-600 text-right">{selectedRequest.reason}</span>
-              </div>
-              <div className="py-1.5 border-b border-gray-100">
-                <span className="text-gray-500 block mb-1">Buyer Explanation:</span>
-                <p className="text-xs text-gray-700 bg-gray-50 p-2.5 rounded border border-gray-200">
-                  {selectedRequest.explanation}
-                </p>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Requested Date:</span>
-                <span className="text-gray-700">{selectedRequest.date}</span>
+            {/* Modal Content */}
+            <div className="p-5 space-y-4 max-h-[80vh] overflow-y-auto text-xs">
+              {/* Order Info Card */}
+              <div className="bg-gray-50 border border-gray-200 rounded p-3 space-y-2">
+                <div className="flex justify-between items-center pb-2 border-b border-gray-200">
+                  <span className="font-bold text-gray-800 flex items-center gap-1.5">
+                    <ShoppingCart className="w-4 h-4 text-[#00a99d]" />
+                    Pesanan: {activeRequest.orderNumber}
+                  </span>
+                  <span className="font-mono font-bold text-sm text-[#00a99d]">
+                    ${Number(activeRequest.totalAmount).toFixed(2)}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                  <div>
+                    <span className="text-gray-400 uppercase font-semibold">Pembeli:</span>
+                    <p className="font-semibold text-gray-800">{activeRequest.buyerName}</p>
+                    <p className="text-gray-400 text-[10px]">{activeRequest.buyerEmail}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 uppercase font-semibold">Penjual:</span>
+                    <p className="font-semibold text-gray-800">{activeRequest.vendorName}</p>
+                    <p className="text-gray-400 text-[10px]">{activeRequest.vendorEmail}</p>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-gray-200">
+                  <span className="text-gray-400 uppercase font-semibold">Alasan Pembeli:</span>
+                  <p className="text-gray-700 italic bg-white p-2 rounded border border-gray-200 mt-0.5">
+                    "{activeRequest.reason}"
+                  </p>
+                </div>
               </div>
 
-              <div className="pt-3 flex justify-between items-center">
-                {selectedRequest.status === "Processing" && (
+              {/* Status Decision Buttons */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                  Putusan Moderator:
+                </label>
+                <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
-                    onClick={() => handleDeclineRefund(selectedRequest)}
-                    className="px-3.5 py-1.5 bg-[#dd4b39] hover:bg-[#c23321] text-white rounded-[3px] text-[13px] font-medium cursor-pointer transition-colors shadow-2xs"
+                    onClick={() => setDecisionStatus("approved")}
+                    className={`py-2.5 px-3 text-xs font-bold rounded border text-center transition-all flex items-center justify-center gap-1.5 ${
+                      decisionStatus === "approved"
+                        ? "bg-emerald-50 border-emerald-500 text-emerald-800 ring-2 ring-emerald-200"
+                        : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                    }`}
                   >
-                    Decline Request
+                    <Check className="w-4 h-4 text-emerald-600" />
+                    <span>Setujui Refund (Approve)</span>
                   </button>
-                )}
-                <div className="flex gap-2 ml-auto">
-                  {selectedRequest.status === "Processing" && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleApproveRefund(selectedRequest);
-                        setSelectedRequest(null);
-                      }}
-                      className="px-3.5 py-1.5 bg-[#00a65a] hover:bg-[#008d4c] text-white rounded-[3px] text-[13px] font-medium cursor-pointer transition-colors shadow-2xs flex items-center gap-1"
-                    >
-                      <Check className="w-4 h-4" />
-                      Approve Refund
-                    </button>
-                  )}
+
                   <button
                     type="button"
-                    onClick={() => setSelectedRequest(null)}
-                    className="px-4 py-1.5 border border-gray-300 hover:bg-gray-100 text-gray-700 rounded-[3px] text-[13px] font-medium cursor-pointer transition-colors"
+                    onClick={() => setDecisionStatus("declined")}
+                    className={`py-2.5 px-3 text-xs font-bold rounded border text-center transition-all flex items-center justify-center gap-1.5 ${
+                      decisionStatus === "declined"
+                        ? "bg-rose-50 border-rose-500 text-rose-800 ring-2 ring-rose-200"
+                        : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                    }`}
                   >
-                    Close
+                    <Ban className="w-4 h-4 text-rose-600" />
+                    <span>Tolak Refund (Decline)</span>
                   </button>
                 </div>
               </div>
+
+              {/* Auto update order status checkbox */}
+              {decisionStatus === "approved" && (
+                <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded">
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={autoUpdateOrder}
+                      onChange={(e) => setAutoUpdateOrder(e.target.checked)}
+                      className="mt-0.5 rounded text-[#00a99d] focus:ring-[#00a99d]"
+                    />
+                    <div>
+                      <span className="font-bold text-emerald-950">
+                        Otomatis Perbarui Status Pesanan di Supabase
+                      </span>
+                      <p className="text-emerald-800 text-[11px] mt-0.5">
+                        Menyetujui refund ini akan otomatis mengubah `payment_status` menjadi <strong>'refunded'</strong> dan `order_status` menjadi <strong>'cancelled'</strong> pada tabel pesanan {activeRequest.orderNumber}.
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              )}
+
+              {/* Moderator Notes */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Catatan Resmi Putusan Moderator:
+                </label>
+                <textarea
+                  rows={3}
+                  value={decisionNotes}
+                  onChange={(e) => setDecisionNotes(e.target.value)}
+                  placeholder="Tuliskan dasar pertimbangan putusan untuk disampaikan kepada pembeli dan toko..."
+                  className="w-full text-xs p-2.5 border border-gray-300 rounded focus:border-[#00a99d] focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 bg-gray-50 border-t border-gray-200 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveRequest(null)}
+                className="px-4 py-1.5 border border-gray-300 hover:bg-gray-100 text-gray-700 text-xs font-medium rounded transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                disabled={submitting}
+                onClick={handleSaveDecision}
+                className="px-4 py-1.5 bg-[#00a99d] hover:bg-[#008f85] text-white text-xs font-bold rounded shadow-xs transition-colors flex items-center gap-1.5"
+              >
+                {submitting ? "Memproses..." : "Simpan Putusan"}
+              </button>
             </div>
           </div>
         </div>

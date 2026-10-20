@@ -24,9 +24,9 @@ export const ROLE_PROFILES: Record<UserRole, UserProfile | null> = {
     badgeLabel: "Admin",
   },
   moderator: {
-    name: "Moderator",
+    name: "Roger Novak",
     email: "moderator@codingest.net",
-    avatar: "https://i.pravatar.cc/150?u=admin",
+    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80",
     role: "moderator",
     badgeLabel: "Moderator",
   },

@@ -33,8 +33,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Auto-detect role from URL path if matching dedicated portals
     let active: UserRole = "guest";
+    const savedRole = (cookieRole || localRole) as UserRole | null;
+
     if (pathname.startsWith("/admin")) {
-      active = "admin";
+      if (savedRole && ["moderator", "super_admin", "admin"].includes(savedRole)) {
+        active = savedRole;
+      } else {
+        active = "admin";
+      }
     } else if (pathname.startsWith("/dashboard")) {
       active = "vendor";
     } else if (pathname.startsWith("/member")) {

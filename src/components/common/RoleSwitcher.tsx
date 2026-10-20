@@ -13,7 +13,8 @@ import {
   Check, 
   Sparkles,
   Lock,
-  User
+  User,
+  Scale
 } from "lucide-react";
 
 export default function RoleSwitcher() {
@@ -61,6 +62,16 @@ export default function RoleSwitcher() {
       icon: Store,
       destination: "/dashboard",
       description: "Panel toko Trendshop. Kelola produk, pesanan penjualan, dompet (wallet), ulasan, dan toko.",
+    },
+    {
+      id: "moderator",
+      title: "Mode MODERATOR (Roger Novak)",
+      subTitle: "Panel Moderasi Produk & Konten",
+      tag: "Moderator",
+      tagColor: "bg-teal-50 text-teal-800 border-teal-300",
+      icon: Scale,
+      destination: "/admin",
+      description: "Panel kerja moderator Modesy. Verifikasi produk pending, tangani laporan pelanggaran (abuse), moderasi ulasan & sengketa.",
     },
     {
       id: "admin",

@@ -40,7 +40,7 @@ export default function PromotionPaymentsPage() {
                   <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.productId}</td>
                   <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentAmount}</td>
                   <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentStatus}</td>
-                  <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.purchasedPlan}</td>
+                  <td className="py-4 pr-4 text-[#2c333e] align-middle max-w-[140px] leading-tight">{item.purchasedPlan}</td>
                   <td className="py-4 pr-4 text-[#2c333e] align-middle whitespace-nowrap">{item.date}</td>
                   <td className="py-4 align-middle">
                     <button

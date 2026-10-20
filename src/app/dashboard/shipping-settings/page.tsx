@@ -26,26 +26,13 @@ const INITIAL_ZONES: ShippingZone[] = [
   {
     id: 1,
     name: "International",
-    regions: [
-      "Europe",
-      "Asia",
-      "North America",
-      "South America",
-      "Oceania",
-      "Antarctica",
-    ],
+    regions: ["Europe", "Asia", "Africa", "South America"],
     methods: "Free Shipping, Flat Rate",
   },
   {
     id: 2,
-    name: "Germany",
-    regions: ["Europe/Germany"],
-    methods: "Free Shipping, Local Pickup, Flat Rate",
-  },
-  {
-    id: 3,
-    name: "Europe",
-    regions: ["Europe"],
+    name: "Domestic",
+    regions: ["North America/United States"],
     methods: "Free Shipping, Local Pickup, Flat Rate",
   },
 ];
@@ -306,11 +293,11 @@ export default function ShippingSettingsPage() {
 
                     {/* Options (Edit, Delete) */}
                     <td className="py-3.5 pr-1 align-middle">
-                      <div className="flex items-center gap-1">
+                      <div className="inline-flex items-center rounded-[3px] border border-[#d2d6de] overflow-hidden bg-[#f4f4f4]">
                         <button
                           type="button"
                           onClick={() => handleOpenEditZone(zone)}
-                          className="w-7 h-7 bg-[#e9ecef] hover:bg-gray-300 rounded-[2px] flex items-center justify-center text-[#495057] transition-colors cursor-pointer"
+                          className="px-2.5 py-1 text-[#444] hover:bg-gray-200 hover:text-black border-r border-[#d2d6de] transition-colors cursor-pointer"
                           title="Edit"
                         >
                           <SquarePen className="w-3.5 h-3.5" />
@@ -318,7 +305,7 @@ export default function ShippingSettingsPage() {
                         <button
                           type="button"
                           onClick={() => handleDeleteZone(zone.id)}
-                          className="w-7 h-7 bg-[#e9ecef] hover:bg-red-100 hover:text-red-600 rounded-[2px] flex items-center justify-center text-[#495057] transition-colors cursor-pointer"
+                          className="px-2.5 py-1 text-[#444] hover:bg-gray-200 hover:text-red-600 transition-colors cursor-pointer"
                           title="Delete"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -355,86 +342,88 @@ export default function ShippingSettingsPage() {
       </div>
 
       {/* ================= CARD 2: SHIPPING DELIVERY TIMES ================= */}
-      <div className="bg-white rounded-[4px] border border-[#e9ecef] p-6 lg:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-        {/* Header with Title and Add Button */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <h2 className="text-[18px] font-bold text-[#2c333e] font-sans">
-            Shipping Delivery Times
-          </h2>
-          <button
-            type="button"
-            onClick={handleOpenAddDelivery}
-            className="bg-[#00ab97] hover:bg-[#009684] text-white text-[13px] font-medium px-4 py-2 rounded-[3px] inline-flex items-center gap-1.5 transition-colors shadow-2xs cursor-pointer self-start sm:self-auto"
-          >
-            <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>Add Delivery Time</span>
-          </button>
-        </div>
+      <div className="space-y-6 max-w-[650px]">
+        <div className="bg-white rounded-[4px] border border-[#e9ecef] p-6 lg:p-8 shadow-xs">
+          {/* Header with Title and Add Button */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <h2 className="text-[18px] font-bold text-[#2c333e] font-sans">
+              Shipping Delivery Times
+            </h2>
+            <button
+              type="button"
+              onClick={handleOpenAddDelivery}
+              className="bg-[#00ab97] hover:bg-[#009684] text-white text-[13px] font-medium px-4 py-2 rounded-[3px] inline-flex items-center gap-1.5 transition-colors shadow-2xs cursor-pointer self-start sm:self-auto"
+            >
+              <Plus className="w-4 h-4 stroke-[2.5]" />
+              <span>Add Delivery Time</span>
+            </button>
+          </div>
 
-        {/* Delivery Times Table */}
-        <div className="overflow-x-auto max-w-[650px]">
-          <table className="w-full text-left text-[13px] border-collapse">
-            <thead>
-              <tr className="text-[#2c333e] font-semibold text-[13px] border-b border-[#f1f3f5]">
-                <th className="pb-3.5 pr-4 pl-1 font-semibold">Option</th>
-                <th className="pb-3.5 pr-1 font-semibold w-[90px] text-left">Options</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#f8f9fa]">
-              {deliveryTimes.map((item) => (
-                <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
-                  <td className="py-3.5 pr-4 pl-1 text-[#2c333e] align-middle font-normal">
-                    {item.option}
-                  </td>
-                  <td className="py-3.5 pr-1 align-middle">
-                    <div className="flex items-center gap-1">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenEditDelivery(item)}
-                        className="w-7 h-7 bg-[#e9ecef] hover:bg-gray-300 rounded-[2px] flex items-center justify-center text-[#495057] transition-colors cursor-pointer"
-                        title="Edit"
-                      >
-                        <SquarePen className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteDelivery(item.id)}
-                        className="w-7 h-7 bg-[#e9ecef] hover:bg-red-100 hover:text-red-600 rounded-[2px] flex items-center justify-center text-[#495057] transition-colors cursor-pointer"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </td>
+          {/* Delivery Times Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-[13px] border-collapse">
+              <thead>
+                <tr className="text-[#2c333e] font-semibold text-[13px] border-b border-[#f1f3f5]">
+                  <th className="pb-3.5 pr-4 pl-1 font-semibold">Option</th>
+                  <th className="pb-3.5 pr-1 font-semibold w-[90px] text-left">Options</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-[#f8f9fa]">
+                {deliveryTimes.map((item) => (
+                  <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
+                    <td className="py-3.5 pr-4 pl-1 text-[#2c333e] align-middle font-normal">
+                      {item.option}
+                    </td>
+                    <td className="py-3.5 pr-1 align-middle">
+                      <div className="inline-flex items-center rounded-[3px] border border-[#d2d6de] overflow-hidden bg-[#f4f4f4]">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditDelivery(item)}
+                          className="px-2.5 py-1 text-[#444] hover:bg-gray-200 hover:text-black border-r border-[#d2d6de] transition-colors cursor-pointer"
+                          title="Edit"
+                        >
+                          <SquarePen className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteDelivery(item.id)}
+                          className="px-2.5 py-1 text-[#444] hover:bg-gray-200 hover:text-red-600 transition-colors cursor-pointer"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        {/* Pagination Controls */}
-        <div className="mt-5 flex justify-end items-center max-w-[650px]">
-          <div className="inline-flex rounded-[3px] overflow-hidden text-[12px] border border-[#dee2e6]">
-            <button
-              disabled
-              className="w-7 h-7 flex items-center justify-center bg-white text-gray-300 cursor-not-allowed border-r border-[#dee2e6]"
-            >
-              &lt;
-            </button>
-            <button className="w-7 h-7 flex items-center justify-center bg-[#00ab97] text-white font-bold">
-              1
-            </button>
-            <button
-              disabled
-              className="w-7 h-7 flex items-center justify-center bg-white text-gray-300 cursor-not-allowed border-l border-[#dee2e6]"
-            >
-              &gt;
-            </button>
+          {/* Pagination Controls */}
+          <div className="mt-5 flex justify-end items-center">
+            <div className="inline-flex rounded-[3px] overflow-hidden text-[12px] border border-[#dee2e6]">
+              <button
+                disabled
+                className="w-7 h-7 flex items-center justify-center bg-white text-gray-300 cursor-not-allowed border-r border-[#dee2e6]"
+              >
+                &lt;
+              </button>
+              <button className="w-7 h-7 flex items-center justify-center bg-[#00ab97] text-white font-bold">
+                1
+              </button>
+              <button
+                disabled
+                className="w-7 h-7 flex items-center justify-center bg-white text-gray-300 cursor-not-allowed border-l border-[#dee2e6]"
+              >
+                &gt;
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Information Alert Box */}
-        <div className="mt-6 p-4 rounded-[4px] bg-[#d7f3f0] border border-[#b2ebe5] text-[13px] leading-relaxed text-[#006b61]">
+        <div className="p-4 rounded-[4px] bg-[#d1ecf1] border border-[#bee5eb] text-[13px] leading-relaxed text-[#0c5460]">
           You can add shipping delivery times from here (E.g: Ready to ship in 1 Business Day)
         </div>
       </div>

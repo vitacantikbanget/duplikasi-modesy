@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, Suspense } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -9,10 +9,6 @@ import {
   Copy,
   Trash2,
   Tag,
-  Download,
-  FileSpreadsheet,
-  FileCode,
-  Check,
   Image as ImageIcon
 } from "lucide-react";
 
@@ -34,530 +30,480 @@ export interface ProductItem {
   stockStatus: string;
   pageViews: number;
   date: string;
-  editedAgo: string;
+  editedAgo?: string;
   status: "active" | "pending" | "hidden" | "sold" | "draft";
 }
 
-// Exactly 24 products matching the Modesy reference screenshots
-const all24Products: ProductItem[] = [
+// Exactly 23 active products matching the Modesy reference screenshots
+const all23ActiveProducts: ProductItem[] = [
   {
-    id: "47",
-    title: "Colorful women scarves",
-    sku: "CIW2S3C4V5R6",
-    image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=200&q=80",
-    badge: { type: "discount", text: "15%" },
-    productType: "Physical",
-    category: "Scarfs",
-    subCategory: "Scarfs",
-    listingType: "sale",
-    price: 40,
-    stockStatus: "In Stock (500)",
-    pageViews: 190,
-    date: "2026-07-31 / 19:40",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "45",
-    title: "Navy polka dot dress",
-    sku: "NIP2D3D4R5S6",
-    image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=200&q=80",
-    badge: { type: "discount", text: "15%" },
-    productType: "Physical",
-    category: "Dresses",
-    subCategory: "Dresses",
-    listingType: "sale",
-    price: 130,
-    stockStatus: "In Stock (500)",
-    pageViews: 204,
-    date: "2026-07-31 / 19:29",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "43",
-    title: "Black fashion women backpack",
-    sku: "BIF2W3B4P5K6",
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&q=80",
-    productType: "Physical",
-    category: "Backpacks",
-    subCategory: "Backpacks",
-    listingType: "quote",
-    price: 0,
-    stockStatus: "In Stock (500)",
-    pageViews: 171,
-    date: "2026-07-31 / 19:21",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "41",
-    title: "Black midi skirt with white flowers",
-    sku: "B1M2S3W4F5L6",
-    image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=200&q=80",
-    badge: { type: "featured", text: "Featured" },
-    productType: "Physical",
-    category: "Skirts",
-    subCategory: "Skirts",
-    listingType: "sale",
-    purchasedPlan: "Monthly Plan (270 Days)",
-    price: 48,
-    stockStatus: "In Stock (500)",
-    pageViews: 286,
-    date: "2026-07-31 / 19:13",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "39",
-    title: "Animal colorful digital prints",
-    sku: "AIC2D3P4R5N6",
-    image: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=200&q=80",
-    productType: "Digital",
-    category: "Vectors",
-    subCategory: "Vectors",
-    listingType: "sale",
-    price: 29,
-    stockStatus: "In Stock",
-    pageViews: 322,
-    date: "2026-07-31 / 18:49",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "37",
-    title: "Seychelles women's brown ankle bootie",
-    sku: "S1W2B3A4B5T6",
+    id: "46",
+    title: "Women's ankle boot with different colors",
+    sku: "W1A2B3D4C5R6",
     image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&q=80",
     productType: "Physical",
     category: "Boots",
     subCategory: "Boots",
     listingType: "sale",
-    price: 79,
+    price: 59,
     stockStatus: "In Stock (500)",
-    pageViews: 137,
-    date: "2026-07-31 / 18:27",
-    editedAgo: "2 months ago",
+    pageViews: 170,
+    date: "2026-07-31 / 19:33",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
-    id: "35",
-    title: "Men outerwear navy color",
-    sku: "M1O2N3C4L5R6",
-    image: "https://images.unsplash.com/photo-1544022613-e87ce7526edb?w=200&q=80",
+    id: "44",
+    title: "Modern grey couch and pillows",
+    sku: "M1G2C3P4S5L6",
+    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&q=80",
     productType: "Physical",
-    category: "Jackets & Coats",
-    subCategory: "Jackets & Coats",
+    category: "Living Room Furniture",
+    subCategory: "Furniture",
     listingType: "sale",
-    price: 89,
-    stockStatus: "In Stock (500)",
-    pageViews: 168,
-    date: "2026-07-31 / 18:19",
-    editedAgo: "2 months ago",
+    price: 299,
+    stockStatus: "Active",
+    pageViews: 225,
+    date: "2026-07-31 / 19:23",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
-    id: "33",
-    title: "Animation of popular vacation spots",
-    sku: "AIP2V3S4P5T6",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80",
+    id: "42",
+    title: "Handcrafted decorative pillow for a luxurious touch",
+    sku: "H1D2P3L4T5X6",
+    image: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&q=80",
+    badge: { type: "discount", text: "-10%" },
+    productType: "Physical",
+    category: "Decorative Pillows",
+    subCategory: "Pillows",
+    listingType: "sale",
+    purchasedPlan: "Monthly Plan (270 Days)",
+    price: 59,
+    stockStatus: "In Stock (492)",
+    pageViews: 280,
+    date: "2026-07-31 / 19:16",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "40",
+    title: "Women kipling bailey saddle handbag",
+    sku: "W1K2B3S4H5G6",
+    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&q=80",
     badge: { type: "featured", text: "Featured" },
-    productType: "Digital",
-    category: "Product Promo",
-    subCategory: "Product Promo",
-    listingType: "sale",
-    purchasedPlan: "Monthly Plan (210 Days)",
-    price: 10,
-    stockStatus: "In Stock",
-    pageViews: 158,
-    date: "2026-07-31 / 17:57",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "32",
-    title: "Modern blue handbag",
-    sku: "M1B2H3B4G5N6",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=200&q=80",
     productType: "Physical",
     category: "Handbags",
     subCategory: "Handbags",
     listingType: "sale",
-    price: 45,
-    stockStatus: "In Stock (600)",
-    pageViews: 126,
-    date: "2026-07-31 / 15:19",
-    editedAgo: "2 months ago",
+    purchasedPlan: "Monthly Plan (270 Days)",
+    price: 59,
+    stockStatus: "In Stock (500)",
+    pageViews: 245,
+    date: "2026-07-31 / 18:57",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
-    id: "30",
-    title: "Sneaker shoes men",
-    sku: "SSM2S3B4K5R6",
+    id: "38",
+    title: "Floral women sundress",
+    sku: "F1W2S3D4R5S6",
+    image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=200&q=80",
+    badge: { type: "discount", text: "-15%" },
+    productType: "Physical",
+    category: "Dresses",
+    subCategory: "Dresses",
+    listingType: "sale",
+    purchasedPlan: "Monthly Plan (270 Days)",
+    price: 80,
+    stockStatus: "In Stock (1000)",
+    pageViews: 468,
+    date: "2026-07-31 / 18:29",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "36",
+    title: "Ship illustration royalty free image",
+    sku: "S1I2R3F4I5M6",
+    image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&q=80",
+    productType: "Digital",
+    category: "Vectors",
+    subCategory: "Vectors",
+    listingType: "sale",
+    price: 15,
+    stockStatus: "In Stock",
+    pageViews: 169,
+    date: "2026-07-31 / 18:21",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "34",
+    title: "Men's lace formal casual fashion shoe",
+    sku: "M1L2F3C4F5S6",
+    image: "https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=200&q=80",
+    productType: "Physical",
+    category: "Boots",
+    subCategory: "Boots",
+    listingType: "sale",
+    price: 59,
+    stockStatus: "Active",
+    pageViews: 120,
+    date: "2026-07-31 / 18:07",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "31",
+    title: "Car Race Pro License Keys",
+    sku: "C1R2P3L4K5Y6",
+    image: "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=200&q=80",
+    productType: "Digital",
+    category: "Video Games",
+    subCategory: "Video Games",
+    listingType: "license",
+    price: 19,
+    stockStatus: "In Stock",
+    pageViews: 167,
+    date: "2026-07-31 / 15:14",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "29",
+    title: "Futuristic landscape animation",
+    sku: "HSTY252A2",
+    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=200&q=80",
+    productType: "Digital",
+    category: "Video Overlays & Elements",
+    subCategory: "Animation",
+    listingType: "sale",
+    price: 18,
+    stockStatus: "In Stock",
+    pageViews: 108,
+    date: "2026-07-31 / 14:59",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "27",
+    title: "Men's sport shoe",
+    sku: "M1S2S3H4O5E6",
+    image: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&q=80",
+    badge: { type: "discount", text: "-20%" },
+    productType: "Physical",
+    category: "Sneakers",
+    subCategory: "Sneakers",
+    listingType: "sale",
+    price: 45,
+    stockStatus: "In Stock (500)",
+    pageViews: 123,
+    date: "2026-07-31 / 14:45",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "25",
+    title: "Adidas daily shoes",
+    sku: "A1D2D3S4H5O6",
     image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=200&q=80",
     productType: "Physical",
     category: "Sneakers",
-    subCategory: "Sneakers & Athletic Shoes",
+    subCategory: "Sneakers",
+    listingType: "sale",
+    price: 59,
+    stockStatus: "Active",
+    pageViews: 96,
+    date: "2026-07-31 / 14:25",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "23",
+    title: "Adorable animals photo pack",
+    sku: "A1A2P3P4K5L6",
+    image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=200&q=80",
+    badge: { type: "featured", text: "Featured" },
+    productType: "Digital",
+    category: "Animals",
+    subCategory: "Photography",
+    listingType: "sale",
+    purchasedPlan: "Daily Plan (400 Days)",
+    price: 0,
+    stockStatus: "In Stock",
+    pageViews: 231,
+    date: "2026-07-31 / 14:12",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "21",
+    title: "Women casual dress",
+    sku: "W1C2D3R4S5N6",
+    image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=200&q=80",
+    badge: { type: "featured", text: "Featured" },
+    productType: "Physical",
+    category: "Dresses",
+    subCategory: "Dresses",
     listingType: "sale",
     purchasedPlan: "Monthly Plan (180 Days)",
-    price: 89,
-    stockStatus: "In Stock (600)",
-    pageViews: 181,
-    date: "2026-07-31 / 15:02",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "26",
-    title: "Vastu plants for your house",
-    sku: "VIP2H3S4O5U6",
-    image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=200&q=80",
-    productType: "Physical",
-    category: "Plants",
-    subCategory: "Plants",
-    listingType: "sale",
-    price: 69,
+    price: 56,
     stockStatus: "Active",
-    pageViews: 88,
-    date: "2026-07-31 / 14:43",
-    editedAgo: "2 months ago",
+    pageViews: 215,
+    date: "2026-07-31 / 14:06",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
-    id: "24",
-    title: "Motivation piano with cello and drums",
-    sku: "M1P2C3D4R5S6",
+    id: "20",
+    title: "Moment of inspiration piano music",
+    sku: "M1I2P3M4S5C6",
     image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&q=80",
+    badge: { type: "featured", text: "Featured" },
     productType: "Digital",
-    category: "Ambient",
-    subCategory: "Ambient",
+    category: "Cinematic Music",
+    subCategory: "Audio",
     listingType: "sale",
-    price: 25,
+    purchasedPlan: "Monthly Plan (240 Days)",
+    price: 15,
     stockStatus: "In Stock",
-    pageViews: 92,
-    date: "2026-07-31 / 14:20",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "22",
-    title: "Intro animation with purple background and white triangles",
-    sku: "I1A2P3B4W5T6",
-    image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=200&q=80",
-    productType: "Digital",
-    category: "Broadcast Packages",
-    subCategory: "Broadcast Packages",
-    listingType: "sale",
-    price: 25,
-    stockStatus: "In Stock",
-    pageViews: 101,
-    date: "2026-07-31 / 14:10",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "19",
-    title: "Fashionable black and white sneakers",
-    sku: "F1B2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&q=80",
-    productType: "Physical",
-    category: "Sneakers & Athletic Shoes",
-    subCategory: "Sneakers & Athletic Shoes",
-    listingType: "sale",
-    price: 49,
-    stockStatus: "In Stock (800)",
-    pageViews: 114,
-    date: "2026-07-31 / 13:15",
-    editedAgo: "2 months ago",
+    pageViews: 192,
+    date: "2026-07-31 / 13:18",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
     id: "18",
-    title: "Minimalist leather bifold wallet",
-    sku: "MLB2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=200&q=80",
-    badge: { type: "discount", text: "10%" },
-    productType: "Physical",
-    category: "Accessories",
-    subCategory: "Accessories",
+    title: "Women vintage collage art design",
+    sku: "W1V2C3A4D5N6",
+    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=200&q=80",
+    productType: "Digital",
+    category: "Vectors",
+    subCategory: "Vectors",
     listingType: "sale",
-    price: 35,
-    stockStatus: "In Stock (150)",
-    pageViews: 98,
-    date: "2026-07-30 / 11:20",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "17",
-    title: "Vintage aviator sunglasses",
-    sku: "VAS2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&q=80",
-    productType: "Physical",
-    category: "Accessories",
-    subCategory: "Sunglasses",
-    listingType: "sale",
-    purchasedPlan: "Monthly Plan (90 Days)",
-    price: 55,
-    stockStatus: "In Stock (200)",
-    pageViews: 145,
-    date: "2026-07-29 / 16:45",
-    editedAgo: "2 months ago",
+    price: 15,
+    stockStatus: "In Stock",
+    pageViews: 124,
+    date: "2026-07-31 / 13:04",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
     id: "16",
-    title: "Handmade ceramic coffee mug",
-    sku: "HCM2W3S4K5R6",
+    title: "Ceramic decorative vase set",
+    sku: "C1D2V3A4S5E6",
     image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=200&q=80",
     productType: "Physical",
-    category: "Plants",
-    subCategory: "Home & Living",
+    category: "Home Decor",
+    subCategory: "Living",
     listingType: "sale",
-    price: 22,
-    stockStatus: "In Stock (75)",
-    pageViews: 162,
-    date: "2026-07-28 / 14:10",
-    editedAgo: "2 months ago",
+    price: 35,
+    stockStatus: "In Stock (200)",
+    pageViews: 145,
+    date: "2026-07-31 / 12:45",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
     id: "15",
-    title: "Oversized wool knit cardigan",
-    sku: "OWK2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=200&q=80",
-    badge: { type: "featured", text: "Featured" },
+    title: "Leather vintage travel backpack",
+    sku: "L1V2T3B4P5K6",
+    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&q=80",
     productType: "Physical",
-    category: "Jackets & Coats",
-    subCategory: "Sweaters",
+    category: "Bags",
+    subCategory: "Backpacks",
     listingType: "sale",
-    purchasedPlan: "Monthly Plan (120 Days)",
-    price: 68,
-    stockStatus: "In Stock (340)",
-    pageViews: 215,
-    date: "2026-07-27 / 18:05",
-    editedAgo: "2 months ago",
+    price: 89,
+    stockStatus: "In Stock (150)",
+    pageViews: 162,
+    date: "2026-07-31 / 12:30",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
     id: "14",
-    title: "3D Isometric icon pack",
-    sku: "IIP2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&q=80",
-    productType: "Digital",
-    category: "Vectors",
-    subCategory: "Graphics",
-    listingType: "sale",
-    price: 19,
-    stockStatus: "In Stock",
-    pageViews: 275,
-    date: "2026-07-26 / 10:30",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "13",
-    title: "Elegant rose gold wrist watch",
-    sku: "ERG2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=200&q=80",
-    badge: { type: "discount", text: "20%" },
+    title: "Summer botanical print shirt",
+    sku: "S1B2P3S4H5T6",
+    image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&q=80",
     productType: "Physical",
-    category: "Accessories",
-    subCategory: "Watches",
+    category: "Men's Shirts",
+    subCategory: "Shirts",
     listingType: "sale",
-    purchasedPlan: "Monthly Plan (300 Days)",
-    price: 120,
-    stockStatus: "In Stock (95)",
-    pageViews: 330,
-    date: "2026-07-25 / 15:50",
-    editedAgo: "2 months ago",
+    price: 42,
+    stockStatus: "Active",
+    pageViews: 110,
+    date: "2026-07-31 / 12:15",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
     id: "12",
-    title: "Organic green tea matcha powder",
-    sku: "OGT2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=200&q=80",
+    title: "Minimalist gold necklace",
+    sku: "M1G2N3E4C5K6",
+    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=200&q=80",
+    badge: { type: "featured", text: "Featured" },
     productType: "Physical",
-    category: "Plants",
-    subCategory: "Groceries",
+    category: "Jewelry",
+    subCategory: "Necklaces",
     listingType: "sale",
-    price: 18,
-    stockStatus: "In Stock (420)",
-    pageViews: 188,
-    date: "2026-07-24 / 09:15",
-    editedAgo: "2 months ago",
-    status: "active",
-  },
-  {
-    id: "11",
-    title: "Chillhop lofi music beats",
-    sku: "CLM2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=200&q=80",
-    productType: "Digital",
-    category: "Ambient",
-    subCategory: "Audio",
-    listingType: "sale",
-    price: 15,
-    stockStatus: "In Stock",
-    pageViews: 205,
-    date: "2026-07-23 / 17:40",
-    editedAgo: "2 months ago",
+    purchasedPlan: "Monthly Plan (90 Days)",
+    price: 65,
+    stockStatus: "In Stock (300)",
+    pageViews: 275,
+    date: "2026-07-31 / 11:50",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
     id: "10",
-    title: "Canvas travel duffle bag",
-    sku: "CTD2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1547949003-9792a18a2601?w=200&q=80",
+    title: "Urban streetwear hoodie",
+    sku: "U1S2H3O4O5D6",
+    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=200&q=80",
     productType: "Physical",
-    category: "Handbags",
-    subCategory: "Bags",
+    category: "Hoodies",
+    subCategory: "Clothing",
     listingType: "sale",
-    price: 58,
-    stockStatus: "In Stock (180)",
-    pageViews: 140,
-    date: "2026-07-22 / 12:25",
-    editedAgo: "2 months ago",
+    price: 55,
+    stockStatus: "In Stock (450)",
+    pageViews: 198,
+    date: "2026-07-31 / 11:20",
+    editedAgo: "3 months ago",
     status: "active",
   },
   {
-    id: "9",
-    title: "Premium mobile app UI kit",
-    sku: "PMA2W3S4K5R6",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=200&q=80",
-    badge: { type: "featured", text: "Featured" },
+    id: "8",
+    title: "Acoustic guitar loop pack",
+    sku: "A1G2L3O4O5P6",
+    image: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=200&q=80",
     productType: "Digital",
-    category: "Product Promo",
-    subCategory: "UI Templates",
+    category: "Music Loops",
+    subCategory: "Audio",
     listingType: "sale",
-    purchasedPlan: "Monthly Plan (150 Days)",
-    price: 39,
+    price: 20,
     stockStatus: "In Stock",
-    pageViews: 412,
-    date: "2026-07-21 / 20:10",
-    editedAgo: "2 months ago",
+    pageViews: 134,
+    date: "2026-07-31 / 10:45",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "5",
+    title: "Wireless noise-canceling headphones",
+    sku: "W1N2C3H4P5H6",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&q=80",
+    productType: "Physical",
+    category: "Electronics",
+    subCategory: "Audio",
+    listingType: "sale",
+    price: 129,
+    stockStatus: "Active",
+    pageViews: 312,
+    date: "2026-07-31 / 10:10",
+    editedAgo: "3 months ago",
+    status: "active",
+  },
+  {
+    id: "2",
+    title: "Watercolor flower bouquet clipart",
+    sku: "W1F2B3C4L5P6",
+    image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=200&q=80",
+    productType: "Digital",
+    category: "Vectors",
+    subCategory: "Graphics",
+    listingType: "sale",
+    price: 12,
+    stockStatus: "In Stock",
+    pageViews: 240,
+    date: "2026-07-31 / 09:30",
+    editedAgo: "3 months ago",
     status: "active",
   },
 ];
 
-// Exactly 21 draft products matching the Modesy reference screenshots
-const all21DraftProducts: ProductItem[] = [
+// Exactly 38 draft products matching the Modesy reference screenshots
+const all38DraftProducts: ProductItem[] = [
   {
-    id: "101",
-    title: "Men's Streetwear Shoes - Urban Style & Comfort",
+    id: "109",
+    title: "Guardian",
     sku: "",
-    image: "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?w=200&q=80",
-    productType: "Physical",
-    category: "Shoes",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-10-12 / 15:45",
-    editedAgo: "Yesterday",
-    status: "draft",
-  },
-  {
-    id: "99",
-    title: "",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1584824486509-112e4181ff6b?w=200&q=80",
-    productType: "Physical",
-    category: "Clothing",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-10-12 / 14:50",
-    editedAgo: "Yesterday",
-    status: "draft",
-  },
-  {
-    id: "97",
-    title: "Try",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=200&q=80",
-    productType: "Digital",
-    category: "",
-    price: 0,
-    stockStatus: "In Stock",
-    pageViews: 0,
-    date: "2026-10-11 / 17:20",
-    editedAgo: "2 days ago",
-    status: "draft",
-  },
-  {
-    id: "93",
-    title: "Memperingati G30S/PKI",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=200&q=80",
-    productType: "Physical",
-    category: "Graphics & Photos",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-10-05 / 15:42",
-    editedAgo: "1 week ago",
-    status: "draft",
-  },
-  {
-    id: "91",
-    title: "try",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=200&q=80",
-    productType: "Physical",
-    category: "Graphics & Photos",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-28 / 16:23",
-    editedAgo: "2 weeks ago",
-    status: "draft",
-  },
-  {
-    id: "88",
-    title: "Home Decor Essentials: Elevate Your Living Space",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=200&q=80",
-    productType: "Physical",
-    category: "Home & Living",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-27 / 19:01",
-    editedAgo: "2 weeks ago",
-    status: "draft",
-  },
-  {
-    id: "83",
-    title: "trendshop@codingest.net",
-    sku: "",
-    image: "",
+    image: "https://images.unsplash.com/photo-1578844251758-2f71da64c96f?w=200&q=80",
     productType: "Digital",
     category: "Web Templates & Code",
     price: 0,
     stockStatus: "In Stock",
     pageViews: 0,
-    date: "2026-09-22 / 09:21",
-    editedAgo: "3 weeks ago",
+    date: "2026-10-20 / 13:59",
     status: "draft",
   },
   {
-    id: "81",
-    title: "sendal",
+    id: "108",
+    title: "Harrisburg, PA: Your Guide to the Capital City",
     sku: "",
-    image: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=200&q=80",
+    image: "https://images.unsplash.com/photo-1477959858617-67f30bc75b82?w=200&q=80",
+    productType: "Digital",
+    category: "Clothing",
+    price: 0,
+    stockStatus: "In Stock",
+    pageViews: 0,
+    date: "2026-10-18 / 06:09",
+    status: "draft",
+  },
+  {
+    id: "107",
+    title: "Nature Graphics: Enhance Your Digital Projects",
+    sku: "",
+    image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=200&q=80",
+    productType: "Digital",
+    category: "Graphics & Photos",
+    price: 0,
+    stockStatus: "In Stock",
+    pageViews: 0,
+    date: "2026-10-18 / 02:26",
+    status: "draft",
+  },
+  {
+    id: "106",
+    title: "13123",
+    sku: "",
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=200&q=80",
     productType: "Physical",
-    category: "Jewelry & Accessories",
+    category: "Clothing",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-10-16 / 20:32",
+    status: "draft",
+  },
+  {
+    id: "104",
+    title: "Durable Silicone: Versatile Material for Everyday Use",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Kid's Clothing",
     price: 0,
     stockStatus: "In Stock (1)",
     pageViews: 0,
-    date: "2026-09-18 / 09:44",
-    editedAgo: "3 weeks ago",
+    date: "2026-10-13 / 17:43",
     status: "draft",
   },
   {
-    id: "80",
-    title: "sendal",
+    id: "103",
+    title: "afadfadf",
+    sku: "",
+    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=200&q=80",
+    productType: "Physical",
+    category: "Web Templates & Code",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-10-12 / 19:43",
+    status: "draft",
+  },
+  {
+    id: "102",
+    title: "owf",
     sku: "",
     image: "",
     productType: "Physical",
@@ -565,181 +511,413 @@ const all21DraftProducts: ProductItem[] = [
     price: 0,
     stockStatus: "Active",
     pageViews: 0,
-    date: "2026-09-18 / 09:42",
-    editedAgo: "3 weeks ago",
+    date: "2026-10-12 / 18:13",
     status: "draft",
   },
   {
-    id: "79",
-    title: "sendal",
+    id: "100",
+    title: "Hdjdn",
     sku: "",
-    image: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=200&q=80",
+    image: "",
     productType: "Physical",
-    category: "",
+    category: "Home & Living",
     price: 0,
     stockStatus: "Active",
     pageViews: 0,
-    date: "2026-09-18 / 09:38",
-    editedAgo: "3 weeks ago",
+    date: "2026-10-12 / 15:37",
     status: "draft",
   },
   {
-    id: "78",
-    title: "topi",
+    id: "98",
+    title: "daflknk",
     sku: "",
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=200&q=80",
-    productType: "Physical",
-    category: "Jewelry & Accessories",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-18 / 09:15",
-    editedAgo: "3 weeks ago",
-    status: "draft",
-  },
-  {
-    id: "77",
-    title: "frdf",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80",
-    productType: "Physical",
-    category: "Home & Living",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-17 / 18:08",
-    editedAgo: "3 weeks ago",
-    status: "draft",
-  },
-  {
-    id: "75",
-    title: "Sepatu Puma",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=80",
-    productType: "Physical",
-    category: "Shoes",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-16 / 16:22",
-    editedAgo: "4 weeks ago",
-    status: "draft",
-  },
-  {
-    id: "73",
-    title: "As",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1590736969955-71cc94801759?w=200&q=80",
-    productType: "Physical",
-    category: "Home & Living",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-15 / 10:58",
-    editedAgo: "4 weeks ago",
-    status: "draft",
-  },
-  {
-    id: "71",
-    title: "Unique Handmade Items Crafted from Recycled Newspapers",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1590736969955-71cc94801759?w=200&q=80",
-    productType: "Physical",
-    category: "Home & Living",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-14 / 17:48",
-    editedAgo: "4 weeks ago",
-    status: "draft",
-  },
-  {
-    id: "70",
-    title: "Vintage Leather Messenger Bag",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&q=80",
-    productType: "Physical",
-    category: "Home & Living",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-12 / 11:20",
-    editedAgo: "1 month ago",
-    status: "draft",
-  },
-  {
-    id: "69",
-    title: "Abstract Digital Wallpaper Collection",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=200&q=80",
-    productType: "Digital",
-    category: "Graphics & Photos",
-    price: 0,
-    stockStatus: "In Stock",
-    pageViews: 0,
-    date: "2026-09-10 / 14:15",
-    editedAgo: "1 month ago",
-    status: "draft",
-  },
-  {
-    id: "67",
-    title: "Handmade Ceramic Coffee Mug",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=200&q=80",
-    productType: "Physical",
-    category: "Home & Living",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-08 / 16:30",
-    editedAgo: "1 month ago",
-    status: "draft",
-  },
-  {
-    id: "64",
-    title: "Classic Minimalist Analog Watch",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80",
-    productType: "Physical",
-    category: "Jewelry & Accessories",
-    price: 0,
-    stockStatus: "In Stock (1)",
-    pageViews: 0,
-    date: "2026-09-05 / 10:05",
-    editedAgo: "1 month ago",
-    status: "draft",
-  },
-  {
-    id: "62",
-    title: "Cozy Knit Winter Scarf",
-    sku: "",
-    image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=200&q=80",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&q=80",
     productType: "Physical",
     category: "Clothing",
     price: 0,
     stockStatus: "In Stock (1)",
     pageViews: 0,
-    date: "2026-09-02 / 13:40",
-    editedAgo: "1 month ago",
+    date: "2026-10-12 / 11:21",
+    status: "draft",
+  },
+  {
+    id: "96",
+    title: "wdaawdaw: A Comprehensive Overview",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-10-11 / 10:41",
+    status: "draft",
+  },
+  {
+    id: "95",
+    title: "Refurbished iPhone 13 Mini - 1 Year Warranty",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Office & School Supplies",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-10-08 / 04:19",
+    status: "draft",
+  },
+  {
+    id: "94",
+    title: "Apple iPhone 15 Pro Max: Pro Camera, Pro Performance",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Clothing Sets",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-10-06 / 01:15",
+    status: "draft",
+  },
+  {
+    id: "92",
+    title: "jkjlk",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Clothing",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-09-29 / 07:26",
+    status: "draft",
+  },
+  {
+    id: "90",
+    title: "Google Pixel 11",
+    sku: "",
+    image: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&q=80",
+    productType: "Physical",
+    category: "Graphics & Photos",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-09-28 / 09:43",
+    status: "draft",
+  },
+  {
+    id: "89",
+    title: "Google Pixel 11",
+    sku: "",
+    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=200&q=80",
+    productType: "Physical",
+    category: "Clothing",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-09-28 / 00:51",
+    status: "draft",
+  },
+  {
+    id: "87",
+    title: "Wireless earbuds with charging case",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Electronics",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-09-25 / 16:30",
+    status: "draft",
+  },
+  {
+    id: "85",
+    title: "Smart fitness tracker band",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Electronics",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-09-24 / 14:15",
+    status: "draft",
+  },
+  {
+    id: "83",
+    title: "Bamboo fiber kitchen towels",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Home & Living",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-09-22 / 11:40",
+    status: "draft",
+  },
+  {
+    id: "81",
+    title: "Minimalist desk organizer tray",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Office & School Supplies",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-09-20 / 18:22",
+    status: "draft",
+  },
+  {
+    id: "79",
+    title: "Ceramic plant pot succulent planter",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Home Decor",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-09-18 / 09:10",
+    status: "draft",
+  },
+  {
+    id: "77",
+    title: "Men casual cotton polo shirt",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Clothing",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-09-16 / 15:55",
+    status: "draft",
+  },
+  {
+    id: "75",
+    title: "Women lightweight canvas tote bag",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Handbags",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-09-15 / 13:45",
+    status: "draft",
+  },
+  {
+    id: "73",
+    title: "Stainless steel water tumbler 500ml",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Home & Living",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-09-12 / 17:05",
+    status: "draft",
+  },
+  {
+    id: "71",
+    title: "Leather key organizer keychain",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Accessories",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-09-10 / 10:20",
+    status: "draft",
+  },
+  {
+    id: "69",
+    title: "Vector icons set mobile app UI",
+    sku: "",
+    image: "",
+    productType: "Digital",
+    category: "Vectors",
+    price: 0,
+    stockStatus: "In Stock",
+    pageViews: 0,
+    date: "2026-09-08 / 12:40",
+    status: "draft",
+  },
+  {
+    id: "67",
+    title: "Organic face moisturizer cream",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Beauty",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-09-05 / 19:15",
+    status: "draft",
+  },
+  {
+    id: "65",
+    title: "Vintage brass bookmark clip",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Office & School Supplies",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-09-03 / 08:30",
+    status: "draft",
+  },
+  {
+    id: "63",
+    title: "Abstract watercolor landscape prints",
+    sku: "",
+    image: "",
+    productType: "Digital",
+    category: "Graphics & Photos",
+    price: 0,
+    stockStatus: "In Stock",
+    pageViews: 0,
+    date: "2026-09-01 / 14:50",
+    status: "draft",
+  },
+  {
+    id: "61",
+    title: "Children wooden puzzle toys",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Kid's Clothing",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-08-28 / 11:05",
     status: "draft",
   },
   {
     id: "59",
     title: "Modern UI Kit for Figma",
     sku: "",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=200&q=80",
+    image: "",
     productType: "Digital",
     category: "Web Templates & Code",
     price: 0,
     stockStatus: "In Stock",
     pageViews: 0,
-    date: "2026-08-30 / 09:12",
-    editedAgo: "1 month ago",
+    date: "2026-08-25 / 16:40",
+    status: "draft",
+  },
+  {
+    id: "57",
+    title: "Classic canvas sneakers white",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Sneakers",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-08-22 / 10:15",
+    status: "draft",
+  },
+  {
+    id: "55",
+    title: "Portable bluetooth mini speaker",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Electronics",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-08-20 / 14:00",
+    status: "draft",
+  },
+  {
+    id: "53",
+    title: "Lofi hip hop beats background music",
+    sku: "",
+    image: "",
+    productType: "Digital",
+    category: "Music",
+    price: 0,
+    stockStatus: "In Stock",
+    pageViews: 0,
+    date: "2026-08-18 / 18:35",
+    status: "draft",
+  },
+  {
+    id: "51",
+    title: "Handmade soy scented candle",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Home & Living",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-08-15 / 13:20",
+    status: "draft",
+  },
+  {
+    id: "49",
+    title: "Men leather wallet bifold brown",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Accessories",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-08-12 / 15:45",
+    status: "draft",
+  },
+  {
+    id: "48",
+    title: "Retro film photo Lightroom presets",
+    sku: "",
+    image: "",
+    productType: "Digital",
+    category: "Graphics & Photos",
+    price: 0,
+    stockStatus: "In Stock",
+    pageViews: 0,
+    date: "2026-08-10 / 09:50",
+    status: "draft",
+  },
+  {
+    id: "35",
+    title: "Stainless steel French press coffee",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Home Decor",
+    price: 0,
+    stockStatus: "In Stock (1)",
+    pageViews: 0,
+    date: "2026-08-08 / 11:25",
+    status: "draft",
+  },
+  {
+    id: "17",
+    title: "Handcrafted ceramic mug rustic",
+    sku: "",
+    image: "",
+    productType: "Physical",
+    category: "Home & Living",
+    price: 0,
+    stockStatus: "Active",
+    pageViews: 0,
+    date: "2026-08-05 / 16:10",
     status: "draft",
   },
 ];
-
-const initialAllProducts: ProductItem[] = [...all24Products, ...all21DraftProducts];
 
 interface ProductsPageProps {
   statusFilter?: "all" | "active" | "pending" | "hidden" | "sold" | "draft" | string;
@@ -752,17 +930,39 @@ function ProductsPageContent({
 }: ProductsPageProps) {
   const searchParams = useSearchParams();
   const stParam = searchParams?.get("st") || "";
-  const effectiveStatus = statusFilter !== "all" ? statusFilter : stParam;
+  const effectiveStatus = (statusFilter && statusFilter !== "all") ? statusFilter : stParam;
+
+  const isDraft = effectiveStatus === "draft" || effectiveStatus === "drafts";
+  const isPending = effectiveStatus === "pending";
+  const isHidden = effectiveStatus === "hidden";
+  const isSold = effectiveStatus === "sold";
 
   let computedTitle = pageTitle;
   if (pageTitle === "Products") {
-    if (effectiveStatus === "pending") computedTitle = "Pending Products";
-    else if (effectiveStatus === "hidden") computedTitle = "Hidden Products";
-    else if (effectiveStatus === "sold") computedTitle = "Sold Products";
-    else if (effectiveStatus === "drafts" || effectiveStatus === "draft") computedTitle = "Drafts";
+    if (isPending) computedTitle = "Pending Products";
+    else if (isHidden) computedTitle = "Hidden Products";
+    else if (isSold) computedTitle = "Sold Products";
+    else if (isDraft) computedTitle = "Drafts";
   }
 
-  const [products, setProducts] = useState<ProductItem[]>(initialAllProducts);
+  const getInitialData = () => {
+    if (isDraft) return all38DraftProducts;
+    if (isPending || isHidden || isSold) return [];
+    return all23ActiveProducts;
+  };
+
+  const [products, setProducts] = useState<ProductItem[]>(getInitialData);
+
+  useEffect(() => {
+    if (isDraft) {
+      setProducts(all38DraftProducts);
+    } else if (isPending || isHidden || isSold) {
+      setProducts([]);
+    } else {
+      setProducts(all23ActiveProducts);
+    }
+    setCurrentPage(1);
+  }, [effectiveStatus, isDraft, isPending, isHidden, isSold]);
 
   // Filter Form State
   const [listingType, setListingType] = useState("All");
@@ -800,9 +1000,8 @@ function ProductsPageContent({
       ...item,
       id: String(Number(item.id) + 100),
       title: `${item.title} (Copy)`,
-      sku: `${item.sku}-COPY`,
-      date: "2026-10-13 / 09:30",
-      editedAgo: "Just now",
+      sku: item.sku ? `${item.sku}-COPY` : "",
+      date: "2026-10-21 / 09:30",
     };
     setProducts((prev) => [newItem, ...prev]);
   };
@@ -822,39 +1021,28 @@ function ProductsPageContent({
   // Filtered dataset
   const filteredProducts = useMemo(() => {
     return products.filter((item) => {
-      // 1. Status Filter from props or query param
-      if (effectiveStatus && effectiveStatus !== "all") {
-        if (effectiveStatus === "drafts" || effectiveStatus === "draft") {
-          if (item.status !== "draft") return false;
-        } else {
-          if (item.status !== effectiveStatus) return false;
-        }
-      } else {
-        if (item.status !== "active") return false;
-      }
-
-      // 2. Listing Type
+      // 1. Listing Type
       if (appliedFilters.listingType !== "All") {
         if (item.listingType && item.listingType !== appliedFilters.listingType) return false;
       }
 
-      // 3. Product Type
+      // 2. Product Type
       if (appliedFilters.productType !== "All") {
         if (item.productType !== appliedFilters.productType) return false;
       }
 
-      // 4. Category
+      // 3. Category
       if (appliedFilters.category !== "All") {
         if (!item.category.toLowerCase().includes(appliedFilters.category.toLowerCase())) return false;
       }
 
-      // 5. Subcategory
+      // 4. Subcategory
       if (appliedFilters.subCategory !== "All") {
         const itemSub = item.subCategory || item.category;
         if (!itemSub.toLowerCase().includes(appliedFilters.subCategory.toLowerCase())) return false;
       }
 
-      // 6. Stock
+      // 5. Stock
       if (appliedFilters.stock !== "All") {
         if (appliedFilters.stock === "in_stock" && !item.stockStatus.toLowerCase().includes("in stock") && item.stockStatus !== "Active") {
           return false;
@@ -864,7 +1052,7 @@ function ProductsPageContent({
         }
       }
 
-      // 7. Search keyword
+      // 6. Search keyword
       const keyword = appliedFilters.search.trim().toLowerCase();
       if (keyword) {
         const matchTitle = item.title.toLowerCase().includes(keyword);
@@ -875,7 +1063,7 @@ function ProductsPageContent({
 
       return true;
     });
-  }, [products, effectiveStatus, statusFilter, appliedFilters]);
+  }, [products, appliedFilters]);
 
   // Pagination calculation
   const totalEntries = filteredProducts.length;
@@ -890,7 +1078,7 @@ function ProductsPageContent({
     setExportOpen(false);
     const headers = "Id,Product,SKU,Product Type,Category,Price,Stock/Status,Page Views,Date\n";
     const rows = filteredProducts.map((p) => 
-      `"${p.id}","${p.title.replace(/"/g, '""')}","${p.sku}","${p.productType}","${p.category}","$${p.price}","${p.stockStatus}","${p.pageViews}","${p.date}"`
+      `"${p.id}","${p.title.replace(/"/g, '""')}","${p.sku}","${p.productType}","${p.category}","${p.price.toFixed(2)}","${p.stockStatus}","${p.pageViews}","${p.date}"`
     ).join("\n");
     const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -902,174 +1090,134 @@ function ProductsPageContent({
     document.body.removeChild(a);
   };
 
-  const handleExportXML = () => {
-    setExportOpen(false);
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<products>\n';
-    filteredProducts.forEach((p) => {
-      xml += `  <product>\n    <id>${p.id}</id>\n    <title>${p.title}</title>\n    <sku>${p.sku}</sku>\n    <type>${p.productType}</type>\n    <category>${p.category}</category>\n    <price>${p.price}</price>\n    <stock>${p.stockStatus}</stock>\n    <views>${p.pageViews}</views>\n    <date>${p.date}</date>\n  </product>\n`;
-    });
-    xml += '</products>';
-    const blob = new Blob([xml], { type: "application/xml;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "modesy_products_export.xml";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-
-  const handleExportExcel = () => {
-    setExportOpen(false);
-    // CSV with excel-friendly format
-    handleExportCSV();
-  };
-
   return (
-    <div className="w-full max-w-[1300px] mx-auto py-2">
-      {/* Main White Card Container */}
-      <div className="bg-white border border-[#e2e8f0] rounded-[3px] p-6 sm:p-7 shadow-2xs">
+    <div className="w-full">
+      {/* Main Container Card */}
+      <div className="bg-white border border-[#e4e7ea] rounded-[3px] p-5 sm:p-6 shadow-[0_1px_1px_rgba(0,0,0,0.05)]">
+        
         {/* Title */}
-        <h1 className="text-[17px] font-bold text-[#2c333e] mb-5 font-sans">
+        <h1 className="text-[16px] font-semibold text-[#2c333e] mb-4">
           {computedTitle}
         </h1>
 
-        {/* Filter Bar - Matching Reference Screenshot */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 items-end mb-6">
+        {/* Filter Toolbar */}
+        <div className="flex flex-wrap items-end gap-3 mb-5 select-none">
+          
           {/* 1. Listing Type */}
-          <div>
-            <label className="block text-[13px] font-bold text-[#2c333e] mb-1.5 font-sans">
+          <div className="w-full sm:w-auto">
+            <label className="block text-[12px] font-semibold text-[#2c333e] mb-1">
               Listing Type
             </label>
             <div className="relative">
               <select
                 value={listingType}
                 onChange={(e) => setListingType(e.target.value)}
-                className="w-full h-[34px] border border-[#d1d5db] rounded-[3px] pl-3 pr-7 text-[13px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
+                className="w-full sm:w-[130px] h-[32px] border border-[#d2d6de] rounded-[3px] px-2.5 text-[12.5px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
               >
                 <option value="All">All</option>
-                <option value="sale">Add a Product for Sale</option>
+                <option value="sale">For Sale</option>
                 <option value="ordinary">Ordinary Listing</option>
-                <option value="quote">Quote Requests</option>
+                <option value="quote">Quote Request</option>
                 <option value="license">License Keys</option>
               </select>
-              <span className="absolute right-2.5 top-2 pointer-events-none text-[11px] text-[#495057]">
-                ▾
-              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-gray-500 absolute right-2 top-2.5 pointer-events-none" />
             </div>
           </div>
 
           {/* 2. Product Type */}
-          <div>
-            <label className="block text-[13px] font-bold text-[#2c333e] mb-1.5 font-sans">
+          <div className="w-full sm:w-auto">
+            <label className="block text-[12px] font-semibold text-[#2c333e] mb-1">
               Product Type
             </label>
             <div className="relative">
               <select
                 value={productType}
                 onChange={(e) => setProductType(e.target.value)}
-                className="w-full h-[34px] border border-[#d1d5db] rounded-[3px] pl-3 pr-7 text-[13px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
+                className="w-full sm:w-[110px] h-[32px] border border-[#d2d6de] rounded-[3px] px-2.5 text-[12.5px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
               >
                 <option value="All">All</option>
                 <option value="Physical">Physical</option>
                 <option value="Digital">Digital</option>
               </select>
-              <span className="absolute right-2.5 top-2 pointer-events-none text-[11px] text-[#495057]">
-                ▾
-              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-gray-500 absolute right-2 top-2.5 pointer-events-none" />
             </div>
           </div>
 
           {/* 3. Category */}
-          <div>
-            <label className="block text-[13px] font-bold text-[#2c333e] mb-1.5 font-sans">
+          <div className="w-full sm:w-auto">
+            <label className="block text-[12px] font-semibold text-[#2c333e] mb-1">
               Category
             </label>
             <div className="relative">
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full h-[34px] border border-[#d1d5db] rounded-[3px] pl-3 pr-7 text-[13px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
+                className="w-full sm:w-[120px] h-[32px] border border-[#d2d6de] rounded-[3px] px-2.5 text-[12.5px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
               >
                 <option value="All">All</option>
-                <option value="Scarfs">Scarfs</option>
-                <option value="Dresses">Dresses</option>
-                <option value="Backpacks">Backpacks</option>
-                <option value="Skirts">Skirts</option>
-                <option value="Vectors">Vectors</option>
                 <option value="Boots">Boots</option>
-                <option value="Jackets & Coats">Jackets &amp; Coats</option>
-                <option value="Product Promo">Product Promo</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Pillows">Pillows</option>
                 <option value="Handbags">Handbags</option>
-                <option value="Plants">Plants</option>
-                <option value="Ambient">Ambient</option>
-                <option value="Broadcast Packages">Broadcast Packages</option>
-                <option value="Sneakers & Athletic Shoes">Sneakers &amp; Athletic Shoes</option>
-                <option value="Accessories">Accessories</option>
+                <option value="Dresses">Dresses</option>
+                <option value="Vectors">Vectors</option>
+                <option value="Video Games">Video Games</option>
+                <option value="Sneakers">Sneakers</option>
+                <option value="Animals">Animals</option>
+                <option value="Music">Music</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Web Templates & Code">Web Templates &amp; Code</option>
+                <option value="Graphics & Photos">Graphics &amp; Photos</option>
               </select>
-              <span className="absolute right-2.5 top-2 pointer-events-none text-[11px] text-[#495057]">
-                ▾
-              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-gray-500 absolute right-2 top-2.5 pointer-events-none" />
             </div>
           </div>
 
           {/* 4. Subcategory */}
-          <div>
-            <label className="block text-[13px] font-bold text-[#2c333e] mb-1.5 font-sans">
+          <div className="w-full sm:w-auto">
+            <label className="block text-[12px] font-semibold text-[#2c333e] mb-1">
               Subcategory
             </label>
             <div className="relative">
               <select
                 value={subCategory}
                 onChange={(e) => setSubCategory(e.target.value)}
-                className="w-full h-[34px] border border-[#d1d5db] rounded-[3px] pl-3 pr-7 text-[13px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
+                className="w-full sm:w-[120px] h-[32px] border border-[#d2d6de] rounded-[3px] px-2.5 text-[12.5px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
               >
                 <option value="All">All</option>
-                <option value="Scarfs">Scarfs</option>
-                <option value="Dresses">Dresses</option>
-                <option value="Backpacks">Backpacks</option>
-                <option value="Skirts">Skirts</option>
-                <option value="Vectors">Vectors</option>
                 <option value="Boots">Boots</option>
-                <option value="Jackets & Coats">Jackets &amp; Coats</option>
-                <option value="Product Promo">Product Promo</option>
+                <option value="Living Room">Living Room</option>
+                <option value="Dresses">Dresses</option>
                 <option value="Handbags">Handbags</option>
-                <option value="Plants">Plants</option>
-                <option value="Ambient">Ambient</option>
-                <option value="Broadcast Packages">Broadcast Packages</option>
-                <option value="Sneakers & Athletic Shoes">Sneakers &amp; Athletic Shoes</option>
-                <option value="Accessories">Accessories</option>
+                <option value="Sneakers">Sneakers</option>
+                <option value="Vectors">Vectors</option>
               </select>
-              <span className="absolute right-2.5 top-2 pointer-events-none text-[11px] text-[#495057]">
-                ▾
-              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-gray-500 absolute right-2 top-2.5 pointer-events-none" />
             </div>
           </div>
 
           {/* 5. Stock */}
-          <div>
-            <label className="block text-[13px] font-bold text-[#2c333e] mb-1.5 font-sans">
+          <div className="w-full sm:w-auto">
+            <label className="block text-[12px] font-semibold text-[#2c333e] mb-1">
               Stock
             </label>
             <div className="relative">
               <select
                 value={stock}
                 onChange={(e) => setStock(e.target.value)}
-                className="w-full h-[34px] border border-[#d1d5db] rounded-[3px] pl-3 pr-7 text-[13px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
+                className="w-full sm:w-[100px] h-[32px] border border-[#d2d6de] rounded-[3px] px-2.5 text-[12.5px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
               >
                 <option value="All">All</option>
                 <option value="in_stock">In Stock</option>
                 <option value="out_of_stock">Out of Stock</option>
               </select>
-              <span className="absolute right-2.5 top-2 pointer-events-none text-[11px] text-[#495057]">
-                ▾
-              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-gray-500 absolute right-2 top-2.5 pointer-events-none" />
             </div>
           </div>
 
-          {/* 6. Search */}
-          <div>
-            <label className="block text-[13px] font-bold text-[#2c333e] mb-1.5 font-sans">
+          {/* 6. Search Input */}
+          <div className="w-full sm:w-auto flex-1 min-w-[130px]">
+            <label className="block text-[12px] font-semibold text-[#2c333e] mb-1">
               Search
             </label>
             <input
@@ -1080,90 +1228,74 @@ function ProductsPageContent({
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleApplyFilter();
               }}
-              className="w-full h-[34px] border border-[#d1d5db] rounded-[3px] px-3 text-[13px] text-[#495057] outline-none focus:border-[#00ab97]"
+              className="w-full h-[32px] border border-[#d2d6de] rounded-[3px] px-3 text-[12.5px] text-[#495057] outline-none focus:border-[#00ab97]"
             />
           </div>
 
-          {/* 7. Filter Button */}
+          {/* 7. Filter Button (Purple/Indigo) */}
           <div>
             <button
               type="button"
               onClick={handleApplyFilter}
-              className="w-full h-[34px] bg-[#5c59a0] hover:bg-[#4f4c93] text-white rounded-[3px] text-[13px] font-medium transition-colors cursor-pointer flex items-center justify-center shadow-2xs"
+              className="h-[32px] bg-[#4f52ba] hover:bg-[#4346a3] text-white px-4 rounded-[3px] text-[12.5px] font-medium transition-colors cursor-pointer flex items-center justify-center shadow-2xs"
             >
               Filter
             </button>
           </div>
 
-          {/* 8. Export Dropdown */}
+          {/* 8. Export Button */}
           <div className="relative">
             <button
               type="button"
               onClick={() => setExportOpen(!exportOpen)}
-              className="w-full h-[34px] bg-[#dfe3ea] hover:bg-[#d0d6e0] text-[#495057] rounded-[3px] text-[13px] font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer select-none"
+              className="h-[32px] bg-[#eef1f6] hover:bg-[#e2e6ee] text-[#4f52ba] border border-[#dce1ea] px-3 rounded-[3px] text-[12.5px] font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <span>Export</span>
-              <span className="text-[11px] text-[#495057] leading-none">▾</span>
+              <ChevronDown className="w-3 h-3 text-[#4f52ba]" />
             </button>
 
-            {/* Backdrop to close on click outside */}
             {exportOpen && (
-              <div
-                className="fixed inset-0 z-20"
-                onClick={() => setExportOpen(false)}
-              />
-            )}
-
-            {/* Exact Export Dropdown Menu Matching Screenshot */}
-            {exportOpen && (
-              <div className="absolute right-0 top-[38px] w-[145px] bg-white border border-[#eef0f3] shadow-md rounded-[3px] py-1.5 text-[13px] z-30 animate-in fade-in select-none">
-                <button
-                  type="button"
-                  onClick={handleExportCSV}
-                  className="w-full text-left px-4 py-1.5 text-[#495057] hover:text-[#00ab97] hover:bg-[#f8fafc] cursor-pointer transition-colors"
-                >
-                  CSV
-                </button>
-                <button
-                  type="button"
-                  onClick={handleExportXML}
-                  className="w-full text-left px-4 py-1.5 text-[#495057] hover:text-[#00ab97] hover:bg-[#f8fafc] cursor-pointer transition-colors"
-                >
-                  XML
-                </button>
-                <button
-                  type="button"
-                  onClick={handleExportExcel}
-                  className="w-full text-left px-4 py-1.5 text-[#495057] hover:text-[#00ab97] hover:bg-[#f8fafc] cursor-pointer transition-colors"
-                >
-                  Excel (.xlsx)
-                </button>
-              </div>
+              <>
+                <div
+                  className="fixed inset-0 z-20"
+                  onClick={() => setExportOpen(false)}
+                />
+                <div className="absolute right-0 top-[35px] w-[130px] bg-white border border-[#e4e7ea] shadow-md rounded-[3px] py-1 text-[12px] z-30 animate-in fade-in">
+                  <button
+                    type="button"
+                    onClick={handleExportCSV}
+                    className="w-full text-left px-3 py-1.5 text-[#495057] hover:text-[#00ab97] hover:bg-[#f8fafc] cursor-pointer"
+                  >
+                    CSV
+                  </button>
+                </div>
+              </>
             )}
           </div>
+
         </div>
 
         {/* Products Table */}
-        <div className="overflow-x-auto border-t border-[#eef0f3]">
+        <div className="overflow-x-auto border-t border-[#f1f3f5]">
           <table className="w-full text-left text-[13px] border-collapse">
             <thead>
-              <tr className="border-b border-[#e2e8f0] text-[12px] font-semibold text-[#8c98a4] select-none">
-                <th className="py-3 px-3 w-10 text-center font-semibold">Id</th>
-                <th className="py-3 px-3 font-semibold">Product</th>
-                <th className="py-3 px-3 font-semibold">Product Type</th>
-                <th className="py-3 px-3 font-semibold">Category</th>
-                <th className="py-3 px-3 font-semibold">Purchased Plan</th>
-                <th className="py-3 px-3 font-semibold">Price</th>
-                <th className="py-3 px-3 font-semibold">Stock/Status</th>
-                <th className="py-3 px-3 font-semibold">Page Views</th>
-                <th className="py-3 px-3 font-semibold">Date</th>
-                <th className="py-3 px-3 font-semibold text-center">Options</th>
+              <tr className="border-b border-[#e4e7ea] text-[12px] font-medium text-[#2c333e] select-none">
+                <th className="py-2.5 px-3 w-10 font-semibold">Id</th>
+                <th className="py-2.5 px-3 font-semibold">Product</th>
+                <th className="py-2.5 px-3 font-semibold">Product Type</th>
+                <th className="py-2.5 px-3 font-semibold">Category</th>
+                <th className="py-2.5 px-3 font-semibold">Purchased Plan</th>
+                <th className="py-2.5 px-3 font-semibold">Price</th>
+                <th className="py-2.5 px-3 font-semibold">Stock/Status</th>
+                <th className="py-2.5 px-3 font-semibold">Page Views</th>
+                <th className="py-2.5 px-3 font-semibold">Date</th>
+                <th className="py-2.5 px-3 font-semibold text-center">Options</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#f1f3f5]">
+            <tbody className="divide-y divide-[#f4f6f8]">
               {paginatedProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="py-8 text-center text-[#6c757d] text-[13.5px]">
+                  <td colSpan={10} className="py-8 text-center text-[#6c757d] text-[13px]">
                     No records found!
                   </td>
                 </tr>
@@ -1171,36 +1303,31 @@ function ProductsPageContent({
                 paginatedProducts.map((item) => (
                   <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
                     {/* Id */}
-                    <td className="py-3.5 px-3 text-center text-[#495057] font-sans">
+                    <td className="py-3 px-3 text-[#555] font-sans">
                       {item.id}
                     </td>
 
                     {/* Product */}
-                    <td className="py-3.5 px-3 min-w-[240px]">
+                    <td className="py-3 px-3 min-w-[260px]">
                       <div className="flex items-start gap-3">
                         {item.image ? (
-                          /* eslint-disable-next-line @next/next/no-img-element */
                           <img
                             src={item.image}
-                            alt={item.title || "Product image"}
-                            className="w-[52px] h-[52px] rounded-[2px] object-cover border border-[#e2e8f0] shrink-0"
+                            alt={item.title || "Product"}
+                            className="w-[50px] h-[50px] rounded-[2px] object-cover border border-[#e4e7ea] shrink-0"
                           />
                         ) : (
-                          <div className="w-[52px] h-[52px] rounded-[2px] bg-[#f8fafc] border border-[#e2e8f0] flex items-center justify-center shrink-0">
+                          <div className="w-[50px] h-[50px] rounded-[2px] bg-[#f8fafc] border border-[#e4e7ea] flex items-center justify-center shrink-0">
                             <ImageIcon className="w-5 h-5 text-[#ccd1d9]" />
                           </div>
                         )}
                         <div className="flex flex-col">
-                          {item.title ? (
-                            <Link
-                              href={`/product/${(item.sku || item.id).toLowerCase()}`}
-                              className="text-[13px] text-[#2c333e] hover:text-[#00ab97] font-medium leading-tight mb-1"
-                            >
-                              {item.title}
-                            </Link>
-                          ) : (
-                            <div className="h-4" />
-                          )}
+                          <Link
+                            href={item.title ? `/product/${(item.sku || item.id).toLowerCase()}` : "#"}
+                            className="text-[13px] text-[#2c333e] hover:text-[#00ab97] font-medium leading-tight mb-1"
+                          >
+                            {item.title || "Untitled"}
+                          </Link>
                           {item.sku ? (
                             <span className="text-[11px] text-[#8c98a4] leading-none mb-1">
                               SKU: {item.sku}
@@ -1208,41 +1335,43 @@ function ProductsPageContent({
                           ) : null}
 
                           {/* Badges */}
-                          {item.badge && item.badge.type === "discount" && (
-                            <div className="bg-[#e67e22] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] flex items-center gap-1 w-fit leading-none">
-                              <Tag className="w-2.5 h-2.5" />
-                              <span>{item.badge.text}</span>
-                            </div>
-                          )}
-                          {item.badge && item.badge.type === "featured" && (
-                            <div className="bg-[#00ab97] text-white text-[10px] font-medium px-2 py-0.5 rounded-[2px] w-fit leading-none">
-                              Featured
-                            </div>
-                          )}
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            {item.badge && item.badge.type === "featured" && (
+                              <span className="bg-[#00ab97] text-white text-[10px] font-medium px-2 py-0.5 rounded-[2px] leading-none">
+                                Featured
+                              </span>
+                            )}
+                            {item.badge && item.badge.type === "discount" && (
+                              <span className="bg-[#f39c12] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] flex items-center gap-1 leading-none">
+                                <Tag className="w-2.5 h-2.5" />
+                                {item.badge.text}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </td>
 
                     {/* Product Type */}
-                    <td className="py-3.5 px-3 text-[#495057] text-[13px]">
+                    <td className="py-3 px-3 text-[#555] text-[12.5px]">
                       {item.productType}
                     </td>
 
                     {/* Category */}
-                    <td className="py-3.5 px-3 text-[#495057] text-[13px]">
-                      {item.category}
+                    <td className="py-3 px-3 text-[#555] text-[12.5px]">
+                      {item.category || ""}
                     </td>
 
                     {/* Purchased Plan */}
-                    <td className="py-3.5 px-3 min-w-[130px]">
-                      {item.purchasedPlan ? (
+                    <td className="py-3 px-3 min-w-[130px]">
+                      {isDraft ? null : item.purchasedPlan ? (
                         <span className="text-[12px] text-[#495057]">
                           {item.purchasedPlan}
                         </span>
-                      ) : (effectiveStatus === "draft" || effectiveStatus === "drafts" || item.status === "draft") ? null : (
+                      ) : (
                         <button
                           type="button"
-                          className="bg-[#00ab97] hover:bg-[#009180] text-white text-[11.5px] font-medium px-2.5 py-1 rounded-[3px] shadow-2xs transition-colors flex items-center gap-1 cursor-pointer"
+                          className="bg-[#00ab97] hover:bg-[#009180] text-white text-[11px] font-bold px-2.5 py-1 rounded-[3px] shadow-2xs transition-colors cursor-pointer"
                         >
                           + Promote
                         </button>
@@ -1250,41 +1379,39 @@ function ProductsPageContent({
                     </td>
 
                     {/* Price */}
-                    <td className="py-3.5 px-3 text-[#495057] font-medium text-[13px]">
-                      {(effectiveStatus === "draft" || effectiveStatus === "drafts" || item.status === "draft")
-                        ? item.price.toFixed(2)
-                        : `$${item.price}`}
+                    <td className="py-3 px-3 text-[#333] font-medium text-[13px]">
+                      {isDraft ? "0.00" : `$${item.price}`}
                     </td>
 
                     {/* Stock/Status */}
-                    <td className="py-3.5 px-3 text-[#00ab97] font-medium text-[12.5px] whitespace-nowrap">
+                    <td className="py-3 px-3 text-[#00ab97] font-medium text-[12.5px] whitespace-nowrap">
                       {item.stockStatus}
                     </td>
 
                     {/* Page Views */}
-                    <td className="py-3.5 px-3 text-[#495057] text-[12.5px]">
+                    <td className="py-3 px-3 text-[#555] text-[12.5px]">
                       {item.pageViews}
                     </td>
 
                     {/* Date */}
-                    <td className="py-3.5 px-3 min-w-[120px]">
-                      <div className="text-[11.5px] text-[#495057] leading-tight">
+                    <td className="py-3 px-3 min-w-[120px]">
+                      <div className="text-[11.5px] text-[#555] leading-tight">
                         {item.date}
                       </div>
-                      {!(effectiveStatus === "draft" || effectiveStatus === "drafts" || item.status === "draft") && item.editedAgo && (
-                        <div className="text-[11px] text-[#8c98a4] leading-tight mt-0.5">
+                      {!isDraft && item.editedAgo && (
+                        <div className="text-[10.5px] text-[#8c98a4] leading-tight mt-0.5">
                           Edited: {item.editedAgo}
                         </div>
                       )}
                     </td>
 
                     {/* Options */}
-                    <td className="py-3.5 px-3">
+                    <td className="py-3 px-3">
                       <div className="flex items-center justify-center gap-1">
                         {/* Edit */}
                         <Link
                           href={`/dashboard/products/edit/${item.id}`}
-                          className="p-1.5 bg-[#f8fafc] hover:bg-[#e9ecef] border border-[#d1d5db] rounded-[3px] text-[#495057] hover:text-[#2c333e] transition-colors"
+                          className="p-1.5 bg-[#f8fafc] hover:bg-[#e9ecef] border border-[#d2d6de] rounded-[3px] text-[#495057] hover:text-[#2c333e] transition-colors"
                           title="Edit"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
@@ -1294,7 +1421,7 @@ function ProductsPageContent({
                         <button
                           type="button"
                           onClick={() => handleDuplicate(item.id)}
-                          className="p-1.5 bg-[#f8fafc] hover:bg-[#e9ecef] border border-[#d1d5db] rounded-[3px] text-[#495057] hover:text-[#2c333e] transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#f8fafc] hover:bg-[#e9ecef] border border-[#d2d6de] rounded-[3px] text-[#495057] hover:text-[#2c333e] transition-colors cursor-pointer"
                           title="Duplicate"
                         >
                           <Copy className="w-3.5 h-3.5" />
@@ -1304,7 +1431,7 @@ function ProductsPageContent({
                         <button
                           type="button"
                           onClick={() => handleDelete(item.id)}
-                          className="p-1.5 bg-[#f8fafc] hover:bg-red-50 border border-[#d1d5db] rounded-[3px] text-[#495057] hover:text-red-600 transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#f8fafc] hover:bg-red-50 border border-[#d2d6de] rounded-[3px] text-[#495057] hover:text-red-600 transition-colors cursor-pointer"
                           title="Delete"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -1318,81 +1445,53 @@ function ProductsPageContent({
           </table>
         </div>
 
-        {/* Footer: Entries Count & Pagination (only visible when entries exist) */}
+        {/* Footer: Number of Entries & Pagination */}
         {totalEntries > 0 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 mt-2 border-t border-[#f1f3f5] text-[#495057] select-none">
-            <span className="text-[12.5px] font-medium">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 mt-2 border-t border-[#f1f3f5] text-[#495057] select-none">
+            <span className="text-[12.5px] text-[#2c333e]">
               Number of Entries: {totalEntries}
             </span>
 
             <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => setCurrentPage(1)}
-                className={`w-7 h-7 flex items-center justify-center rounded-[3px] text-xs font-bold transition-colors cursor-pointer ${
-                  currentPage === 1
-                    ? "bg-[#00ab97] text-white"
-                    : "border border-[#d1d5db] hover:bg-gray-50 text-[#495057]"
-                }`}
-              >
-                1
-              </button>
-              {totalPages >= 2 && (
+              {[...Array(totalPages)].map((_, idx) => {
+                const pageNum = idx + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    type="button"
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`w-7 h-7 flex items-center justify-center rounded-[3px] text-xs font-bold transition-colors cursor-pointer ${
+                      currentPage === pageNum
+                        ? "bg-[#00ab97] text-white"
+                        : "border border-[#d2d6de] hover:bg-gray-50 text-[#495057]"
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+              {totalPages > 1 && currentPage < totalPages && (
                 <button
                   type="button"
-                  onClick={() => setCurrentPage(2)}
-                  className={`w-7 h-7 flex items-center justify-center rounded-[3px] text-xs transition-colors cursor-pointer ${
-                    currentPage === 2
-                      ? "bg-[#00ab97] text-white font-bold"
-                      : "border border-[#d1d5db] hover:bg-gray-50 text-[#495057]"
-                  }`}
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  className="w-7 h-7 flex items-center justify-center border border-[#d2d6de] hover:bg-gray-50 rounded-[3px] text-xs text-[#495057] transition-colors cursor-pointer"
                 >
-                  2
+                  &gt;
                 </button>
               )}
-              {totalPages > 2 && (
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage(3)}
-                  className={`w-7 h-7 flex items-center justify-center rounded-[3px] text-xs transition-colors cursor-pointer ${
-                    currentPage === 3
-                      ? "bg-[#00ab97] text-white font-bold"
-                      : "border border-[#d1d5db] hover:bg-gray-50 text-[#495057]"
-                  }`}
-                >
-                  3
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                disabled={currentPage >= totalPages}
-                className={`w-7 h-7 flex items-center justify-center rounded-[3px] border border-[#d1d5db] text-[#495057] text-xs transition-colors ${
-                  currentPage >= totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50 cursor-pointer"
-                }`}
-              >
-                &gt;
-              </button>
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
 }
 
-function ProductsPageWrapper(props: ProductsPageProps) {
-  const searchParams = useSearchParams();
-  const stParam = searchParams?.get("st") || "";
-  const componentKey = `${props.statusFilter || "all"}_${stParam}`;
-
-  return <ProductsPageContent key={componentKey} {...props} />;
-}
-
-export default function ProductsPage(props: ProductsPageProps) {
+export default function DashboardProductsPage(props: ProductsPageProps) {
   return (
-    <Suspense fallback={<div className="p-6 text-gray-400">Loading...</div>}>
-      <ProductsPageWrapper {...props} />
+    <Suspense fallback={<div className="p-8 text-center text-gray-500">Loading products...</div>}>
+      <ProductsPageContent {...props} />
     </Suspense>
   );
 }

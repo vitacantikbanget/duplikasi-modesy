@@ -28,9 +28,14 @@ export async function middleware(request: NextRequest) {
 
   // 2. If visiting Vendor Dashboard (/dashboard)
   if (path.startsWith('/dashboard')) {
-    // If not in a vendor or super_admin role, auto-set demo vendor role so session is never lost
-    if (!['vendor', 'super_admin'].includes(demoRole || '')) {
-      // Set persistent 1-year cookie for vendor
+    // CRITICAL: If user is logged in as admin/super_admin/moderator, DO NOT change to vendor!
+    // Admin has full vendor dashboard access as "Hi, Admin"
+    if (['super_admin', 'admin', 'moderator'].includes(demoRole || '')) {
+      return supabaseResponse
+    }
+
+    // Only set vendor if no role exists yet
+    if (!['vendor'].includes(demoRole || '')) {
       supabaseResponse.cookies.set('demo_role', 'vendor', {
         path: '/',
         maxAge: 31536000,

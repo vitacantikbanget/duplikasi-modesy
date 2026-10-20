@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useAppContext } from "@/contexts/AppContext";
 import {
   X,
   Home,
@@ -53,6 +54,13 @@ export default function VendorSidebar({ sidebarOpenMobile, closeMobileSidebar }:
   const searchParams = useSearchParams();
   const stParam = searchParams?.get("st") || "";
   const paymentParam = searchParams?.get("payment") || "";
+  const { role, userProfile } = useAppContext();
+
+  const isAdmin = role === "admin" || role === "super_admin" || role === "moderator";
+  const displayName = isAdmin ? "Admin" : (userProfile?.name || "Trendshop");
+  const avatarUrl = isAdmin
+    ? "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=100&auto=format&fit=crop&q=80"
+    : (userProfile?.avatar || "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=200&q=80");
 
   // State to track open/closed submenus
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
@@ -204,7 +212,6 @@ export default function VendorSidebar({ sidebarOpenMobile, closeMobileSidebar }:
           label: "Quote Requests",
           href: "/dashboard/quote-requests",
           icon: Tag,
-          badge: 2,
         },
         {
           id: "coupons",
@@ -305,8 +312,8 @@ export default function VendorSidebar({ sidebarOpenMobile, closeMobileSidebar }:
         {/* Logo Section */}
         <div className="pt-6 pb-4 px-6 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center justify-center w-full">
-            <span className="text-[28px] font-bold tracking-tight text-[#2c333e] font-sans flex items-center">
-              M<span className="text-[#00ab97]">o</span>desy
+            <span className="text-[26px] font-bold tracking-tight text-[#2c333e] font-sans">
+              Modesy
             </span>
           </Link>
           <button
@@ -320,16 +327,16 @@ export default function VendorSidebar({ sidebarOpenMobile, closeMobileSidebar }:
 
         {/* User Profile Card */}
         <div className="pb-5 px-6 flex flex-col items-center">
-          <div className="w-[84px] h-[84px] rounded-full p-[2.5px] border-[3px] border-[#0099ff] flex items-center justify-center overflow-hidden mb-2.5 shadow-2xs">
+          <div className="w-[84px] h-[84px] rounded-full p-[2.5px] border-[3px] border-[#00ab97]/70 flex items-center justify-center overflow-hidden mb-2.5 shadow-2xs">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=200&q=80"
-              alt="Trendshop"
+              src={avatarUrl}
+              alt={displayName}
               className="w-full h-full object-cover rounded-full"
             />
           </div>
           <span className="text-[14.5px] font-bold text-[#2c333e] font-sans">
-            Hi, Trendshop
+            Hi, {displayName}
           </span>
         </div>
 

@@ -1,17 +1,18 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
-import { X, CheckCircle, Info, Trash2, Send } from "lucide-react";
+import { X, Info, Trash2, Send } from "lucide-react";
 
 interface QuoteRequest {
   id: string;
   quoteId: string;
   productTitle: string;
+  color: string;
   productSku: string;
   quantity: number;
   image: string;
   buyer: string;
-  status: "New Quote Request" | "Pending Quote" | "Closed";
+  status: "Pending Quote" | "Pending Payment" | "Completed" | "New Quote Request" | "Closed" | string;
   sellersBid?: string | null;
   updated: string;
   date: string;
@@ -19,82 +20,74 @@ interface QuoteRequest {
 
 const initialQuotes: QuoteRequest[] = [
   {
-    id: "10",
-    quoteId: "#10",
-    productTitle: "Black gold fashion backpack",
-    productSku: "HIKIRJZ1K4",
-    quantity: 8,
-    image: "https://images.unsplash.com/photo-1546938576-6e6a64f317cc?w=200&q=80",
-    buyer: "Admin",
-    status: "New Quote Request",
-    sellersBid: null,
-    updated: "7 days ago",
-    date: "2026-10-06 / 10:51",
-  },
-  {
-    id: "9",
-    quoteId: "#9",
-    productTitle: "Black gold fashion backpack",
-    productSku: "HIKIRJZ1K4",
+    id: "11",
+    quoteId: "#11",
+    productTitle: "Cobalt man t-shirt all colors",
+    color: "Blue",
+    productSku: "H1K1LP22272-Blue",
     quantity: 1,
-    image: "https://images.unsplash.com/photo-1546938576-6e6a64f317cc?w=200&q=80",
-    buyer: "Admin",
-    status: "Closed",
-    sellersBid: null,
-    updated: "7 days ago",
-    date: "2026-10-06 / 10:51",
-  },
-  {
-    id: "8",
-    quoteId: "#8",
-    productTitle: "Black fashion women backpack",
-    productSku: "B1F2W3B4P5K6",
-    quantity: 1,
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&q=80",
-    buyer: "Admin",
-    status: "New Quote Request",
-    sellersBid: null,
-    updated: "11 days ago",
-    date: "2026-10-01 / 21:00",
-  },
-  {
-    id: "4",
-    quoteId: "#4",
-    productTitle: "Black fashion women backpack",
-    productSku: "B1F2W3B4P5K6",
-    quantity: 1,
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&q=80",
-    buyer: "Admin",
+    image: "/images/products/cobalt-tshirt.webp",
+    buyer: "Trendshop",
     status: "Pending Quote",
-    sellersBid: "$8",
-    updated: "26 days ago",
-    date: "2026-09-04 / 08:27",
+    sellersBid: "$80,865",
+    updated: "3 days ago",
+    date: "2026-10-16 / 20:24",
   },
   {
-    id: "3",
-    quoteId: "#3",
-    productTitle: "Black gold fashion backpack",
-    productSku: "HIKIRJZ1K4",
+    id: "7",
+    quoteId: "#7",
+    productTitle: "Cobalt man t-shirt all colors",
+    color: "Teal",
+    productSku: "H1K1LP22272-Teal",
     quantity: 1,
-    image: "https://images.unsplash.com/photo-1546938576-6e6a64f317cc?w=200&q=80",
-    buyer: "Peter Jone",
-    status: "Closed",
-    sellersBid: null,
-    updated: "1 month ago",
-    date: "2026-09-01 / 23:19",
-  },
-  {
-    id: "2",
-    quoteId: "#2",
-    productTitle: "Black gold fashion backpack",
-    productSku: "HIKIRJZ1K4",
-    quantity: 1,
-    image: "https://images.unsplash.com/photo-1546938576-6e6a64f317cc?w=200&q=80",
-    buyer: "Admin",
+    image: "/images/products/cobalt-tshirt.webp",
+    buyer: "Caleb Prosper",
     status: "Pending Quote",
-    sellersBid: "$75,000",
-    updated: "1 month ago",
-    date: "2026-08-31 / 14:26",
+    sellersBid: "$20",
+    updated: "9 days ago",
+    date: "2026-09-29 / 11:29",
+  },
+  {
+    id: "6",
+    quoteId: "#6",
+    productTitle: "Cobalt man t-shirt all colors",
+    color: "Teal",
+    productSku: "H1K1LP22272-Teal",
+    quantity: 1,
+    image: "/images/products/cobalt-tshirt.webp",
+    buyer: "Caleb Prosper",
+    status: "Pending Payment",
+    sellersBid: "$750",
+    updated: "21 days ago",
+    date: "2026-09-29 / 06:06",
+  },
+  {
+    id: "5",
+    quoteId: "#5",
+    productTitle: "Cobalt man t-shirt all colors",
+    color: "Teal",
+    productSku: "H1K1LP22272-Teal",
+    quantity: 1,
+    image: "/images/products/cobalt-tshirt.webp",
+    buyer: "Caleb Prosper",
+    status: "Pending Payment",
+    sellersBid: "$1,000,000",
+    updated: "25 days ago",
+    date: "2026-09-26 / 08:37",
+  },
+  {
+    id: "1",
+    quoteId: "#1",
+    productTitle: "Cobalt man t-shirt all colors",
+    color: "Blue",
+    productSku: "H1K1LP22272-Blue",
+    quantity: 5,
+    image: "/images/products/cobalt-tshirt.webp",
+    buyer: "Trendshop",
+    status: "Completed",
+    sellersBid: "$100",
+    updated: "3 months ago",
+    date: "2026-08-05 / 14:05",
   },
 ];
 
@@ -138,7 +131,7 @@ export default function QuoteRequestsPage() {
       if (appliedStatus !== "All") {
         if (item.status !== appliedStatus) return false;
       }
-      // 2. Search query (matches quoteId, productTitle, or buyer)
+      // 2. Search query (matches quoteId, productTitle, buyer, or sku)
       if (appliedSearch) {
         const matchQuote = item.quoteId.toLowerCase().includes(appliedSearch);
         const matchTitle = item.productTitle.toLowerCase().includes(appliedSearch);
@@ -198,11 +191,12 @@ export default function QuoteRequestsPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-[150px] h-[34px] border border-[#d1d5db] rounded-[3px] pl-3 pr-7 text-[13px] text-[#495057] bg-white appearance-none outline-none focus:border-[#00ab97]"
+                className="w-[150px] h-[34px] border border-[#d1d5db] rounded-[3px] pl-3 pr-7 text-[13px] text-[#495057] bg-white appearance-none outline-none focus:border-[#605ca8]"
               >
                 <option value="All">All</option>
-                <option value="New Quote Request">New Quote Request</option>
                 <option value="Pending Quote">Pending Quote</option>
+                <option value="Pending Payment">Pending Payment</option>
+                <option value="Completed">Completed</option>
                 <option value="Closed">Closed</option>
               </select>
               <span className="absolute right-2.5 top-2 pointer-events-none text-[11px] text-[#495057]">
@@ -222,7 +216,7 @@ export default function QuoteRequestsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleFilter()}
-              className="w-[150px] sm:w-[180px] h-[34px] border border-[#d1d5db] rounded-[3px] px-3 text-[13px] text-[#495057] outline-none focus:border-[#00ab97] placeholder:text-[#9ca3af]"
+              className="w-[150px] sm:w-[180px] h-[34px] border border-[#d1d5db] rounded-[3px] px-3 text-[13px] text-[#495057] outline-none focus:border-[#605ca8] placeholder:text-[#9ca3af]"
             />
           </div>
 
@@ -230,25 +224,25 @@ export default function QuoteRequestsPage() {
           <button
             type="button"
             onClick={handleFilter}
-            className="h-[34px] px-5 bg-[#5b69bc] hover:bg-[#4d5aa7] text-white text-[13px] font-medium rounded-[3px] transition-colors cursor-pointer"
+            className="h-[34px] px-5 bg-[#605ca8] hover:bg-[#524d99] text-white text-[13px] font-medium rounded-[3px] transition-colors cursor-pointer"
           >
             Filter
           </button>
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto min-h-[300px]">
           <table className="w-full text-left text-[13px] border-collapse min-w-[950px]">
             <thead>
               <tr className="border-b border-[#dee2e6] text-[#2c333e] font-semibold text-[13px]">
                 <th className="py-3 px-3 w-[70px]">Quote</th>
                 <th className="py-3 px-3 min-w-[280px]">Product</th>
-                <th className="py-3 px-3 w-[110px]">Buyer</th>
+                <th className="py-3 px-3 w-[120px]">Buyer</th>
                 <th className="py-3 px-3 w-[150px]">Status</th>
-                <th className="py-3 px-3 w-[110px]">Seller&#39;s Bid</th>
-                <th className="py-3 px-3 w-[110px]">Updated</th>
-                <th className="py-3 px-3 w-[150px]">Date</th>
-                <th className="py-3 px-3 w-[140px]">Options</th>
+                <th className="py-3 px-3 w-[120px]">Seller&#39;s Bid</th>
+                <th className="py-3 px-3 w-[120px]">Updated</th>
+                <th className="py-3 px-3 w-[160px]">Date</th>
+                <th className="py-3 px-3 w-[150px]">Options</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#f1f3f5]">
@@ -262,27 +256,32 @@ export default function QuoteRequestsPage() {
                 filteredQuotes.map((item) => (
                   <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
                     {/* Quote ID */}
-                    <td className="py-3.5 px-3 font-medium text-[#2c333e] font-sans">
+                    <td className="py-4 px-3 font-normal text-[#2c333e] font-sans align-top">
                       {item.quoteId}
                     </td>
 
                     {/* Product */}
-                    <td className="py-3.5 px-3">
-                      <div className="flex items-center gap-3">
+                    <td className="py-4 px-3 align-top">
+                      <div className="flex items-start gap-3">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={item.image}
                           alt={item.productTitle}
-                          className="w-[48px] h-[48px] rounded-[3px] object-cover border border-[#e9ecef] shrink-0"
+                          className="w-[50px] h-[50px] rounded-[3px] object-cover border border-[#e9ecef] shrink-0"
                         />
                         <div className="flex flex-col">
-                          <span className="text-[#2c333e] font-medium hover:text-[#00ab97] transition-colors cursor-pointer leading-tight mb-1">
+                          <span className="text-[#2c333e] font-medium hover:text-[#00ab97] transition-colors cursor-pointer leading-tight mb-1 text-[13px]">
                             {item.productTitle}
                           </span>
-                          <span className="text-[12px] text-[#6c757d] leading-none mb-0.5">
+                          {item.color && (
+                            <span className="text-[12px] text-[#6c757d] leading-tight mb-0.5">
+                              Color: {item.color}
+                            </span>
+                          )}
+                          <span className="text-[12px] text-[#6c757d] leading-tight mb-0.5">
                             SKU: {item.productSku}
                           </span>
-                          <span className="text-[12px] text-[#6c757d] leading-none">
+                          <span className="text-[12px] text-[#6c757d] leading-tight">
                             Quantity: {item.quantity}
                           </span>
                         </div>
@@ -290,29 +289,37 @@ export default function QuoteRequestsPage() {
                     </td>
 
                     {/* Buyer */}
-                    <td className="py-3.5 px-3 text-[#495057]">
+                    <td className="py-4 px-3 text-[#495057] align-top text-[13px]">
                       {item.buyer}
                     </td>
 
                     {/* Status Badge */}
-                    <td className="py-3.5 px-3">
-                      {item.status === "New Quote Request" ? (
+                    <td className="py-4 px-3 align-top">
+                      {item.status === "Pending Quote" ? (
+                        <span className="inline-block bg-[#f39c12] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px] leading-tight">
+                          Pending Quote
+                        </span>
+                      ) : item.status === "Pending Payment" ? (
+                        <span className="inline-block bg-[#00c0ef] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px] leading-tight">
+                          Pending Payment
+                        </span>
+                      ) : item.status === "Completed" ? (
+                        <span className="inline-block bg-[#605ca8] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px] leading-tight">
+                          Completed
+                        </span>
+                      ) : item.status === "New Quote Request" ? (
                         <span className="inline-block bg-[#00ab97] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px] leading-tight">
                           New Quote Request
                         </span>
-                      ) : item.status === "Pending Quote" ? (
-                        <span className="inline-block bg-[#fb8c00] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px] leading-tight">
-                          Pending Quote
-                        </span>
                       ) : (
                         <span className="inline-block bg-[#e9ecef] text-[#495057] text-[11px] font-medium px-2 py-0.5 rounded-[2px] leading-tight">
-                          Closed
+                          {item.status}
                         </span>
                       )}
                     </td>
 
                     {/* Seller's Bid */}
-                    <td className="py-3.5 px-3">
+                    <td className="py-4 px-3 align-top">
                       {item.sellersBid ? (
                         <span className="inline-block bg-[#00ab97] text-white text-[11px] font-bold px-2 py-0.5 rounded-[2px] leading-tight">
                           {item.sellersBid}
@@ -321,22 +328,22 @@ export default function QuoteRequestsPage() {
                     </td>
 
                     {/* Updated */}
-                    <td className="py-3.5 px-3 text-[#495057] text-[12.5px]">
+                    <td className="py-4 px-3 text-[#495057] text-[12.5px] align-top">
                       {item.updated}
                     </td>
 
                     {/* Date */}
-                    <td className="py-3.5 px-3 text-[#495057] text-[12.5px]">
+                    <td className="py-4 px-3 text-[#495057] text-[12.5px] align-top">
                       {item.date}
                     </td>
 
                     {/* Options Button */}
-                    <td className="py-3.5 px-3 relative">
+                    <td className="py-4 px-3 align-top relative">
                       <div className="relative inline-block text-left">
                         <button
                           type="button"
                           onClick={() => setOpenMenuId(openMenuId === item.id ? null : item.id)}
-                          className="inline-flex items-center justify-between gap-1.5 px-3 py-1.5 bg-[#5b69bc] hover:bg-[#4d5aa7] text-white text-[12px] font-medium rounded-[3px] transition-colors shadow-2xs cursor-pointer select-none"
+                          className="inline-flex items-center justify-between gap-2 px-3 py-1.5 bg-[#605ca8] hover:bg-[#524d99] text-white text-[12px] font-medium rounded-[3px] transition-colors shadow-2xs cursor-pointer select-none"
                         >
                           <span>Select an option</span>
                           <span className="text-[10px]">▾</span>
@@ -369,7 +376,7 @@ export default function QuoteRequestsPage() {
                               }}
                               className="w-full text-left px-4 py-2 text-[12.5px] text-[#495057] hover:bg-[#f8f9fa] hover:text-[#2c333e] flex items-center gap-2 cursor-pointer transition-colors"
                             >
-                              <Info className="w-3.5 h-3.5 text-[#5b69bc]" />
+                              <Info className="w-3.5 h-3.5 text-[#605ca8]" />
                               <span>View Details</span>
                             </button>
 
@@ -429,6 +436,7 @@ export default function QuoteRequestsPage() {
                 />
                 <div className="text-xs">
                   <p className="font-semibold text-[#2c333e]">{submitModalQuote.productTitle}</p>
+                  <p className="text-gray-500">Color: {submitModalQuote.color}</p>
                   <p className="text-gray-500">Requested Quantity: {submitModalQuote.quantity}</p>
                   <p className="text-gray-500">Buyer: {submitModalQuote.buyer}</p>
                 </div>
@@ -443,7 +451,7 @@ export default function QuoteRequestsPage() {
                   placeholder="e.g. 50 or 75,000"
                   value={bidAmount}
                   onChange={(e) => setBidAmount(e.target.value)}
-                  className="w-full h-[36px] border border-[#d1d5db] rounded-[3px] px-3 text-[13px] text-[#495057] outline-none focus:border-[#00ab97]"
+                  className="w-full h-[36px] border border-[#d1d5db] rounded-[3px] px-3 text-[13px] text-[#495057] outline-none focus:border-[#605ca8]"
                 />
                 <span className="text-[11px] text-gray-400 mt-1 block">
                   Enter your offered total price for the requested quantity.
@@ -498,6 +506,7 @@ export default function QuoteRequestsPage() {
                 />
                 <div>
                   <h4 className="font-bold text-[#2c333e] text-sm">{detailsModalQuote.productTitle}</h4>
+                  <p className="text-gray-500 text-xs">Color: {detailsModalQuote.color}</p>
                   <p className="text-gray-500 text-xs">SKU: {detailsModalQuote.productSku}</p>
                 </div>
               </div>
@@ -517,17 +526,21 @@ export default function QuoteRequestsPage() {
               <div className="flex justify-between py-1.5 border-b border-[#f1f3f5]">
                 <span className="text-gray-500">Status:</span>
                 <span>
-                  {detailsModalQuote.status === "New Quote Request" ? (
-                    <span className="bg-[#00ab97] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px]">
-                      New Quote Request
-                    </span>
-                  ) : detailsModalQuote.status === "Pending Quote" ? (
-                    <span className="bg-[#fb8c00] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px]">
+                  {detailsModalQuote.status === "Pending Quote" ? (
+                    <span className="bg-[#f39c12] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px]">
                       Pending Quote
+                    </span>
+                  ) : detailsModalQuote.status === "Pending Payment" ? (
+                    <span className="bg-[#00c0ef] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px]">
+                      Pending Payment
+                    </span>
+                  ) : detailsModalQuote.status === "Completed" ? (
+                    <span className="bg-[#605ca8] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px]">
+                      Completed
                     </span>
                   ) : (
                     <span className="bg-[#e9ecef] text-[#495057] text-[11px] font-medium px-2 py-0.5 rounded-[2px]">
-                      Closed
+                      {detailsModalQuote.status}
                     </span>
                   )}
                 </span>

@@ -1,43 +1,42 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Plus, Edit2, Trash2, X, Check, Search } from "lucide-react";
 
 interface CouponItem {
   id: string;
   code: string;
-  discountRate: string; // e.g. "15%"
-  totalCoupons: number; // e.g. 100000
-  usedCoupons: number; // e.g. 2
-  expiryDate: string; // e.g. "2027-03-31 / 13:57"
+  discountRate: string; // e.g. "10%"
+  totalCoupons: number; // e.g. 500
+  usedCoupons: number; // e.g. 0
+  expiryDate: string; // e.g. "2027-04-16 / 15:01"
   status: "Active" | "Expired";
-  date: string; // e.g. "2026-08-05 / 12:57"
+  date: string; // e.g. "2026-08-06 / 14:01"
   selectedProductIds?: string[];
 }
 
 const initialCoupons: CouponItem[] = [
   {
     id: "1",
-    code: "41GNOLDX",
-    discountRate: "15%",
-    totalCoupons: 100000,
-    usedCoupons: 2,
-    expiryDate: "2027-03-31 / 13:57",
+    code: "P6PG5GLS",
+    discountRate: "10%",
+    totalCoupons: 500,
+    usedCoupons: 0,
+    expiryDate: "2027-04-16 / 15:01",
     status: "Active",
-    date: "2026-08-05 / 12:57",
+    date: "2026-08-06 / 14:01",
     selectedProductIds: ["all"],
   },
 ];
 
 // Sample vendor products for product selector modal
 const sampleProducts = [
-  { id: "43", title: "Black fashion women backpack", sku: "B1F2W3B4P5K6" },
-  { id: "41", title: "Black midi skirt with white flowers", sku: "B1M2S3W4F5L6" },
-  { id: "39", title: "Embroidered black women shoes", sku: "EBW2S3W4F5L6" },
-  { id: "37", title: "Floral print summer dress", sku: "FPS2D3W4F5L6" },
-  { id: "35", title: "Men outerwear navy color", sku: "M1O2N3C4L5R6" },
-  { id: "33", title: "Animation of popular vacation spots", sku: "AIP2V3S4P5T6" },
+  { id: "43", title: "Cobalt man t-shirt all colors", sku: "H1K1LP22272-Teal" },
+  { id: "41", title: "Black fashion women backpack", sku: "B1F2W3B4P5K6" },
+  { id: "39", title: "Black midi skirt with white flowers", sku: "B1M2S3W4F5L6" },
+  { id: "37", title: "Embroidered black women shoes", sku: "EBW2S3W4F5L6" },
+  { id: "35", title: "Floral print summer dress", sku: "FPS2D3W4F5L6" },
+  { id: "33", title: "Men outerwear navy color", sku: "M1O2N3C4L5R6" },
   { id: "10", title: "Black gold fashion backpack", sku: "HIKIRJZ1K4" },
 ];
 
@@ -53,9 +52,9 @@ export default function CouponsPage() {
   const [formData, setFormData] = useState({
     code: "",
     discountRate: "10",
-    totalCoupons: 100,
-    expiryDate: "2027-12-31",
-    expiryTime: "23:59",
+    totalCoupons: 500,
+    expiryDate: "2027-04-16",
+    expiryTime: "15:01",
     status: "Active" as "Active" | "Expired",
   });
 
@@ -69,9 +68,9 @@ export default function CouponsPage() {
     setFormData({
       code: randomCode,
       discountRate: "10",
-      totalCoupons: 1000,
-      expiryDate: "2027-12-31",
-      expiryTime: "23:59",
+      totalCoupons: 500,
+      expiryDate: "2027-04-16",
+      expiryTime: "15:01",
       status: "Active",
     });
     setEditingCoupon(null);
@@ -84,8 +83,8 @@ export default function CouponsPage() {
       code: coupon.code,
       discountRate: coupon.discountRate.replace("%", ""),
       totalCoupons: coupon.totalCoupons,
-      expiryDate: coupon.expiryDate.split(" / ")[0] || "2027-12-31",
-      expiryTime: coupon.expiryDate.split(" / ")[1] || "23:59",
+      expiryDate: coupon.expiryDate.split(" / ")[0] || "2027-04-16",
+      expiryTime: coupon.expiryDate.split(" / ")[1] || "15:01",
       status: coupon.status,
     });
     setAddModalOpen(true);
@@ -192,7 +191,7 @@ export default function CouponsPage() {
           <button
             type="button"
             onClick={handleOpenAddModal}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#00ab97] hover:bg-[#009180] text-white text-[13px] font-medium rounded-[3px] transition-colors shadow-2xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#00ab97] hover:bg-[#009180] text-white text-[13px] font-medium rounded-[3px] transition-colors shadow-2xs cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Coupon</span>
@@ -200,7 +199,7 @@ export default function CouponsPage() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto min-h-[160px]">
           <table className="w-full text-left text-[13px] border-collapse min-w-[900px]">
             <thead>
               <tr className="border-b border-[#dee2e6] text-[#2c333e] font-semibold text-[13px]">
@@ -225,30 +224,30 @@ export default function CouponsPage() {
                 coupons.map((item) => (
                   <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
                     {/* Coupon Code */}
-                    <td className="py-3.5 px-3 font-medium text-[#2c333e]">
+                    <td className="py-4 px-3 font-normal text-[#2c333e]">
                       {item.code}
                     </td>
 
                     {/* Discount Rate */}
-                    <td className="py-3.5 px-3 text-[#2c333e]">
+                    <td className="py-4 px-3 text-[#2c333e]">
                       {item.discountRate}
                     </td>
 
                     {/* Number of Coupons */}
-                    <td className="py-3.5 px-3 text-[#2c333e]">
+                    <td className="py-4 px-3 text-[#2c333e]">
                       <span>{item.totalCoupons}</span>{" "}
-                      <span className="text-[#dc2626] font-medium">
+                      <span className="text-[#e74c3c] font-normal">
                         (Used: {item.usedCoupons})
                       </span>
                     </td>
 
                     {/* Expiry Date */}
-                    <td className="py-3.5 px-3 text-[#495057] text-[12.5px]">
+                    <td className="py-4 px-3 text-[#495057] text-[12.5px]">
                       {item.expiryDate}
                     </td>
 
                     {/* Status Badge */}
-                    <td className="py-3.5 px-3">
+                    <td className="py-4 px-3">
                       {item.status === "Active" ? (
                         <span className="inline-block bg-[#00ab97] text-white text-[11px] font-medium px-2 py-0.5 rounded-[2px] leading-tight">
                           Active
@@ -261,12 +260,12 @@ export default function CouponsPage() {
                     </td>
 
                     {/* Date */}
-                    <td className="py-3.5 px-3 text-[#495057] text-[12.5px]">
+                    <td className="py-4 px-3 text-[#495057] text-[12.5px]">
                       {item.date}
                     </td>
 
                     {/* Products Button */}
-                    <td className="py-3.5 px-3">
+                    <td className="py-4 px-3">
                       <button
                         type="button"
                         onClick={() => handleOpenSelectProducts(item)}
@@ -277,13 +276,13 @@ export default function CouponsPage() {
                     </td>
 
                     {/* Options Buttons */}
-                    <td className="py-3.5 px-3">
-                      <div className="inline-flex items-center gap-1 bg-[#e9ecef] p-0.5 rounded-[3px]">
+                    <td className="py-4 px-3">
+                      <div className="inline-flex items-center rounded-[3px] border border-[#d2d6de] overflow-hidden bg-[#f4f4f4]">
                         <button
                           type="button"
                           onClick={() => handleOpenEditModal(item)}
                           title="Edit Coupon"
-                          className="p-1 text-[#495057] hover:text-[#2c333e] hover:bg-white rounded-[2px] transition-colors cursor-pointer"
+                          className="px-2.5 py-1 text-[#444] hover:bg-[#e6e6e6] hover:text-[#222] border-r border-[#d2d6de] transition-colors cursor-pointer"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
@@ -291,7 +290,7 @@ export default function CouponsPage() {
                           type="button"
                           onClick={() => handleDeleteCoupon(item.id)}
                           title="Delete Coupon"
-                          className="p-1 text-[#495057] hover:text-[#dc2626] hover:bg-white rounded-[2px] transition-colors cursor-pointer"
+                          className="px-2.5 py-1 text-[#444] hover:bg-[#e6e6e6] hover:text-[#dc2626] transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -305,7 +304,7 @@ export default function CouponsPage() {
         </div>
 
         {/* Footer: Number of Entries */}
-        <div className="pt-5 mt-2 border-t border-[#f1f3f5] text-[#495057] select-none">
+        <div className="pt-5 mt-4 border-t border-[#f1f3f5] text-[#495057] select-none">
           <span className="text-[12.5px] font-medium">
             Number of Entries: {coupons.length}
           </span>
@@ -340,7 +339,7 @@ export default function CouponsPage() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. 41GNOLDX"
+                      placeholder="e.g. P6PG5GLS"
                       value={formData.code}
                       onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
                       className="flex-1 h-[36px] border border-[#d1d5db] rounded-[3px] px-3 text-[13px] text-[#495057] uppercase outline-none focus:border-[#00ab97]"
@@ -370,7 +369,7 @@ export default function CouponsPage() {
                     min="1"
                     max="100"
                     required
-                    placeholder="e.g. 15"
+                    placeholder="e.g. 10"
                     value={formData.discountRate}
                     onChange={(e) => setFormData({ ...formData, discountRate: e.target.value })}
                     className="w-full h-[36px] border border-[#d1d5db] rounded-[3px] px-3 text-[13px] text-[#495057] outline-none focus:border-[#00ab97]"
@@ -386,7 +385,7 @@ export default function CouponsPage() {
                     type="number"
                     min="1"
                     required
-                    placeholder="e.g. 100000"
+                    placeholder="e.g. 500"
                     value={formData.totalCoupons}
                     onChange={(e) => setFormData({ ...formData, totalCoupons: Number(e.target.value) })}
                     className="w-full h-[36px] border border-[#d1d5db] rounded-[3px] px-3 text-[13px] text-[#495057] outline-none focus:border-[#00ab97]"

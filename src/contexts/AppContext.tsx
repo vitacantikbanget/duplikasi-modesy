@@ -909,19 +909,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const pathname = window.location.pathname;
     const cookieRole = getCookie("demo_role") as UserRole | null;
     const localRole = localStorage.getItem("modesy_role") as UserRole | null;
+    const existingRole = localRole || cookieRole;
 
-    // Auto-detect role from URL path if matching dedicated portals
+    // If user has an explicit active role (like admin, super_admin, or vendor), PRESERVE IT!
     let active: UserRole = "guest";
-    if (pathname.startsWith("/admin")) {
+
+    if (existingRole && existingRole !== "guest") {
+      // If user is admin/super_admin, keep admin everywhere
+      active = existingRole;
+    } else if (pathname.startsWith("/admin")) {
       active = "admin";
     } else if (pathname.startsWith("/dashboard")) {
       active = "vendor";
     } else if (pathname.startsWith("/member")) {
       active = "member";
-    } else if (pathname.startsWith("/guest")) {
-      active = "guest";
-    } else {
-      active = (cookieRole && cookieRole !== "admin") ? cookieRole : (localRole && localRole !== "admin") ? localRole : "guest";
     }
 
     setRoleState(active);
@@ -950,13 +951,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
+    const wasAdmin = role === "admin" || role === "super_admin";
     setRoleState("guest");
     if (typeof document !== "undefined") {
       document.cookie = "demo_role=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
     if (typeof window !== "undefined") {
       localStorage.removeItem("modesy_role");
-      window.location.href = "/";
+      if (wasAdmin) {
+        window.location.href = "/admin/login";
+      } else {
+        window.location.href = "/";
+      }
     }
   };
 

@@ -25,97 +25,88 @@ export interface PromotionPaymentItem {
   date: string;
 }
 
-export const MEMBERSHIP_PAYMENTS: MembershipPaymentItem[] = [
-  {
-    id: 3,
-    paymentId: "WLT-HMKBXC78KP-C2OT79NU",
-    paymentMethod: "Wallet Balance",
-    membershipPlan: "Professional (Number of Ads: Unlimited, Number of Days: Unlimited)",
-    paymentAmount: "$30.45 (USD)",
-    paymentStatus: "Succeeded",
-    date: "2026-09-23 / 17:22",
-  },
-  {
-    id: 1,
-    paymentId: "pi_3SIuYHBHW47ba9xU0s6wR7dv",
-    paymentMethod: "Stripe",
-    membershipPlan: "Professional (Number of Ads: Unlimited, Number of Days: Unlimited)",
-    paymentAmount: "$30.45 (USD)",
-    paymentStatus: "paid",
-    date: "2026-07-30 / 21:35",
-  },
-];
+export const MEMBERSHIP_PAYMENTS: MembershipPaymentItem[] = [];
 
 export const PROMOTION_PAYMENTS: PromotionPaymentItem[] = [
   {
-    id: 15,
-    paymentId: "80R99643X06310109",
-    paymentMethod: "PayPal",
-    productId: 41,
-    paymentAmount: "9.45 (USD)",
-    paymentStatus: "COMPLETED",
-    purchasedPlan: "Monthly Plan (270 Days)",
-    date: "2026-08-04 / 10:34",
-  },
-  {
-    id: 12,
-    paymentId: "20T479709E951411J",
-    paymentMethod: "PayPal",
-    productId: 17,
-    paymentAmount: "31.50 (USD)",
-    paymentStatus: "COMPLETED",
-    purchasedPlan: "Daily Plan (300 Days)",
-    date: "2026-08-04 / 10:30",
-  },
-  {
-    id: 11,
-    paymentId: "TST2524702337417",
-    paymentMethod: "PayTabs",
-    productId: 30,
-    paymentAmount: "8.40 (USD)",
-    paymentStatus: "Authorised",
-    purchasedPlan: "Monthly Plan (240 Days)",
-    date: "2026-08-04 / 10:27",
-  },
-  {
-    id: 6,
-    paymentId: "9614491",
-    paymentMethod: "Flutterwave",
-    productId: 33,
-    paymentAmount: "7.35 (USD)",
-    paymentStatus: "Successful",
-    purchasedPlan: "Monthly Plan (210 Days)",
-    date: "2026-08-04 / 10:11",
-  },
-  {
-    id: 5,
-    paymentId: "pay_RDSAEwAnicw9nb",
-    paymentMethod: "Razorpay",
-    productId: 15,
-    paymentAmount: "555.24 (INR)",
-    paymentStatus: "captured",
-    purchasedPlan: "Monthly Plan (180 Days)",
-    date: "2026-08-04 / 10:09",
-  },
-  {
-    id: 4,
-    paymentId: "7MY93294KM779043W",
-    paymentMethod: "PayPal",
-    productId: 13,
-    paymentAmount: "31.50 (USD)",
-    paymentStatus: "COMPLETED",
-    purchasedPlan: "Daily Plan (300 Days)",
-    date: "2026-08-04 / 10:06",
-  },
-  {
-    id: 2,
-    paymentId: "pi_3S3MzFBHW47ba9xU0aSzZS56",
+    id: 14,
+    paymentId: "pi_3S3Yb6BHW47ba9xUlKNINqtR",
     paymentMethod: "Stripe",
-    productId: 11,
-    paymentAmount: "8.40 (USD)",
+    productId: 42,
+    paymentAmount: "9.45 (USD)",
     paymentStatus: "paid",
+    purchasedPlan: "Monthly Plan (270 Days)",
+    date: "2026-08-04 / 10:33",
+  },
+  {
+    id: 13,
+    paymentId: "pi_3S3YZyBHW47ba9xUlSgGPOgs",
+    paymentMethod: "Stripe",
+    productId: 38,
+    paymentAmount: "9.45 (USD)",
+    paymentStatus: "paid",
+    purchasedPlan: "Monthly Plan (270 Days)",
+    date: "2026-08-04 / 10:31",
+  },
+  {
+    id: 10,
+    paymentId: "DP-117107",
+    paymentMethod: "dLocal Go",
+    productId: 40,
+    paymentAmount: "51.53 (BRL)",
+    paymentStatus: "Completed",
+    purchasedPlan: "Monthly Plan (270 Days)",
+    date: "2026-08-04 / 10:25",
+  },
+  {
+    id: 9,
+    paymentId: "597d8fb4-6400-4708-b7bd-7de53c82c5d9",
+    paymentMethod: "Midtrans",
+    productId: 1,
+    paymentAmount: "137996.29 (IDR)",
+    paymentStatus: "capture",
     purchasedPlan: "Monthly Plan (240 Days)",
-    date: "2026-08-03 / 22:09",
+    date: "2026-08-04 / 10:18",
+  },
+  {
+    id: 8,
+    paymentId: "pi_3S3YLFBHW47ba9xU1zwaQPwG",
+    paymentMethod: "Stripe",
+    productId: 23,
+    paymentAmount: "42.00 (USD)",
+    paymentStatus: "paid",
+    purchasedPlan: "Daily Plan (400 Days)",
+    date: "2026-08-04 / 10:16",
+  },
+  {
+    id: 7,
+    paymentId: "25276060",
+    paymentMethod: "iyzico",
+    productId: 20,
+    paymentAmount: "345.72 (TRY)",
+    paymentStatus: "SUCCESS",
+    purchasedPlan: "Monthly Plan (240 Days)",
+    date: "2026-08-04 / 10:13",
+  },
+  {
+    id: 3,
+    paymentId: "077d280d97da30d1d3bcb0849484e830089e782c",
+    paymentMethod: "PayStack",
+    productId: 12,
+    paymentAmount: "16073.55 (NGN)",
+    paymentStatus: "success",
+    purchasedPlan: "Monthly Plan (300 Days)",
+    date: "2026-08-03 / 23:29",
+  },
+  {
+    id: 1,
+    paymentId: "62W28666TH4730240",
+    paymentMethod: "PayPal",
+    productId: 21,
+    paymentAmount: "6.30 (USD)",
+    paymentStatus: "COMPLETED",
+    purchasedPlan: "Monthly Plan (180 Days)",
+    date: "2026-08-03 / 22:06",
   },
 ];
 
@@ -175,7 +166,7 @@ function PaymentsContent() {
                     <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.productId}</td>
                     <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentAmount}</td>
                     <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentStatus}</td>
-                    <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.purchasedPlan}</td>
+                    <td className="py-4 pr-4 text-[#2c333e] align-middle max-w-[140px] leading-tight">{item.purchasedPlan}</td>
                     <td className="py-4 pr-4 text-[#2c333e] align-middle whitespace-nowrap">{item.date}</td>
                     <td className="py-4 align-middle">
                       <button
@@ -219,50 +210,60 @@ function PaymentsContent() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#f8f9fa]">
-                {MEMBERSHIP_PAYMENTS.map((item) => (
-                  <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
-                    <td className="py-4 pr-4 pl-1 text-[#2c333e] align-middle">{item.id}</td>
-                    <td className="py-4 pr-4 text-[#2c333e] align-middle font-normal">{item.paymentId}</td>
-                    <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentMethod}</td>
-                    <td className="py-4 pr-4 text-[#2c333e] align-middle max-w-[280px] leading-relaxed">
-                      {item.membershipPlan}
-                    </td>
-                    <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentAmount}</td>
-                    <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentStatus}</td>
-                    <td className="py-4 pr-4 text-[#2c333e] align-middle whitespace-nowrap">{item.date}</td>
-                    <td className="py-4 align-middle">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setSelectedInvoice({
-                            type: "membership",
-                            id: item.id,
-                            paymentId: item.paymentId,
-                            paymentMethod: item.paymentMethod,
-                            plan: item.membershipPlan,
-                            amount: item.paymentAmount,
-                            status: item.paymentStatus,
-                            date: item.date,
-                          })
-                        }
-                        className="bg-[#00a2b8] hover:bg-[#008ea2] text-white text-[12px] font-medium px-3.5 py-1.5 rounded-[3px] inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
-                      >
-                        <FileText className="w-3.5 h-3.5 text-white" />
-                        <span>View Invoice</span>
-                      </button>
+                {MEMBERSHIP_PAYMENTS.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="py-8 text-center text-[#6c757d] text-[13.5px]">
+                      No records found!
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  MEMBERSHIP_PAYMENTS.map((item) => (
+                    <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
+                      <td className="py-4 pr-4 pl-1 text-[#2c333e] align-middle">{item.id}</td>
+                      <td className="py-4 pr-4 text-[#2c333e] align-middle font-normal">{item.paymentId}</td>
+                      <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentMethod}</td>
+                      <td className="py-4 pr-4 text-[#2c333e] align-middle max-w-[280px] leading-relaxed">
+                        {item.membershipPlan}
+                      </td>
+                      <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentAmount}</td>
+                      <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentStatus}</td>
+                      <td className="py-4 pr-4 text-[#2c333e] align-middle whitespace-nowrap">{item.date}</td>
+                      <td className="py-4 align-middle">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setSelectedInvoice({
+                              type: "membership",
+                              id: item.id,
+                              paymentId: item.paymentId,
+                              paymentMethod: item.paymentMethod,
+                              plan: item.membershipPlan,
+                              amount: item.paymentAmount,
+                              status: item.paymentStatus,
+                              date: item.date,
+                            })
+                          }
+                          className="bg-[#00a2b8] hover:bg-[#008ea2] text-white text-[12px] font-medium px-3.5 py-1.5 rounded-[3px] inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-white" />
+                          <span>View Invoice</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           )}
         </div>
 
-        {/* Number of Entries */}
-        <div className="mt-8 pt-4 text-[#2c333e] select-none text-[13px]">
-          <span>Number of Entries: </span>
-          <span className="font-bold">{currentCount}</span>
-        </div>
+        {/* Number of Entries (Hidden when empty) */}
+        {currentCount > 0 && (
+          <div className="mt-8 pt-4 text-[#2c333e] select-none text-[13px] border-t border-[#f1f3f5]">
+            <span>Number of Entries: </span>
+            <span className="font-bold">{currentCount}</span>
+          </div>
+        )}
       </div>
 
       {/* Invoice Modal */}

@@ -12,16 +12,7 @@ export interface CommentItem {
   date: string;
 }
 
-export const INITIAL_COMMENTS: CommentItem[] = [
-  {
-    id: 1,
-    username: "Peter Jone",
-    comment: "good",
-    product: "Women lace blouse with different colors",
-    productSlug: "women-lace-blouse-with-different-colors",
-    date: "2026-09-13 / 14:16",
-  },
-];
+export const INITIAL_COMMENTS: CommentItem[] = [];
 
 export default function CommentsPage() {
   const [comments] = useState<CommentItem[]>(INITIAL_COMMENTS);
@@ -49,7 +40,7 @@ export default function CommentsPage() {
             <tbody className="divide-y divide-[#f8f9fa]">
               {comments.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-[#6c757d] text-[13px]">
+                  <td colSpan={5} className="py-8 text-center text-[#6c757d] text-[13.5px]">
                     No records found!
                   </td>
                 </tr>
@@ -83,11 +74,13 @@ export default function CommentsPage() {
           </table>
         </div>
 
-        {/* Number of Entries */}
-        <div className="mt-8 pt-4 text-[#2c333e] select-none text-[13px]">
-          <span>Number of Entries: </span>
-          <span className="font-bold">{comments.length}</span>
-        </div>
+        {/* Number of Entries (Hidden when empty) */}
+        {comments.length > 0 && (
+          <div className="mt-8 pt-4 text-[#2c333e] select-none text-[13px] border-t border-[#f1f3f5]">
+            <span>Number of Entries: </span>
+            <span className="font-bold">{comments.length}</span>
+          </div>
+        )}
       </div>
     </div>
   );

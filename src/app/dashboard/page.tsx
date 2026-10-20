@@ -26,7 +26,7 @@ export default function VendorDashboardOverview() {
         {/* Card 1: Sales */}
         <div className="bg-white rounded-[3px] border border-[#e4e7ea] p-5 flex items-center justify-between shadow-[0_1px_1px_rgba(0,0,0,0.05)]">
           <div>
-            <h2 className="text-[32px] font-bold text-[#2d3436] leading-none mb-1.5">28</h2>
+            <h2 className="text-[32px] font-bold text-[#2d3436] leading-none mb-1.5">32</h2>
             <p className="text-[13px] text-[#7f8c8d]">Number of total sales</p>
           </div>
           <div className="text-[#a4b0be] opacity-70">
@@ -37,7 +37,7 @@ export default function VendorDashboardOverview() {
         {/* Card 2: Balance */}
         <div className="bg-white rounded-[3px] border border-[#e4e7ea] p-5 flex items-center justify-between shadow-[0_1px_1px_rgba(0,0,0,0.05)]">
           <div>
-            <h2 className="text-[32px] font-bold text-[#2d3436] leading-none mb-1.5">$793.52</h2>
+            <h2 className="text-[32px] font-bold text-[#2d3436] leading-none mb-1.5">$1,246.15</h2>
             <p className="text-[13px] text-[#7f8c8d]">Balance</p>
           </div>
           <div className="text-[#a4b0be] opacity-70">
@@ -48,7 +48,7 @@ export default function VendorDashboardOverview() {
         {/* Card 3: Products */}
         <div className="bg-white rounded-[3px] border border-[#e4e7ea] p-5 flex items-center justify-between shadow-[0_1px_1px_rgba(0,0,0,0.05)]">
           <div>
-            <h2 className="text-[32px] font-bold text-[#2d3436] leading-none mb-1.5">24</h2>
+            <h2 className="text-[32px] font-bold text-[#2d3436] leading-none mb-1.5">23</h2>
             <p className="text-[13px] text-[#7f8c8d]">Products</p>
           </div>
           <div className="text-[#a4b0be] opacity-70">
@@ -87,11 +87,11 @@ export default function VendorDashboardOverview() {
             <div className="flex items-center justify-center gap-6 mb-6 text-xs text-gray-600 font-medium">
               <div className="flex items-center gap-2">
                 <span className="w-5 h-2.5 bg-[#00c0ef] inline-block rounded-xs"></span>
-                <span>Active Sales (17)</span>
+                <span>Active Sales (25)</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-5 h-2.5 bg-[#3c8dbc] inline-block rounded-xs"></span>
-                <span>Completed Sales (11)</span>
+                <span>Completed Sales (7)</span>
               </div>
             </div>
 
@@ -101,8 +101,7 @@ export default function VendorDashboardOverview() {
                 {/* Background circle / Hole */}
                 <circle cx="50" cy="50" r="36" fill="transparent" stroke="#f1f3f5" strokeWidth="24" />
                 
-                {/* Active Sales Segment: 17/(17+11) = 60.7% = 60.7 * 2.2619 = 137.3 */}
-                {/* Circumference for r=36 is 2 * Math.PI * 36 = 226.2 */}
+                {/* Active Sales Segment: 25 / 32 = 78.125% -> 176.7 / 226.2 */}
                 <circle
                   cx="50"
                   cy="50"
@@ -110,11 +109,11 @@ export default function VendorDashboardOverview() {
                   fill="transparent"
                   stroke="#00c0ef"
                   strokeWidth="24"
-                  strokeDasharray="137.3 226.2"
+                  strokeDasharray="176.7 226.2"
                   strokeDashoffset="0"
                 />
 
-                {/* Completed Sales Segment: 11/28 = 39.3% = 88.9 */}
+                {/* Completed Sales Segment: 7 / 32 = 21.875% -> 49.5 / 226.2 */}
                 <circle
                   cx="50"
                   cy="50"
@@ -122,8 +121,8 @@ export default function VendorDashboardOverview() {
                   fill="transparent"
                   stroke="#3c8dbc"
                   strokeWidth="24"
-                  strokeDasharray="88.9 226.2"
-                  strokeDashoffset="-137.3"
+                  strokeDasharray="49.5 226.2"
+                  strokeDashoffset="-176.7"
                 />
               </svg>
             </div>
@@ -145,47 +144,51 @@ export default function VendorDashboardOverview() {
             <div className="flex items-center justify-center gap-2 mb-4 text-xs text-gray-600 font-medium">
               <div className="flex items-center gap-1.5 border border-[#00c0ef] px-2 py-0.5 rounded-xs">
                 <span className="w-3 h-1 bg-[#00c0ef]"></span>
-                <span className="text-[11px]">Sales (2026)</span>
+                <span className="text-[11px] text-[#333]">Sales (2026)</span>
               </div>
             </div>
 
             {/* Chart Graphic Area */}
             <div className="w-full h-64 relative">
               <svg viewBox="0 0 600 240" className="w-full h-full overflow-visible">
-                {/* Horizontal Grid lines */}
+                {/* Horizontal Grid lines (0 to 100000 in 10000 steps) */}
                 {[
-                  { label: "$60000", y: 20 },
-                  { label: "$50000", y: 55 },
-                  { label: "$40000", y: 90 },
-                  { label: "$30000", y: 125 },
-                  { label: "$20000", y: 160 },
-                  { label: "$10000", y: 195 },
-                  { label: "$0", y: 230 },
+                  { label: "$100000", y: 15 },
+                  { label: "$90000", y: 36 },
+                  { label: "$80000", y: 57 },
+                  { label: "$70000", y: 78 },
+                  { label: "$60000", y: 99 },
+                  { label: "$50000", y: 120 },
+                  { label: "$40000", y: 141 },
+                  { label: "$30000", y: 162 },
+                  { label: "$20000", y: 183 },
+                  { label: "$10000", y: 204 },
+                  { label: "$0", y: 225 },
                 ].map((grid, idx) => (
                   <g key={idx}>
-                    <text x="35" y={grid.y + 3} textAnchor="end" fontSize="9" fill="#999" fontFamily="sans-serif">
+                    <text x="42" y={grid.y + 3} textAnchor="end" fontSize="8.5" fill="#999" fontFamily="sans-serif">
                       {grid.label}
                     </text>
-                    <line x1="45" y1={grid.y} x2="585" y2={grid.y} stroke="#edf0f2" strokeWidth="1" />
+                    <line x1="48" y1={grid.y} x2="585" y2={grid.y} stroke="#f0f2f4" strokeWidth="1" />
                   </g>
                 ))}
 
                 {/* X-axis months */}
                 {[
-                  { m: "Jan", x: 60 },
-                  { m: "Feb", x: 105 },
-                  { m: "Mar", x: 150 },
-                  { m: "Apr", x: 195 },
-                  { m: "May", x: 240 },
-                  { m: "Jun", x: 285 },
-                  { m: "Jul", x: 330 },
-                  { m: "Aug", x: 375 },
-                  { m: "Sep", x: 420 },
-                  { m: "Oct", x: 465 },
-                  { m: "Nov", x: 510 },
-                  { m: "Dec", x: 555 },
+                  { m: "Jan", x: 65 },
+                  { m: "Feb", x: 110 },
+                  { m: "Mar", x: 155 },
+                  { m: "Apr", x: 200 },
+                  { m: "May", x: 245 },
+                  { m: "Jun", x: 290 },
+                  { m: "Jul", x: 335 },
+                  { m: "Aug", x: 380 },
+                  { m: "Sep", x: 425 },
+                  { m: "Oct", x: 470 },
+                  { m: "Nov", x: 515 },
+                  { m: "Dec", x: 560 },
                 ].map((item, idx) => (
-                  <text key={idx} x={item.x} y="248" textAnchor="middle" fontSize="10" fill="#777" fontFamily="sans-serif">
+                  <text key={idx} x={item.x} y="239" textAnchor="middle" fontSize="9.5" fill="#777" fontFamily="sans-serif">
                     {item.m}
                   </text>
                 ))}
@@ -193,20 +196,20 @@ export default function VendorDashboardOverview() {
                 {/* Gradient Definition */}
                 <defs>
                   <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#00c0ef" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#00c0ef" stopOpacity="0.0" />
+                    <stop offset="0%" stopColor="#00c0ef" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#00c0ef" stopOpacity="0.02" />
                   </linearGradient>
                 </defs>
 
-                {/* Area Fill */}
+                {/* Area Fill: flat at 225, smooth peak up to ~52 at Sep (x=425) */}
                 <path
-                  d="M 60 230 L 105 230 L 150 230 L 195 230 L 240 230 L 285 230 L 330 230 L 375 230 C 390 230, 405 55, 420 55 C 435 55, 450 230, 465 230 L 510 230 L 555 230 Z"
+                  d="M 65 225 L 110 225 L 155 225 L 200 225 L 245 225 L 290 225 L 335 225 L 380 225 C 395 225, 410 52, 425 52 C 440 52, 455 225, 470 225 L 515 225 L 560 225 Z"
                   fill="url(#salesGrad)"
                 />
 
                 {/* Smooth Curve Line */}
                 <path
-                  d="M 60 230 L 105 230 L 150 230 L 195 230 L 240 230 L 285 230 L 330 230 L 375 230 C 390 230, 405 55, 420 55 C 435 55, 450 230, 465 230 L 510 230 L 555 230"
+                  d="M 65 225 L 110 225 L 155 225 L 200 225 L 245 225 L 290 225 L 335 225 L 380 225 C 395 225, 410 52, 425 52 C 440 52, 455 225, 470 225 L 515 225 L 560 225"
                   fill="none"
                   stroke="#00c0ef"
                   strokeWidth="2.5"
@@ -214,18 +217,18 @@ export default function VendorDashboardOverview() {
 
                 {/* Data Points */}
                 {[
-                  { x: 60, y: 230 },
-                  { x: 105, y: 230 },
-                  { x: 150, y: 230 },
-                  { x: 195, y: 230 },
-                  { x: 240, y: 230 },
-                  { x: 285, y: 230 },
-                  { x: 330, y: 230 },
-                  { x: 375, y: 230 },
-                  { x: 420, y: 55 },
-                  { x: 465, y: 230 },
-                  { x: 510, y: 230 },
-                  { x: 555, y: 230 },
+                  { x: 65, y: 225 },
+                  { x: 110, y: 225 },
+                  { x: 155, y: 225 },
+                  { x: 200, y: 225 },
+                  { x: 245, y: 225 },
+                  { x: 290, y: 225 },
+                  { x: 335, y: 225 },
+                  { x: 380, y: 225 },
+                  { x: 425, y: 52 },
+                  { x: 470, y: 225 },
+                  { x: 515, y: 225 },
+                  { x: 560, y: 225 },
                 ].map((pt, i) => (
                   <circle key={i} cx={pt.x} cy={pt.y} r="3" fill="#00c0ef" stroke="#fff" strokeWidth="1" />
                 ))}
@@ -239,9 +242,9 @@ export default function VendorDashboardOverview() {
       {/* ROW 3: LATEST COMMENTS & LATEST REVIEWS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         
-        {/* Latest Comments Widget */}
+        {/* Latest Comments Widget (Empty state matching live screenshot) */}
         {commentsVisible && (
-          <div className="bg-white rounded-[3px] border border-[#e4e7ea] shadow-[0_1px_1px_rgba(0,0,0,0.05)] flex flex-col">
+          <div className="bg-white rounded-[3px] border border-[#e4e7ea] shadow-[0_1px_1px_rgba(0,0,0,0.05)] flex flex-col min-h-[220px]">
             <div className="px-5 py-3.5 border-b border-[#f1f3f5] flex items-center justify-between">
               <h3 className="text-[14px] font-semibold text-[#444]">Latest Comments</h3>
               <div className="flex items-center gap-1 text-gray-400">
@@ -254,21 +257,14 @@ export default function VendorDashboardOverview() {
               <table className="w-full text-[13px] text-left">
                 <thead className="text-[12px] text-gray-700 border-b border-[#f1f3f5] font-semibold">
                   <tr>
-                    <th className="px-5 py-2.5 w-12">Id</th>
-                    <th className="px-5 py-2.5">Comment</th>
-                    <th className="px-5 py-2.5">Product</th>
-                    <th className="px-5 py-2.5">Date</th>
+                    <th className="px-5 py-2.5 w-12 font-medium">Id</th>
+                    <th className="px-5 py-2.5 font-medium">Comment</th>
+                    <th className="px-5 py-2.5 font-medium">Product</th>
+                    <th className="px-5 py-2.5 font-medium">Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#f8f9fa] text-gray-700">
-                  <tr className="hover:bg-[#fafafa]">
-                    <td className="px-5 py-3 text-gray-500">1</td>
-                    <td className="px-5 py-3 font-medium">good</td>
-                    <td className="px-5 py-3 text-[#337ab7] hover:underline cursor-pointer">
-                      Women lace blouse with different colors
-                    </td>
-                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap">2026-09-13 / 14:16</td>
-                  </tr>
+                <tbody>
+                  {/* Empty state matching live screenshot */}
                 </tbody>
               </table>
             </div>
@@ -286,7 +282,7 @@ export default function VendorDashboardOverview() {
 
         {/* Latest Reviews Widget */}
         {reviewsVisible && (
-          <div className="bg-white rounded-[3px] border border-[#e4e7ea] shadow-[0_1px_1px_rgba(0,0,0,0.05)] flex flex-col">
+          <div className="bg-white rounded-[3px] border border-[#e4e7ea] shadow-[0_1px_1px_rgba(0,0,0,0.05)] flex flex-col min-h-[220px]">
             <div className="px-5 py-3.5 border-b border-[#f1f3f5] flex items-center justify-between">
               <h3 className="text-[14px] font-semibold text-[#444]">Latest Reviews</h3>
               <div className="flex items-center gap-1 text-gray-400">
@@ -299,61 +295,47 @@ export default function VendorDashboardOverview() {
               <table className="w-full text-[13px] text-left">
                 <thead className="text-[12px] text-gray-700 border-b border-[#f1f3f5] font-semibold">
                   <tr>
-                    <th className="px-5 py-2.5 w-12">Id</th>
-                    <th className="px-5 py-2.5">Comment</th>
-                    <th className="px-5 py-2.5">Product</th>
-                    <th className="px-5 py-2.5">Date</th>
+                    <th className="px-5 py-2.5 w-12 font-medium">Id</th>
+                    <th className="px-5 py-2.5 font-medium">Comment</th>
+                    <th className="px-5 py-2.5 font-medium">Product</th>
+                    <th className="px-5 py-2.5 font-medium">Date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#f8f9fa] text-gray-700">
                   <tr className="hover:bg-[#fafafa]">
-                    <td className="px-5 py-3 text-gray-500">8</td>
-                    <td className="px-5 py-3">
-                      <div className="flex items-center gap-0.5 text-yellow-500 mb-0.5">
+                    <td className="px-5 py-3 text-gray-500 align-top">6</td>
+                    <td className="px-5 py-3 max-w-sm">
+                      <div className="flex items-center gap-0.5 text-yellow-500 mb-1">
                         {[...Array(5)].map((_, i) => (
                           <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                         ))}
                       </div>
-                      <span className="text-gray-600">dfg</span>
+                      <p className="text-gray-600 text-[12px] leading-relaxed">
+                        The material feels durable, and the design is sleek enough to match both casual and formal outfits. It has plenty of space inside without being too bulky, and the strap is comfortable for carrying all day.
+                      </p>
                     </td>
-                    <td className="px-5 py-3 text-[#337ab7] hover:underline cursor-pointer">
-                      Animal colorful digital prints
+                    <td className="px-5 py-3 text-[#337ab7] hover:underline cursor-pointer align-top">
+                      Black bag over the shoulder
                     </td>
-                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap">2026-10-05 / 11:43</td>
+                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap align-top">2026-08-05 / 13:55</td>
                   </tr>
 
                   <tr className="hover:bg-[#fafafa]">
-                    <td className="px-5 py-3 text-gray-500">4</td>
-                    <td className="px-5 py-3">
-                      <div className="flex items-center gap-0.5 text-yellow-500 mb-0.5">
-                        {[...Array(5)].map((_, i) => (
+                    <td className="px-5 py-3 text-gray-500 align-top">5</td>
+                    <td className="px-5 py-3 max-w-sm">
+                      <div className="flex items-center gap-0.5 text-yellow-500 mb-1">
+                        {[...Array(4)].map((_, i) => (
                           <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                         ))}
                       </div>
-                      <span className="text-gray-600">Test 1</span>
+                      <p className="text-gray-600 text-[12px] leading-relaxed">
+                        The floral women sundre
+                      </p>
                     </td>
-                    <td className="px-5 py-3 text-[#337ab7] hover:underline cursor-pointer">
-                      Animal colorful digital prints
+                    <td className="px-5 py-3 text-[#337ab7] hover:underline cursor-pointer align-top">
+                      Floral women sundress
                     </td>
-                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap">2026-09-03 / 22:40</td>
-                  </tr>
-
-                  <tr className="hover:bg-[#fafafa]">
-                    <td className="px-5 py-3 text-gray-500">7</td>
-                    <td className="px-5 py-3">
-                      <div className="flex items-center gap-0.5 text-yellow-500 mb-0.5">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                        ))}
-                      </div>
-                      <span className="text-gray-600 text-[12px] line-clamp-2">
-                        The summer fashion lace top is absolutely beautiful! The lace detailing gives it a ver...
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-[#337ab7] hover:underline cursor-pointer">
-                      Summer fashion top lace
-                    </td>
-                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap">2026-08-05 / 14:04</td>
+                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap align-top">2026-08-05 / 13:55</td>
                   </tr>
                 </tbody>
               </table>
@@ -387,21 +369,21 @@ export default function VendorDashboardOverview() {
             <table className="w-full text-[13px] text-left">
               <thead className="text-[12px] text-gray-700 border-b border-[#f1f3f5] font-semibold">
                 <tr>
-                  <th className="px-5 py-2.5">Sale</th>
-                  <th className="px-5 py-2.5">Status</th>
-                  <th className="px-5 py-2.5">Payment</th>
-                  <th className="px-5 py-2.5">Date</th>
-                  <th className="px-5 py-2.5 text-right">Options</th>
+                  <th className="px-5 py-2.5 font-medium">Sale</th>
+                  <th className="px-5 py-2.5 font-medium">Status</th>
+                  <th className="px-5 py-2.5 font-medium">Payment</th>
+                  <th className="px-5 py-2.5 font-medium">Date</th>
+                  <th className="px-5 py-2.5 text-right font-medium">Options</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#f8f9fa] text-gray-700">
                 {[
-                  { sale: "#10041", status: "Processing", payment: "Pending Payment", date: "2026-10-05 / 15:38" },
+                  { sale: "#10044", status: "Processing", payment: "Pending Payment", date: "2026-10-14 / 20:42" },
+                  { sale: "#10043", status: "Processing", payment: "Pending Payment", date: "2026-10-14 / 19:49" },
+                  { sale: "#10042", status: "Processing", payment: "Payment Received", date: "2026-10-12 / 19:26" },
                   { sale: "#10040", status: "Processing", payment: "Pending Payment", date: "2026-09-29 / 12:00" },
+                  { sale: "#10039", status: "Processing", payment: "Pending Payment", date: "2026-09-29 / 00:34" },
                   { sale: "#10038", status: "Processing", payment: "Pending Payment", date: "2026-09-28 / 22:48" },
-                  { sale: "#10035", status: "Processing", payment: "Pending Payment", date: "2026-09-26 / 21:14" },
-                  { sale: "#10034", status: "Processing", payment: "Pending Payment", date: "2026-09-25 / 06:11" },
-                  { sale: "#10033", status: "Completed", payment: "Payment", date: "2026-09-23 / 17:23" },
                 ].map((row, idx) => (
                   <tr key={idx} className="hover:bg-[#fafafa]">
                     <td className="px-5 py-3 text-[#337ab7] font-medium">{row.sale}</td>

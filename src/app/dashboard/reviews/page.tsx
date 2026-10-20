@@ -16,62 +16,24 @@ export interface ReviewItem {
 
 export const INITIAL_REVIEWS: ReviewItem[] = [
   {
-    id: 8,
-    user: "Admin",
-    rating: 5,
-    reviewText: "dfg",
-    product: "Animal colorful digital prints",
-    productSlug: "animal-colorful-digital-prints",
-    date: "2026-10-05 / 11:43",
-  },
-  {
-    id: 4,
-    user: "Peter Jone",
-    rating: 5,
-    reviewText: "Test 1",
-    product: "Animal colorful digital prints",
-    productSlug: "animal-colorful-digital-prints",
-    date: "2026-09-03 / 22:40",
-  },
-  {
-    id: 7,
-    user: "Admin",
+    id: 6,
+    user: "Trendshop",
     rating: 5,
     reviewText:
-      "The summer fashion lace top is absolutely beautiful! The lace detailing gives it a very elegant and feminine look, while the fabric is light and breathable perfect for warm weather. It fits nicely and pairs well with both jeans and skirts. Stylish, comfortable, and versatile highly recommend!",
-    product: "Summer fashion top lace",
-    productSlug: "summer-fashion-top-lace",
-    date: "2026-08-05 / 14:04",
+      "The material feels durable, and the design is sleek enough to match both casual and formal outfits. It has plenty of space inside without being too bulky, and the strap is comfortable for carrying all day.",
+    product: "Black bag over the shoulder",
+    productSlug: "black-bag-over-the-shoulder",
+    date: "2026-08-05 / 13:55",
   },
   {
-    id: 2,
-    user: "Admin",
-    rating: 5,
-    reviewText:
-      "The visuals are vibrant, and it really captures the essence of each vacation spot. It's both informative and entertaining, making me want to visit every location featured. Highly recommended for travel enthusiasts!",
-    product: "Animation of popular vacation spots",
-    productSlug: "animation-of-popular-vacation-spots",
-    date: "2026-08-04 / 15:02",
-  },
-  {
-    id: 1,
-    user: "Admin",
-    rating: 5,
-    reviewText:
-      "The light blue color is soft and flattering, and the fabric feels high-quality and breathable. It fits perfectly and looks great both casually and at work. Definitely a wardrobe favorite!",
-    product: "Light blue women shirt",
-    productSlug: "light-blue-women-shirt",
-    date: "2026-08-04 / 15:01",
-  },
-  {
-    id: 3,
-    user: "Admin",
+    id: 5,
+    user: "Trendshop",
     rating: 4,
     reviewText:
-      "This skirt is beautiful and the floral pattern is very charming. The material feels nice and it drapes well. I gave it 4 stars because the sizing runs a little small, but overall it's a lovely addition to my wardrobe.",
-    product: "Black midi skirt with white flowers",
-    productSlug: "black-midi-skirt-with-white-flowers",
-    date: "2026-08-04 / 15:01",
+      "The floral women sundress is really pretty and perfect for summer. The fabric feels light and comfortable, and the floral design is elegant. The fit is nice, though it runs just a little bit larger than expected. Overall, it's a lovely dress that looks great for casual outings or vacations.",
+    product: "Floral women sundress",
+    productSlug: "floral-women-sundress",
+    date: "2026-08-05 / 13:55",
   },
 ];
 
@@ -159,7 +121,7 @@ export default function ReviewsPage() {
         </div>
 
         {/* Number of Entries */}
-        <div className="mt-8 pt-4 text-[#2c333e] select-none text-[13px]">
+        <div className="mt-8 pt-4 text-[#2c333e] select-none text-[13px] border-t border-[#f1f3f5]">
           <span>Number of Entries: </span>
           <span className="font-bold">{reviews.length}</span>
         </div>

@@ -9,6 +9,8 @@ import { useAppContext, UserRole } from "@/contexts/AppContext";
 
 const demoAccounts = [
   { role: "Super Admin", email: "admin@codingest.net", pass: "1234" },
+  { role: "Super Admin", email: "admin@gmail.com", pass: "1234" },
+  { role: "Super Admin", email: "admin@perpustakaan.com", pass: "1234" },
   { role: "Moderator", email: "moderator@codingest.net", pass: "1234" },
 ];
 
@@ -90,12 +92,18 @@ export default function AdminLogin() {
             <div className="relative">
               <input
                 type="email"
+                list="admin-emails"
                 placeholder="admin@codingest.net"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full border border-gray-300 px-3 py-2 text-sm outline-none focus:border-[#007bff]"
               />
+              <datalist id="admin-emails">
+                <option value="admin@codingest.net" />
+                <option value="admin@gmail.com" />
+                <option value="admin@perpustakaan.com" />
+              </datalist>
               <Mail className="absolute right-3 top-2.5 w-4 h-4 text-gray-400" />
             </div>
             

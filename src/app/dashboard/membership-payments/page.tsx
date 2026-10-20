@@ -31,38 +31,48 @@ export default function MembershipPaymentsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#f8f9fa]">
-              {MEMBERSHIP_PAYMENTS.map((item) => (
-                <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
-                  <td className="py-4 pr-4 pl-1 text-[#2c333e] align-middle">{item.id}</td>
-                  <td className="py-4 pr-4 text-[#2c333e] align-middle font-normal">{item.paymentId}</td>
-                  <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentMethod}</td>
-                  <td className="py-4 pr-4 text-[#2c333e] align-middle max-w-[280px] leading-relaxed">
-                    {item.membershipPlan}
-                  </td>
-                  <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentAmount}</td>
-                  <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentStatus}</td>
-                  <td className="py-4 pr-4 text-[#2c333e] align-middle whitespace-nowrap">{item.date}</td>
-                  <td className="py-4 align-middle">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedInvoice(item)}
-                      className="bg-[#00a2b8] hover:bg-[#008ea2] text-white text-[12px] font-medium px-3.5 py-1.5 rounded-[3px] inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
-                    >
-                      <FileText className="w-3.5 h-3.5 text-white" />
-                      <span>View Invoice</span>
-                    </button>
+              {MEMBERSHIP_PAYMENTS.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-8 text-center text-[#6c757d] text-[13.5px]">
+                    No records found!
                   </td>
                 </tr>
-              ))}
+              ) : (
+                MEMBERSHIP_PAYMENTS.map((item) => (
+                  <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
+                    <td className="py-4 pr-4 pl-1 text-[#2c333e] align-middle">{item.id}</td>
+                    <td className="py-4 pr-4 text-[#2c333e] align-middle font-normal">{item.paymentId}</td>
+                    <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentMethod}</td>
+                    <td className="py-4 pr-4 text-[#2c333e] align-middle max-w-[280px] leading-relaxed">
+                      {item.membershipPlan}
+                    </td>
+                    <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentAmount}</td>
+                    <td className="py-4 pr-4 text-[#2c333e] align-middle">{item.paymentStatus}</td>
+                    <td className="py-4 pr-4 text-[#2c333e] align-middle whitespace-nowrap">{item.date}</td>
+                    <td className="py-4 align-middle">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedInvoice(item)}
+                        className="bg-[#00a2b8] hover:bg-[#008ea2] text-white text-[12px] font-medium px-3.5 py-1.5 rounded-[3px] inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-white" />
+                        <span>View Invoice</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
-        {/* Number of Entries */}
-        <div className="mt-8 pt-4 text-[#2c333e] select-none text-[13px]">
-          <span>Number of Entries: </span>
-          <span className="font-bold">{MEMBERSHIP_PAYMENTS.length}</span>
-        </div>
+        {/* Number of Entries (Hidden when empty) */}
+        {MEMBERSHIP_PAYMENTS.length > 0 && (
+          <div className="mt-8 pt-4 text-[#2c333e] select-none text-[13px] border-t border-[#f1f3f5]">
+            <span>Number of Entries: </span>
+            <span className="font-bold">{MEMBERSHIP_PAYMENTS.length}</span>
+          </div>
+        )}
       </div>
 
       {/* Invoice Modal */}

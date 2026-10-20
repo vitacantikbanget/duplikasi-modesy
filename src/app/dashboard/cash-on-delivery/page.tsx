@@ -126,11 +126,10 @@ export default function CashOnDeliveryPage() {
                 className="flex items-center gap-2 cursor-pointer select-none text-[13px] text-[#2c333e]"
               >
                 <div
-                  className={`w-[18px] h-[18px] rounded-full border flex items-center justify-center transition-all ${
-                    status === "enable"
+                  className={`w-[18px] h-[18px] rounded-full border flex items-center justify-center transition-all ${status === "enable"
                       ? "bg-[#00ab97] border-[#00ab97] text-white"
                       : "border-[#d1d5db] bg-white hover:border-gray-400"
-                  }`}
+                    }`}
                 >
                   {status === "enable" && (
                     <Check className="w-3 h-3 stroke-[3]" />
@@ -145,11 +144,10 @@ export default function CashOnDeliveryPage() {
                 className="flex items-center gap-2 cursor-pointer select-none text-[13px] text-[#2c333e]"
               >
                 <div
-                  className={`w-[18px] h-[18px] rounded-full border flex items-center justify-center transition-all ${
-                    status === "disable"
+                  className={`w-[18px] h-[18px] rounded-full border flex items-center justify-center transition-all ${status === "disable"
                       ? "bg-[#00ab97] border-[#00ab97] text-white"
                       : "border-[#d1d5db] bg-white hover:border-gray-400"
-                  }`}
+                    }`}
                 >
                   {status === "disable" && (
                     <Check className="w-3 h-3 stroke-[3]" />

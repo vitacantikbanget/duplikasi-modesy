@@ -65,14 +65,14 @@ export default function AdminHeader() {
             className="flex items-center cursor-pointer" 
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
-            <img src="https://i.pravatar.cc/150?u=admin" alt="Admin" className="w-8 h-8 rounded-full object-cover mr-2" />
+            <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=100&auto=format&fit=crop&q=80" alt="Admin" className="w-8 h-8 rounded-full object-cover mr-2" />
             <span className="text-sm font-medium text-gray-700 mr-1 hidden sm:block">Admin</span>
             <ChevronDown className="w-3 h-3 text-gray-500 hidden sm:block" />
           </div>
 
           {dropdownOpen && (
             <div className="absolute right-0 mt-3 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-100 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-              <Link href="/admin" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+              <Link href="/dashboard" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <LayoutGrid className="w-4 h-4 mr-3 text-gray-400" />
                 Dashboard
               </Link>
@@ -84,7 +84,7 @@ export default function AdminHeader() {
                 <Wallet className="w-4 h-4 mr-3 text-gray-400" />
                 Wallet
               </Link>
-              <Link href="/orders" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+              <Link href="/admin/orders" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
                 <ShoppingBasket className="w-4 h-4 mr-3 text-gray-400" />
                 Orders
               </Link>

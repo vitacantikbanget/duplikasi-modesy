@@ -85,9 +85,19 @@ const SIDEBAR_SECTIONS: Section[] = [
         subItems: [
           { label: "Orders", href: "/admin/orders" },
           { label: "Transactions", href: "/admin/transactions" },
-          { label: "Digital Sales", href: "/admin/digital-sales" },
-          { label: "Refund Requests", href: "/admin/refund-requests" },
         ],
+      },
+      {
+        id: "digital-sales",
+        label: "Digital Sales",
+        icon: ShoppingBag,
+        href: "/admin/digital-sales",
+      },
+      {
+        id: "refund-requests",
+        label: "Refund Requests",
+        icon: Flag,
+        href: "/admin/refund-requests",
       },
     ],
   },
@@ -329,15 +339,13 @@ export default function AdminSidebar() {
       {/* Main Sidebar - Exact #323B4A Dark Slate-Navy from User Screenshot */}
       <aside
         className={`bg-[#323B4A] text-[#8a99a8] h-screen flex flex-col z-50 transition-all duration-300 ease-in-out shrink-0 select-none font-sans
-          ${
-            sidebarOpenMobile
-              ? "fixed inset-y-0 left-0 w-[230px] translate-x-0 shadow-2xl"
-              : "fixed inset-y-0 left-0 -translate-x-full md:translate-x-0 md:static"
+          ${sidebarOpenMobile
+            ? "fixed inset-y-0 left-0 w-[230px] translate-x-0 shadow-2xl"
+            : "fixed inset-y-0 left-0 -translate-x-full md:translate-x-0 md:static"
           }
-          ${
-            sidebarCollapsed
-              ? "md:-ml-[230px] md:opacity-0 md:pointer-events-none"
-              : "md:ml-0 md:opacity-100 md:w-[230px]"
+          ${sidebarCollapsed
+            ? "md:-ml-[230px] md:opacity-0 md:pointer-events-none"
+            : "md:ml-0 md:opacity-100 md:w-[230px]"
           }
         `}
       >
@@ -404,20 +412,18 @@ export default function AdminSidebar() {
                           <button
                             type="button"
                             onClick={() => toggleDropdown(item.id)}
-                            className={`w-full flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer text-left select-none ${
-                              active
+                            className={`w-full flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer text-left select-none ${active
                                 ? "text-white font-medium"
                                 : "text-[#8a99a8] hover:text-white hover:bg-[#28303c]/50"
-                            }`}
+                              }`}
                           >
                             <div className="flex items-center min-w-0 pr-2">
                               <Icon className="w-[16px] h-[16px] mr-3.5 shrink-0" strokeWidth={active ? 2.2 : 1.8} />
                               <span className="truncate">{item.label}</span>
                             </div>
                             <ChevronLeft
-                              className={`w-3.5 h-3.5 shrink-0 opacity-60 transition-transform duration-200 ${
-                                isOpen ? "-rotate-90 text-white opacity-90" : "rotate-0"
-                              }`}
+                              className={`w-3.5 h-3.5 shrink-0 opacity-60 transition-transform duration-200 ${isOpen ? "-rotate-90 text-white opacity-90" : "rotate-0"
+                                }`}
                             />
                           </button>
 
@@ -431,18 +437,16 @@ export default function AdminSidebar() {
                                     <Link
                                       href={sub.href}
                                       onClick={closeMobileSidebar}
-                                      className={`flex items-center pl-11 pr-6 py-2 text-[12.5px] transition-colors ${
-                                        subActive
+                                      className={`flex items-center pl-11 pr-6 py-2 text-[12.5px] transition-colors ${subActive
                                           ? "text-white font-medium bg-[#222933]"
                                           : "text-[#8a99a8] hover:text-white hover:bg-[#222933]/50"
-                                      }`}
+                                        }`}
                                     >
                                       <span
-                                        className={`inline-block w-1.5 h-1.5 rounded-full border mr-2.5 shrink-0 transition-colors ${
-                                          subActive
+                                        className={`inline-block w-1.5 h-1.5 rounded-full border mr-2.5 shrink-0 transition-colors ${subActive
                                             ? "border-white bg-white"
                                             : "border-[#8a99a8] bg-transparent"
-                                        }`}
+                                          }`}
                                       />
                                       <span className="truncate">{sub.label}</span>
                                     </Link>
@@ -460,11 +464,10 @@ export default function AdminSidebar() {
                         <Link
                           href={item.href || "#"}
                           onClick={closeMobileSidebar}
-                          className={`flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none ${
-                            active
+                          className={`flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none ${active
                               ? "text-white font-semibold"
                               : "text-[#8a99a8] hover:text-white hover:bg-[#28303c]/50"
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center min-w-0">
                             <Icon

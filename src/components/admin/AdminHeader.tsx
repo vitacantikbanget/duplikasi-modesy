@@ -33,7 +33,7 @@ export default function AdminHeader() {
   return (
     <header className="bg-white border-b border-[#e5e5e5] h-[50px] flex items-center justify-between px-4 sticky top-0 z-40 shrink-0 text-gray-700">
       <div className="flex items-center">
-        <button 
+        <button
           onClick={toggleSidebar}
           aria-label="Toggle sidebar"
           className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-[3px] cursor-pointer transition-colors focus:outline-none flex items-center justify-center"
@@ -44,8 +44,8 @@ export default function AdminHeader() {
 
       <div className="flex items-center space-x-3">
         {/* View Site Button - Exactly as in Screenshot */}
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           target="_blank"
           className="flex items-center text-[12px] font-semibold text-white bg-[#00a65a] hover:bg-[#008d4c] px-3 py-1.5 rounded-sm transition-colors shadow-xs"
         >
@@ -62,14 +62,14 @@ export default function AdminHeader() {
 
         {/* User Profile Dropdown */}
         <div className="relative" ref={dropdownRef}>
-          <div 
-            className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-1 rounded-sm transition-colors" 
+          <div
+            className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-1 rounded-sm transition-colors"
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
-            <img 
-              src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=100&auto=format&fit=crop&q=80" 
-              alt="Admin" 
-              className="w-7 h-7 rounded-full object-cover mr-2 border border-gray-300" 
+            <img
+              src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=100&auto=format&fit=crop&q=80"
+              alt="Admin"
+              className="w-7 h-7 rounded-full object-cover mr-2 border border-gray-300"
             />
             <span className="text-[13px] font-medium text-gray-800 mr-1 hidden sm:inline">Admin</span>
             <ChevronDown className="w-3 h-3 text-gray-400 hidden sm:inline" />
@@ -110,10 +110,10 @@ export default function AdminHeader() {
                 <Settings className="w-3.5 h-3.5 mr-2.5 text-gray-500" />
                 Profile Settings
               </Link>
-              
+
               <div className="border-t border-gray-100 my-1"></div>
-              
-              <button 
+
+              <button
                 onClick={handleLogout}
                 className="w-full flex items-center px-4 py-2 text-xs text-red-600 hover:bg-red-50 text-left cursor-pointer"
               >

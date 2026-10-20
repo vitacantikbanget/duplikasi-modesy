@@ -1,171 +1,188 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
-import { Home, CheckCircle } from "lucide-react";
+import { Check, CheckCircle } from "lucide-react";
+
+interface PayoutMethodSetting {
+  id: string;
+  title: string;
+  status: "Enable" | "Disable";
+  minAmount: string;
+}
 
 export default function PayoutSettingsPage() {
-  const [minPaypal, setMinPaypal] = useState("50");
-  const [minIban, setMinIban] = useState("100");
-  const [minSwift, setMinSwift] = useState("250");
-  const [minBtc, setMinBtc] = useState("100");
-
-  const [enablePaypal, setEnablePaypal] = useState(true);
-  const [enableIban, setEnableIban] = useState(true);
-  const [enableSwift, setEnableSwift] = useState(true);
-  const [enableBtc, setEnableBtc] = useState(false);
+  const [methods, setMethods] = useState<Record<string, PayoutMethodSetting>>({
+    paypal: {
+      id: "paypal",
+      title: "PayPal",
+      status: "Enable",
+      minAmount: "500",
+    },
+    btc: {
+      id: "btc",
+      title: "Bitcoin (BTC)",
+      status: "Enable",
+      minAmount: "500",
+    },
+    iban: {
+      id: "iban",
+      title: "IBAN",
+      status: "Enable",
+      minAmount: "500",
+    },
+    swift: {
+      id: "swift",
+      title: "SWIFT",
+      status: "Enable",
+      minAmount: "500",
+    },
+  });
 
   const [notification, setNotification] = useState<string | null>(null);
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    setNotification("Payout settings updated successfully!");
-    setTimeout(() => setNotification(null), 3000);
+  const handleStatusChange = (key: string, newStatus: "Enable" | "Disable") => {
+    setMethods((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        status: newStatus,
+      },
+    }));
+  };
+
+  const handleAmountChange = (key: string, newAmount: string) => {
+    setMethods((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        minAmount: newAmount,
+      },
+    }));
+  };
+
+  const handleSave = (key: string, title: string) => {
+    setNotification(`${title} payout settings saved successfully.`);
+    setTimeout(() => setNotification(null), 3500);
   };
 
   return (
-    <div className="w-full text-[#333333] pb-12">
-      {/* Header & Breadcrumb */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-        <h1 className="text-[24px] font-normal text-[#333333] m-0">
-          Payout Settings <small className="text-[14px] text-gray-500 font-light">Payouts</small>
-        </h1>
-        <div className="text-[12px] text-gray-500 flex items-center space-x-1 mt-1 sm:mt-0">
-          <Link href="/admin" className="text-[#333333] hover:text-[#3c8dbc] flex items-center gap-1">
-            <Home className="w-3.5 h-3.5" /> Home
-          </Link>
-          <span>/</span>
-          <span className="text-gray-400">Payouts</span>
-          <span>/</span>
-          <span className="text-gray-600 font-medium">Payout Settings</span>
-        </div>
+    <div className="w-full text-[#333333] font-sans pb-16">
+      {/* Page Title */}
+      <div className="mb-4">
+        <h1 className="text-[22px] font-normal text-[#333333]">Payout Settings</h1>
       </div>
 
+      {/* Success Notification Alert */}
       {notification && (
-        <div className="mb-4 px-4 py-3 bg-[#d4edda] border border-[#c3e6cb] text-[#155724] rounded-[3px] text-[13px] flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-          {notification}
+        <div className="mb-4 bg-emerald-50 border border-emerald-300 text-emerald-800 px-4 py-2.5 rounded-[3px] text-sm flex items-center justify-between shadow-xs">
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>{notification}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setNotification(null)}
+            className="text-xs text-emerald-700 font-semibold hover:underline cursor-pointer"
+          >
+            Dismiss
+          </button>
         </div>
       )}
 
-      <form onSubmit={handleSave} className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* PayPal Box */}
-        <div className="bg-white rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] border-t-[3px] border-[#3c8dbc] border-x border-b border-[#d2d6de]/60">
-          <div className="px-5 py-3 border-b border-[#f4f4f4] flex justify-between items-center">
-            <h3 className="text-[#333333] text-[16px] font-semibold">PayPal</h3>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={enablePaypal}
-                onChange={(e) => setEnablePaypal(e.target.checked)}
-                className="w-4 h-4 text-[#3c8dbc] rounded border-gray-300"
-              />
-              <span className="ml-2 text-[13px] font-medium text-gray-700">Enable</span>
-            </label>
-          </div>
-          <div className="p-5">
-            <label className="block text-[13px] font-semibold text-[#333333] mb-1.5">
-              Minimum Payout Amount ($)
-            </label>
-            <input
-              type="number"
-              value={minPaypal}
-              onChange={(e) => setMinPaypal(e.target.value)}
-              className="w-full h-[34px] px-3 border border-[#d2d6de] rounded-[3px] text-[13px] text-gray-700 bg-white focus:outline-none focus:border-[#3c8dbc]"
-            />
-          </div>
-        </div>
-
-        {/* IBAN Box */}
-        <div className="bg-white rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] border-t-[3px] border-[#3c8dbc] border-x border-b border-[#d2d6de]/60">
-          <div className="px-5 py-3 border-b border-[#f4f4f4] flex justify-between items-center">
-            <h3 className="text-[#333333] text-[16px] font-semibold">IBAN / Wire Transfer</h3>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={enableIban}
-                onChange={(e) => setEnableIban(e.target.checked)}
-                className="w-4 h-4 text-[#3c8dbc] rounded border-gray-300"
-              />
-              <span className="ml-2 text-[13px] font-medium text-gray-700">Enable</span>
-            </label>
-          </div>
-          <div className="p-5">
-            <label className="block text-[13px] font-semibold text-[#333333] mb-1.5">
-              Minimum Payout Amount ($)
-            </label>
-            <input
-              type="number"
-              value={minIban}
-              onChange={(e) => setMinIban(e.target.value)}
-              className="w-full h-[34px] px-3 border border-[#d2d6de] rounded-[3px] text-[13px] text-gray-700 bg-white focus:outline-none focus:border-[#3c8dbc]"
-            />
-          </div>
-        </div>
-
-        {/* SWIFT Box */}
-        <div className="bg-white rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] border-t-[3px] border-[#3c8dbc] border-x border-b border-[#d2d6de]/60">
-          <div className="px-5 py-3 border-b border-[#f4f4f4] flex justify-between items-center">
-            <h3 className="text-[#333333] text-[16px] font-semibold">SWIFT</h3>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={enableSwift}
-                onChange={(e) => setEnableSwift(e.target.checked)}
-                className="w-4 h-4 text-[#3c8dbc] rounded border-gray-300"
-              />
-              <span className="ml-2 text-[13px] font-medium text-gray-700">Enable</span>
-            </label>
-          </div>
-          <div className="p-5">
-            <label className="block text-[13px] font-semibold text-[#333333] mb-1.5">
-              Minimum Payout Amount ($)
-            </label>
-            <input
-              type="number"
-              value={minSwift}
-              onChange={(e) => setMinSwift(e.target.value)}
-              className="w-full h-[34px] px-3 border border-[#d2d6de] rounded-[3px] text-[13px] text-gray-700 bg-white focus:outline-none focus:border-[#3c8dbc]"
-            />
-          </div>
-        </div>
-
-        {/* Bitcoin Box */}
-        <div className="bg-white rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] border-t-[3px] border-[#3c8dbc] border-x border-b border-[#d2d6de]/60">
-          <div className="px-5 py-3 border-b border-[#f4f4f4] flex justify-between items-center">
-            <h3 className="text-[#333333] text-[16px] font-semibold">Bitcoin (BTC)</h3>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={enableBtc}
-                onChange={(e) => setEnableBtc(e.target.checked)}
-                className="w-4 h-4 text-[#3c8dbc] rounded border-gray-300"
-              />
-              <span className="ml-2 text-[13px] font-medium text-gray-700">Enable</span>
-            </label>
-          </div>
-          <div className="p-5">
-            <label className="block text-[13px] font-semibold text-[#333333] mb-1.5">
-              Minimum Payout Amount ($)
-            </label>
-            <input
-              type="number"
-              value={minBtc}
-              onChange={(e) => setMinBtc(e.target.value)}
-              className="w-full h-[34px] px-3 border border-[#d2d6de] rounded-[3px] text-[13px] text-gray-700 bg-white focus:outline-none focus:border-[#3c8dbc]"
-            />
-          </div>
-        </div>
-
-        <div className="md:col-span-2 flex justify-end">
-          <button
-            type="submit"
-            className="bg-[#0088cc] hover:bg-[#0077b3] text-white px-5 py-2 rounded-[3px] text-[13px] font-medium shadow-2xs transition-colors"
+      {/* 2x2 Grid of 4 Payout Method Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {Object.values(methods).map((item) => (
+          <div
+            key={item.id}
+            className="bg-white border border-[#d2d6de] rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.06)] p-6 flex flex-col justify-between"
           >
-            Save Changes
-          </button>
-        </div>
-      </form>
+            <div>
+              {/* Card Title */}
+              <h2 className="text-[15px] font-normal text-[#333333] mb-5">
+                {item.title}
+              </h2>
+
+              <div className="space-y-4 text-[13px]">
+                {/* Status Radio Group */}
+                <div>
+                  <label className="block text-[#333333] font-normal mb-2.5">
+                    Status
+                  </label>
+                  <div className="flex items-center gap-12">
+                    {/* Enable */}
+                    <label
+                      onClick={() => handleStatusChange(item.id, "Enable")}
+                      className="flex items-center gap-2 cursor-pointer select-none group"
+                    >
+                      <div
+                        className={`w-[18px] h-[18px] rounded-full border flex items-center justify-center transition-colors ${
+                          item.status === "Enable"
+                            ? "bg-[#5b69bc] border-[#5b69bc] text-white"
+                            : "border-[#b0b7c3] bg-white group-hover:border-[#5b69bc]"
+                        }`}
+                      >
+                        {item.status === "Enable" && (
+                          <Check className="w-3 h-3 stroke-[3]" />
+                        )}
+                      </div>
+                      <span className="text-[#333333] text-[13px]">Enable</span>
+                    </label>
+
+                    {/* Disable */}
+                    <label
+                      onClick={() => handleStatusChange(item.id, "Disable")}
+                      className="flex items-center gap-2 cursor-pointer select-none group"
+                    >
+                      <div
+                        className={`w-[18px] h-[18px] rounded-full border flex items-center justify-center transition-colors ${
+                          item.status === "Disable"
+                            ? "bg-[#5b69bc] border-[#5b69bc] text-white"
+                            : "border-[#b0b7c3] bg-white group-hover:border-[#5b69bc]"
+                        }`}
+                      >
+                        {item.status === "Disable" && (
+                          <Check className="w-3 h-3 stroke-[3]" />
+                        )}
+                      </div>
+                      <span className="text-[#333333] text-[13px]">Disable</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Minimum payout amount */}
+                <div>
+                  <label className="block text-[#333333] font-normal mb-1.5">
+                    Minimum payout amount
+                  </label>
+                  <div className="flex">
+                    <span className="bg-[#eee] border border-r-0 border-[#d2d6de] px-3.5 flex items-center text-[13px] text-[#555] rounded-l-[3px] select-none whitespace-nowrap">
+                      USD ($)
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      value={item.minAmount}
+                      onChange={(e) => handleAmountChange(item.id, e.target.value)}
+                      className="w-full h-[36px] px-3 border border-[#d2d6de] rounded-r-[3px] text-[13px] text-[#555] outline-none focus:border-[#5b69bc]"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Save Changes Button (Right Aligned) */}
+            <div className="mt-8 flex justify-end">
+              <button
+                type="button"
+                onClick={() => handleSave(item.id, item.title)}
+                className="bg-[#0073b7] hover:bg-[#005a91] text-white text-[13px] font-medium px-5 py-2 rounded-[3px] transition-colors cursor-pointer shadow-xs"
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

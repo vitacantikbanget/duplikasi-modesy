@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * Daftar Bahasa yang Didukung (Supported Languages)
+ * ============================================================================
+ * Modesy menyediakan antarmuka multibahasa internasional.
+ * Setiap item bahasa menyertakan label tampilan, kode bahasa ISO,
+ * dan URL ikon bendera nasional representatif dari FlagCDN.
+ */
+
 import { Language } from "@/types/localization";
 
 export const languages: Language[] = [
@@ -6,7 +15,7 @@ export const languages: Language[] = [
   { label: "Español", code: "ES", flagUrl: "https://flagcdn.com/w20/es.png" },
   { label: "Français", code: "FR", flagUrl: "https://flagcdn.com/w20/fr.png" },
   { label: "Türkçe", code: "TR", flagUrl: "https://flagcdn.com/w20/tr.png" },
-  { label: "العربية", code: "AR", flagUrl: "https://flagcdn.com/w20/sa.png" }
+  { label: "العربية", code: "AR", flagUrl: "https://flagcdn.com/w20/sa.png" },
 ];
 
 export const DEFAULT_LANGUAGE = languages[0];

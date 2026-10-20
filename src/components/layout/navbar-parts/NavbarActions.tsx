@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ * NavbarActions: Tombol Aksi Cepat Header (Cart, Wishlist, Sell Now)
+ * ============================================================================
+ * Menampilkan 3 tombol tindakan utama di sebelah kanan search bar:
+ * 1. Cart (Keranjang Belanja): Ikon troli dengan badge merah berisi jumlah item & teks "Cart".
+ * 2. Wishlist: Ikon hati dengan badge merah jumlah item favorit & teks "Wishlist".
+ * 3. Tombol CTA "Sell Now": Tombol hijau teal khas Modesy yang mengarahkan vendor
+ *    langsung ke formulir tambah produk (`/dashboard/add-product`).
+ * 4. Tombol Kaca Pembesar Mobile: Membuka bar pencarian layar penuh pada perangkat seluler.
+ */
+
 "use client";
 
 import Link from "next/link";

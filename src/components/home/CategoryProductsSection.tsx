@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * CategoryProductsSection: Showcase Produk Berbasis Kategori (Category Showcase)
+ * ============================================================================
+ * Menampilkan etalase produk dari kategori pilihan tertentu (misal: Clothing, Jewelry):
+ * - Slider Horizontal Responsif: Mendukung tombol navigasi geser panah kiri/kanan.
+ * - Header Section Khas: Menampilkan nama kategori dan tautan "View All" ke katalog kategori terkait.
+ * - Integrasi Kartu Terstandar: Setiap produk ditampilkan menggunakan `ProductCard`.
+ */
+
 "use client";
 
 import { useRef, useState, useEffect } from "react";

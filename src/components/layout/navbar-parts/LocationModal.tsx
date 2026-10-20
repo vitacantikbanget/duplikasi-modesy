@@ -1,3 +1,17 @@
+/**
+ * ============================================================================
+ * LocationModal: Modal Pemilih Lokasi Geografis Pengguna (Location Selector Modal)
+ * ============================================================================
+ * Mengimplementasikan sistem lokasi bertingkat Modesy (Country -> State/Provinsi):
+ * 1. Pemilihan Negara:
+ *    - Pilihan "Global" untuk melihat seluruh produk tanpa batasan wilayah.
+ *    - Pencarian negara dengan input teks filter.
+ * 2. Pemilihan Provinsi / State:
+ *    - Menyesuaikan daftar provinsi secara dinamis berdasarkan negara yang dipilih (`countryStates`).
+ * 3. Konfirmasi Lokasi:
+ *    - Menyimpan lokasi terpilih ke `LocalizationContext` dan menampilkan label di topbar.
+ */
+
 "use client";
 
 import { useState } from "react";

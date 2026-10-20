@@ -1,3 +1,11 @@
+/**
+ * ============================================================================
+ * Konstanta Navigasi & Kategori Pencarian (Navigation & Search Constants)
+ * ============================================================================
+ * Daftar kategori utama yang muncul pada dropdown pemilih kategori di bilah
+ * pencarian utama (Navbar Search Bar) khas Modesy.
+ */
+
 export interface SearchCategory {
   name: string;
   slug: string;

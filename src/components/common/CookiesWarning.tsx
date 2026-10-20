@@ -1,3 +1,14 @@
+/**
+ * ============================================================================
+ * CookiesWarning: Banner Persetujuan Penggunaan Cookie (GDPR Compliance)
+ * ============================================================================
+ * Menampilkan peringatan kepatuhan cookie di sudut kiri bawah layar:
+ * - Memeriksa kunci `modesy_cookies_accepted` di `localStorage`.
+ * - Jika belum disetujui, banner muncul dengan animasi halus `animate-fade-in-up`.
+ * - Saat pengguna menekan "Accept Cookies", status disimpan permanen di localStorage
+ *   sehingga banner tidak muncul lagi pada kunjungan berikutnya.
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,6 +18,7 @@ import { X } from "lucide-react";
 export default function CookiesWarning() {
   const [visible, setVisible] = useState(false);
 
+  // Periksa apakah pengguna telah menyetujui cookie sebelumnya
   useEffect(() => {
     try {
       const accepted = localStorage.getItem("modesy_cookies_accepted");
@@ -14,15 +26,18 @@ export default function CookiesWarning() {
         setVisible(true);
       }
     } catch (e) {
-      console.error(e);
+      console.error("Gagal membaca cookie policy dari localStorage:", e);
     }
   }, []);
 
+  /**
+   * Menyetujui cookie dan menyimpan preferensi ke localStorage
+   */
   const handleAccept = () => {
     try {
       localStorage.setItem("modesy_cookies_accepted", "true");
     } catch (e) {
-      console.error(e);
+      console.error("Gagal menyimpan preferensi cookie ke localStorage:", e);
     }
     setVisible(false);
   };
@@ -31,6 +46,7 @@ export default function CookiesWarning() {
 
   return (
     <div className="fixed bottom-4 left-4 z-50 max-w-sm w-[calc(100%-2rem)] bg-white border border-gray-200 shadow-xl rounded-md p-4 animate-fade-in-up">
+      {/* Tombol Tutup Sementara */}
       <button
         type="button"
         onClick={() => setVisible(false)}
@@ -39,6 +55,8 @@ export default function CookiesWarning() {
       >
         <X className="w-3.5 h-3.5" />
       </button>
+
+      {/* Deskripsi & Tautan Kebijakan */}
       <div className="text-xs text-gray-600 pr-5 leading-relaxed">
         <p>
           This site uses cookies. By continuing to browse the site, you are agreeing to our use of cookies.{" "}
@@ -47,6 +65,8 @@ export default function CookiesWarning() {
           </Link>
         </p>
       </div>
+
+      {/* Tombol Terima Cookie */}
       <button
         type="button"
         onClick={handleAccept}

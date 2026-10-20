@@ -1,3 +1,22 @@
+/**
+ * ============================================================================
+ * HeroSection: Slider Banner Utama & Banner Promosi Samping (Hero Slider)
+ * ============================================================================
+ * Mengimplementasikan banner hero bergaya Modesy asli:
+ * 1. Infinite Seamless Slider Track:
+ *    - Menggunakan teknik track kloning [Clone-Last, Slide-1, Slide-2, Clone-First]
+ *      untuk menciptakan ilusi pergeseran tak terbatas (infinite loop) yang mulus
+ *      tanpa jeda pembalikan.
+ * 2. Otomatisasi & Interaksi Pengguna:
+ *    - Auto-slide setiap 5 detik (`AUTO_SLIDE_DELAY = 5000`).
+ *    - Berhenti sementara (pause) saat kursor mouse berada di atas banner.
+ *    - Mendukung gestur geser layar sentuh (touch swipe) untuk perangkat mobile.
+ * 3. Efek Tipografi Khas:
+ *    - Animasi `fadeInUp` terpisah untuk judul, subjudul, dan tombol CTA setiap slide berganti.
+ * 4. Dua Banner Promosi Samping:
+ *    - Menampilkan 2 banner statis bergaya Modesy di sebelah kanan slider (pada desktop).
+ */
+
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";

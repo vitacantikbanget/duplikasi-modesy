@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * BlogSection: Bagian Artikel Blog & Tips Belanja (Latest Blog Posts)
+ * ============================================================================
+ * Menampilkan artikel-artikel gaya hidup, panduan belanja, dan fashion terkini:
+ * - Slider Postingan Blog: Kartu artikel dengan gambar thumbnail, kategori, waktu rilis,
+ *   judul artikel, ringkasan (excerpt), dan tautan baca selengkapnya (/blog/[slug]).
+ * - Navigasi Panah Geser: Tombol navigasi responsif kiri/kanan.
+ */
+
 "use client";
 
 import { useRef, useState, useEffect } from "react";

@@ -1,3 +1,17 @@
+/**
+ * ============================================================================
+ * LoginModal: Modal Dialog Masuk / Login Cepat (Fast Login Modal)
+ * ============================================================================
+ * Menyediakan alur masuk instan tanpa meninggalkan halaman aktif:
+ * 1. Mode Dual Auth (Hibrida):
+ *    - Akun Demo: Memeriksa daftar kredensial demo (`DEMO_ACCOUNTS`) untuk bypass cepat
+ *      dan langsung mengaktifkan role (Admin, Vendor, Member).
+ *    - Supabase Auth: Mencoba autentikasi nyata via `supabase.auth.signInWithPassword`.
+ * 2. Tautan Pintas Cepat:
+ *    - Tombol preset cepat (Admin, Vendor, Member) di bawah form untuk mempermudah testing.
+ *    - Tautan ke halaman Pendaftaran (/register) dan Lupa Password (/forgot-password).
+ */
+
 "use client";
 
 import { useState } from "react";

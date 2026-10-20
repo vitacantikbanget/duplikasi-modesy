@@ -1,3 +1,20 @@
+/**
+ * ============================================================================
+ * AdminSidebar: Bilah Navigasi Samping Panel Admin (Modesy Admin Sidebar)
+ * ============================================================================
+ * Mengacu pada antarmuka AdminLTE gelap khas Modesy (warna latar `#222d32`):
+ * 1. Struktur Menu Lengkap:
+ *    - Navigation: Dashboard, Slider, Homepage Manager, dsb.
+ *    - Management: Products, Categories, Orders, Payments, Users, Reviews, Support.
+ *    - Settings: General Settings, Visual Settings, Route, Currency, Email, SEO.
+ * 2. Menu Bertingkat (Accordion Sub-menus):
+ *    - Membuka submenu bertingkat saat item menu diklik.
+ *    - Mendeteksi tautan aktif (`usePathname`) dan otomatis membuka parent dropdown yang sesuai.
+ * 3. Tata Letak Responsif:
+ *    - Mode Desktop Kolaps: Menyusut menjadi lebar 50px hanya dengan ikon.
+ *    - Mode Mobile Drawer: Berupa laci geser dengan tombol tutup silang (X) dan overlay latar belakang gelap.
+ */
+
 "use client";
 
 import Link from "next/link";

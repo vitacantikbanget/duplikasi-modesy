@@ -1,46 +1,76 @@
-import HeroSection from "@/components/home/HeroSection";
-import ShopByCategory from "@/components/home/ShopByCategory";
-import SpecialOffers from "@/components/home/SpecialOffers";
-import FeaturedProducts from "@/components/home/FeaturedProducts";
-import NewArrivals from "@/components/home/NewArrivals";
-import HomePromoBanners from "@/components/home/HomePromoBanners";
-import CategoryProductsSection, {
+/**
+ * ============================================================================
+ * Homepage / Halaman Beranda Utama (Modesy Storefront Index)
+ * ============================================================================
+ * Halaman utama platform marketplace Modesy. Menggabungkan section-section:
+ * 1. `HeroSection`: Slider promosi utama dan banner samping.
+ * 2. `ShopByCategory`: Navigasi kategori lingkaran dengan efek overlay teal.
+ * 3. `SpecialOffers`: Penawaran terbatas dan produk diskon khusus.
+ * 4. `FeaturedProducts`: Grid 6 kolom produk unggulan.
+ * 5. `NewArrivals`: Produk-produk terbaru.
+ * 6. `HomePromoBanners`: Banner promosi grafis horizontal di tengah etalase.
+ * 7. `CategoryProductsSection`: Showcase katalog kategori (Clothing, Jewelry).
+ * 8. `BrandCarousel`: Slider merek mitra resmi.
+ * 9. `BlogSection`: Artikel panduan gaya dan berita belanja.
+ */
+
+import {
+  HeroSection,
+  ShopByCategory,
+  SpecialOffers,
+  FeaturedProducts,
+  NewArrivals,
+  HomePromoBanners,
+  CategoryProductsSection,
   clothingShowcaseProducts,
   jewelryShowcaseProducts,
-} from "@/components/home/CategoryProductsSection";
-import BrandCarousel from "@/components/home/BrandCarousel";
-import BlogSection from "@/components/home/BlogSection";
+  BrandCarousel,
+  BlogSection,
+} from "@/components/home";
 
 export default function HomePage() {
   return (
     <main className="flex-1">
-      {/* Accessible SEO Heading */}
+      {/* Heading aksesibilitas & SEO (tersembunyi secara visual) */}
       <h1 className="sr-only">Modesy - Marketplace - Classified Ads Script</h1>
 
+      {/* 1. Hero Banner Slider */}
       <HeroSection />
+
+      {/* 2. Grid Kategori Cepat */}
       <ShopByCategory />
+
+      {/* 3. Penawaran Khusus (Special Offers) */}
       <SpecialOffers />
+
+      {/* 4. Produk Unggulan (Featured Products) */}
       <FeaturedProducts />
+
+      {/* 5. Produk Terbaru (New Arrivals) */}
       <NewArrivals />
+
+      {/* 6. Banner Promosi Menengah */}
       <HomePromoBanners />
 
-      {/* Category Products: Clothing */}
+      {/* 7. Showcase Produk Kategori: Pakaian (Clothing) */}
       <CategoryProductsSection
         title="Clothing"
         href="/clothing"
         products={clothingShowcaseProducts}
       />
 
-      {/* Category Products: Jewelry & Accessories */}
+      {/* 8. Showcase Produk Kategori: Perhiasan (Jewelry & Accessories) */}
       <CategoryProductsSection
         title="Jewelry & Accessories"
         href="/jewelry-accessories"
         products={jewelryShowcaseProducts}
       />
 
+      {/* 9. Slider Merek / Brand Mitra */}
       <BrandCarousel />
+
+      {/* 10. Bagian Blog & Artikel Terkini */}
       <BlogSection />
     </main>
   );
 }
-

@@ -1,3 +1,21 @@
+/**
+ * ============================================================================
+ * VendorSidebar: Bilah Navigasi Samping Vendor Dashboard (Vendor Sidebar)
+ * ============================================================================
+ * Mengelola navigasi khusus penjual / toko:
+ * 1. Manajemen Produk (Products):
+ *    - Tambah Produk Baru (/dashboard/add-product).
+ *    - Bulk Upload CSV (/dashboard/bulk-product-upload).
+ *    - Daftar Produk: Aktif, Tertunda (Pending), Tersembunyi (Hidden), Terjual (Sold).
+ * 2. Manajemen Penjualan (Sales):
+ *    - Pesanan Aktif, Pesanan Selesai, Pesanan Dibatalkan.
+ * 3. Keuangan & Promosi:
+ *    - Kupon Diskon Toko (/dashboard/coupons).
+ *    - Pembayaran Promosi & Membership.
+ * 4. Ulasan & Pengaturan Toko:
+ *    - Komentar, Ulasan Bintang, Pengaturan Toko, Kebijakan Toko, & Pengiriman.
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";

@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * Daftar Mata Uang & Kurs Konversi (Currencies & Exchange Rates)
+ * ============================================================================
+ * Modesy menyediakan sistem multi-mata uang dinamis.
+ * Seluruh harga produk dalam database dihitung menggunakan patokan basis USD (rate = 1).
+ * Saat pengguna memilih mata uang lain (misal IDR), sistem mengalikan harga dasar
+ * dengan nilai `rate` yang ditentukan di bawah ini.
+ */
+
 import { Currency } from "@/types/localization";
 
 export const currencies: Currency[] = [

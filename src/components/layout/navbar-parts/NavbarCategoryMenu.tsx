@@ -1,3 +1,16 @@
+/**
+ * ============================================================================
+ * NavbarCategoryMenu: Mega Menu Navigasi Kategori (Desktop Mega Menu)
+ * ============================================================================
+ * Menampilkan baris navigasi horizontal seluruh kategori utama Modesy pada desktop:
+ * - Kategori Utama: Clothing, Shoes, Home & Living, Jewelry & Accessories,
+ *   Toys & Entertainment, Graphics & Photos, Video & Audio, Web Templates & Code.
+ * - Desain Mega Menu:
+ *   - Saat kursor melayang di atas kategori (hover), dropdown mega menu lebar muncul.
+ *   - Kolom Teks: Subkategori terperinci (Women's Clothing, Men's Clothing, Kids, dll).
+ *   - Kolom Gambar: Pratinjau visual kategori dengan efek zoom hover.
+ */
+
 "use client";
 
 import Link from "next/link";

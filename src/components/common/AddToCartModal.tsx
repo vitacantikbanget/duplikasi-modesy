@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ * AddToCartModal: Modal Notifikasi Penambahan Produk ke Keranjang
+ * ============================================================================
+ * Modal dialog konfirmasi yang muncul secara instan saat pengguna menekan
+ * tombol "Add to Cart":
+ * - Menampilkan ikon centang hijau teal konfirmasi keberhasilan.
+ * - Menampilkan thumbnail produk, judul barang, nama vendor, harga terformat, & kuantitas.
+ * - Tombol "Continue Shopping": Menutup modal agar pengguna bisa lanjut berbelanja.
+ * - Tombol "Go to Cart": Mengarahkan pengguna langsung ke halaman keranjang belanja (/cart).
+ */
+
 "use client";
 
 import Link from "next/link";
@@ -7,6 +19,7 @@ import { useAppContext } from "@/contexts/AppContext";
 export default function AddToCartModal() {
   const { isAddToCartModalOpen, setIsAddToCartModalOpen, addedModalItem, formatPrice } = useAppContext();
 
+  // Jika modal ditutup atau data item belum tersedia, jangan render apa pun
   if (!isAddToCartModalOpen || !addedModalItem) return null;
 
   return (
@@ -16,7 +29,7 @@ export default function AddToCartModal() {
         role="dialog"
         aria-modal="true"
       >
-        {/* Header */}
+        {/* Header Modal */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-[#fbfbfb]">
           <div className="flex items-center gap-2 text-[#00a99d] font-semibold text-sm md:text-base">
             <span className="w-5 h-5 rounded-full bg-[#00a99d]/15 flex items-center justify-center">
@@ -34,7 +47,7 @@ export default function AddToCartModal() {
           </button>
         </div>
 
-        {/* Body */}
+        {/* Badan Modal (Preview Produk yang Baru Ditambahkan) */}
         <div className="p-5">
           <div className="flex items-start gap-4">
             <div className="w-20 h-20 bg-gray-50 rounded border border-gray-100 overflow-hidden shrink-0">
@@ -63,7 +76,7 @@ export default function AddToCartModal() {
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Tombol Aksi (Lanjut Belanja atau Pergi ke Keranjang) */}
           <div className="grid grid-cols-2 gap-3 mt-6 pt-4 border-t border-gray-100">
             <button
               type="button"

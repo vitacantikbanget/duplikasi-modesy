@@ -1,5 +1,16 @@
+/**
+ * ============================================================================
+ * Konstanta Autentikasi & Akun Demo (Auth Constants & Mock Profiles)
+ * ============================================================================
+ * Menyediakan data profil tiruan untuk setiap peran pengguna (UserRole)
+ * serta kredensial demo untuk memudahkan pengujian login dan role switching.
+ */
+
 import { UserRole, UserProfile, DemoAccount } from "@/types/auth";
 
+/**
+ * Profil bawaan untuk setiap peran di aplikasi Modesy
+ */
 export const ROLE_PROFILES: Record<UserRole, UserProfile | null> = {
   vendor: {
     name: "Trendshop",
@@ -40,6 +51,9 @@ export const ROLE_PROFILES: Record<UserRole, UserProfile | null> = {
   guest: null,
 };
 
+/**
+ * Daftar akun demo untuk pengujian cepat di modal login & widget RoleSwitcher
+ */
 export const DEMO_ACCOUNTS: DemoAccount[] = [
   { role: "Super Admin", email: "admin@codingest.net", pass: "1234" },
   { role: "Moderator", email: "moderator@codingest.net", pass: "1234" },

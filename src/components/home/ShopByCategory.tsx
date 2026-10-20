@@ -1,3 +1,16 @@
+/**
+ * ============================================================================
+ * ShopByCategory: Grid Kategori Lingkaran Modesy (Round Category Showcase)
+ * ============================================================================
+ * Menampilkan kategori-kategori utama dalam format visual lingkaran khas Modesy:
+ * 1. Tata Letak Responsif:
+ *    - Desktop: Grid 6 kolom yang rapi dengan jarak antar item proporsional.
+ *    - Mobile: Baris horizontal yang dapat digeser (horizontal swipe) dengan snap scrolling.
+ * 2. Efek Visual Interaktif:
+ *    - Zoom in halus gambar kategori saat di-hover (`scale-110 duration-500`).
+ *    - Overlay warna teal transparan yang memunculkan label "Shop Now".
+ */
+
 "use client";
 
 import Link from "next/link";
@@ -25,7 +38,7 @@ export default function ShopByCategory() {
   return (
     <section className="section section-categories py-8 sm:py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Section Header */}
+        {/* Header Bagian Kategori */}
         <div className="section-header flex items-center justify-between mb-8 pb-2 border-b border-gray-100">
           <h3 className="title text-xl sm:text-2xl font-bold text-[#222222]">
             {t("shop_by_category", "Shop By Category")}
@@ -39,12 +52,12 @@ export default function ShopByCategory() {
           </Link>
         </div>
 
-        {/* Categories (Swipeable horizontal on mobile, 6-col grid on desktop) */}
+        {/* Daftar Kategori Lingkaran */}
         <div className="featured-categories">
           <div className="flex overflow-x-auto pb-4 gap-4 scrollbar-none sm:grid sm:grid-cols-4 md:grid-cols-6 sm:gap-x-4 sm:gap-y-8 snap-x">
             {shopByCategory.map((cat, i) => (
               <div key={i} className="item-category-round group shrink-0 w-24 sm:w-auto snap-center">
-                {/* Round Category Image Container */}
+                {/* Wadah Gambar Lingkaran */}
                 <div className="category-image relative w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto rounded-full overflow-hidden border border-gray-200/80 shadow-2xs">
                   <Link href={cat.href} className="block w-full h-full">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -55,27 +68,25 @@ export default function ShopByCategory() {
                     />
                   </Link>
 
-                  {/* Hover Overlay with Shop Now */}
+                  {/* Efek Overlay Teal "Shop Now" saat kursor melayang */}
                   <Link
                     href={cat.href}
-                    className="overlay absolute inset-0 bg-[#00a99d]/75 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300"
+                    className="overlay"
+                    title={cat.name}
                   >
-                    <div className="text-shop-now text-white text-xs sm:text-sm font-semibold flex items-center gap-1">
+                    <span className="text-shop-now">
                       Shop Now
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </div>
+                      <ArrowRight className="w-3.5 h-3.5 inline ml-0.5" />
+                    </span>
                   </Link>
                 </div>
 
-                {/* Category Name */}
-                <div className="category-name mt-3 text-center">
-                  <Link
-                    href={cat.href}
-                    className="text-xs sm:text-sm font-semibold text-[#222222] group-hover:text-brand-primary transition-colors block line-clamp-1"
-                  >
-                    {t(`categories.${cat.key}`, cat.name)}
+                {/* Nama Kategori */}
+                <h4 className="category-name text-center">
+                  <Link href={cat.href} className="line-clamp-1">
+                    {t(cat.key, cat.name)}
                   </Link>
-                </div>
+                </h4>
               </div>
             ))}
           </div>

@@ -1,3 +1,20 @@
+/**
+ * ============================================================================
+ * NavbarUserMenu: Menu Dropdown Pengguna di Topbar (User Topbar Dropdown)
+ * ============================================================================
+ * Menampilkan status autentikasi yang adaptif terhadap peran pengguna (Role-Adaptive):
+ * 1. Tamu (Guest): Menampilkan tautan "Login / Register".
+ * 2. Admin / Super Admin:
+ *    - Avatar profil admin dengan badge "Admin".
+ *    - Menu cepat: Admin Panel (/admin), Products, Categories, Orders, Settings, Logout.
+ * 3. Vendor:
+ *    - Avatar toko vendor (Trendshop) dengan badge "Vendor".
+ *    - Menu cepat: Dashboard Toko (/dashboard), Add Product, Orders, Earnings, Settings, Logout.
+ * 4. Member / Pembeli Biasa:
+ *    - Avatar pembeli (Peter Jone) dengan badge "Member".
+ *    - Menu cepat: Profil Pembeli, Pesanan Saya (/orders), Wishlist, Messages, Settings, Logout.
+ */
+
 "use client";
 
 import Link from "next/link";

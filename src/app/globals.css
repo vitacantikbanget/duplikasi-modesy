@@ -1,6 +1,19 @@
+/**
+ * ============================================================================
+ * Stylesheet Global Modesy Marketplace & Classifieds
+ * ============================================================================
+ * Konfigurasi styling berbasis Tailwind CSS v4 dengan palet warna resmi Modesy:
+ * - Warna Primer: Teal (#00a99d) dan varian hover (#008f85)
+ * - Warna Aksen: Orange (#f57c00) untuk label diskon/promo
+ * - Font: "Open Sans" dari Google Fonts untuk konsistensi visual
+ */
+
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,600;1,700&display=swap");
 @import "tailwindcss";
 
+/* -------------------------------------------------------------------------- */
+/* 1. CSS Custom Properties / Design Tokens                                  */
+/* -------------------------------------------------------------------------- */
 :root {
   /* Modesy Brand Colors */
   --brand-primary: #00a99d;
@@ -10,40 +23,43 @@
   --brand-accent-hover: #ef6c00;
   --mds-color-main: #00a99d;
 
-  /* Surfaces */
+  /* Surfaces & Backgrounds */
   --background: #ffffff;
   --foreground: #222222;
   --surface-elevated: #f8f9fa;
   --surface-card: #ffffff;
   --surface-muted: #f4f5f7;
 
-  /* Text */
+  /* Typography Colors */
   --text-primary: #222222;
   --text-secondary: #555555;
   --text-muted: #888888;
   --text-inverse: #ffffff;
 
-  /* Borders */
+  /* Borders & Dividers */
   --border-default: #e9ecef;
   --border-hover: #ced4da;
 
-  /* Shadows */
+  /* Box Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
   --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
 
-  /* Navbar */
+  /* Layout Spacers */
   --navbar-height: 64px;
   --navbar-bg: #ffffff;
   --navbar-border: #e9ecef;
 
-  /* Category Bar */
+  /* Category Menu Bar */
   --category-bg: #00a99d;
   --category-text: #ffffff;
   --category-hover: #008f85;
 }
 
+/* -------------------------------------------------------------------------- */
+/* 2. Integrasi Tailwind CSS v4 Theme Inline                                 */
+/* -------------------------------------------------------------------------- */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -69,6 +85,9 @@
   --font-sans: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
+/* -------------------------------------------------------------------------- */
+/* 3. Pengaturan Dasar HTML & Body                                           */
+/* -------------------------------------------------------------------------- */
 html,
 body {
   overflow-x: hidden;
@@ -104,19 +123,21 @@ textarea {
   background: var(--text-muted);
 }
 
-/* Smooth transitions */
+/* Transisi halus default untuk link dan tombol */
 a,
 button {
   transition: all 0.2s ease;
 }
 
-/* Focus styles */
+/* Aksesibilitas: outline saat navigasi keyboard */
 *:focus-visible {
   outline: 2px solid var(--brand-primary);
   outline-offset: 2px;
 }
 
-/* Animation keyframes */
+/* -------------------------------------------------------------------------- */
+/* 4. Animasi & Keyframes                                                    */
+/* -------------------------------------------------------------------------- */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -170,7 +191,7 @@ button {
   animation: slideDown 0.3s ease forwards;
 }
 
-/* Modesy Hero Banner Slider Animations (Triggered on every slide change) */
+/* Animasi teks Hero Banner Slider Modesy saat slide berganti */
 @keyframes sliderFadeInUp {
   0% {
     opacity: 0;
@@ -194,7 +215,11 @@ button {
   animation: sliderFadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
 }
 
-/* Modesy Product Card Image & Hover Overlays */
+/* -------------------------------------------------------------------------- */
+/* 5. Komponen Khusus Modesy: Product Card & Hover Effects                   */
+/* -------------------------------------------------------------------------- */
+
+/* Crossfade gambar kedua produk saat hover */
 .multi-image-container .hover-image {
   position: absolute;
   top: 0;
@@ -209,6 +234,17 @@ button {
   opacity: 1;
 }
 
+.product-card:hover .product-image-container:has(.hover-image) .default-image,
+.product-card:hover .multi-image-container:has(.hover-image) .default-image {
+  opacity: 0;
+}
+
+.product-card:hover .product-image-container .hover-image,
+.product-card:hover .multi-image-container .hover-image {
+  opacity: 1;
+}
+
+/* Floating Action Overlay pada Product Card (Wishlist & Quick View) */
 .product-actions-overlay {
   position: absolute;
   top: 10px;
@@ -216,10 +252,10 @@ button {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  z-index: 15;
   opacity: 0;
   transform: translateX(10px);
   transition: all 0.25s ease-in-out;
-  z-index: 10;
 }
 
 .product-card:hover .product-actions-overlay {
@@ -231,22 +267,107 @@ button {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #ffffff;
-  color: #444444;
+  background-color: #ffffff;
+  border: 1px solid #e4e7ea;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  color: #495057;
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .product-actions-overlay .action-btn:hover {
-  background: #00a99d;
-  color: #ffffff;
+  background-color: #00a99d;
+  border-color: #00a99d;
+  color: #ffffff !important;
+  transform: scale(1.08);
 }
 
-/* 3-Dot Bounce Spinner */
+.product-actions-overlay .action-btn:hover svg {
+  color: #ffffff !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. Komponen Khusus Modesy: Shop by Category Bulat                         */
+/* -------------------------------------------------------------------------- */
+.item-category-round {
+  text-align: center;
+}
+
+.item-category-round .category-image {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.item-category-round .category-image .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(0, 169, 157, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.item-category-round:hover .category-image .overlay {
+  opacity: 1;
+}
+
+.item-category-round .text-shop-now {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.item-category-round .category-name {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #222222;
+}
+
+.item-category-round:hover .category-name {
+  color: #00a99d;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. Tipografi Harga Khas Modesy                                            */
+/* -------------------------------------------------------------------------- */
+.price-green {
+  color: #00a99d !important;
+}
+
+.discount-original-price {
+  color: #868e96 !important;
+  font-size: 0.813rem !important;
+  margin-left: 6px;
+}
+
+.price-free {
+  font-weight: 600;
+}
+
+.a-meta-request-quote {
+  color: #222222;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 8. Spinner Animasi 3-Dot Bounce Modesy                                    */
+/* -------------------------------------------------------------------------- */
 .spinner {
   margin: 20px auto;
   width: 70px;
@@ -278,125 +399,3 @@ button {
     transform: scale(1.0);
   }
 }
-
-/* Modesy Category Round Image Overlay */
-.item-category-round {
-  text-align: center;
-}
-.item-category-round .category-image {
-  position: relative;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-.item-category-round .category-image .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: rgba(0, 169, 157, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-.item-category-round:hover .category-image .overlay {
-  opacity: 1;
-}
-.item-category-round .text-shop-now {
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.item-category-round .category-name {
-  margin-top: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #222222;
-}
-.item-category-round:hover .category-name {
-  color: #00a99d;
-}
-
-/* Price typography matching Modesy */
-.price-green {
-  color: #00a99d !important;
-}
-.discount-original-price {
-  color: #868e96 !important;
-  font-size: 0.813rem !important;
-  margin-left: 6px;
-}
-.price-free {
-  font-weight: 600;
-}
-.a-meta-request-quote {
-  color: #222222;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-/* Floating Action Overlay on Product Card */
-.product-actions-overlay {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  z-index: 15;
-  opacity: 0;
-  transform: translateX(10px);
-  transition: all 0.25s ease-in-out;
-}
-
-.product-card:hover .product-actions-overlay {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.product-actions-overlay .action-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  border: 1px solid #e4e7ea;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #495057;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.product-actions-overlay .action-btn:hover {
-  background-color: #00a99d;
-  border-color: #00a99d;
-  color: #ffffff !important;
-  transform: scale(1.1);
-}
-
-.product-actions-overlay .action-btn:hover svg {
-  color: #ffffff !important;
-}
-
-/* Product Multi-Image Crossfade on Hover */
-.product-card:hover .product-image-container:has(.hover-image) .default-image,
-.product-card:hover .multi-image-container:has(.hover-image) .default-image {
-  opacity: 0;
-}
-
-.product-card:hover .product-image-container .hover-image,
-.product-card:hover .multi-image-container .hover-image {
-  opacity: 1;
-}
-
-
-

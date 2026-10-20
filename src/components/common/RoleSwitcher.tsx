@@ -1,3 +1,18 @@
+/**
+ * ============================================================================
+ * RoleSwitcher: Widget Pengalih Peran Demo (Demo Role Switcher Widget)
+ * ============================================================================
+ * Widget mengambang di sudut kanan bawah antarmuka yang sangat berguna untuk:
+ * 1. Pengujian Antarmuka Multi-Role Cepat:
+ *    - Mode UMUM (Tamu / Guest): Storefront publik, login/register button.
+ *    - Mode MEMBER (Pembeli): Riwayat pesanan, profil pembeli, keranjang belanja.
+ *    - Mode VENDOR (Penjual): Dashboard toko /dashboard, tambah produk, penjualan.
+ *    - Mode ADMIN (Administrator): Panel admin lengkap /admin, manajemen katalog, settings.
+ * 2. Sinkronisasi Instan:
+ *    - Mengubah state context `role` dan menyinkronkan cookie `demo_role`.
+ *    - Secara otomatis mengarahkan rute sesuai portal yang relevan.
+ */
+
 "use client";
 
 import { useState } from "react";

@@ -1,3 +1,16 @@
+/**
+ * ============================================================================
+ * Root Layout Aplikasi (Next.js 16 App Router)
+ * ============================================================================
+ * Layout tertinggi yang membungkus seluruh halaman aplikasi:
+ * - Mengatur metadata global SEO (title, description, keywords).
+ * - Menghubungkan Google Fonts ("Open Sans") via CDN preconnect untuk performa tinggi.
+ * - Memuat berkas CSS global (`globals.css`).
+ * - Membungkus seluruh aplikasi dengan `AppProvider` agar seluruh komponen
+ *   dapat mengakses state global (auth, cart, wishlist, localization, modal).
+ * - Menggunakan `Suspense` untuk mendukung streaming SSR secara mulus.
+ */
+
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppProvider } from "@/contexts/AppContext";
@@ -17,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <head>
+        {/* Preconnect ke CDN Google Fonts untuk mempercepat muat tipografi */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

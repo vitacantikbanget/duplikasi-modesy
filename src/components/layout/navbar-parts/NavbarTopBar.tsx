@@ -1,3 +1,17 @@
+/**
+ * ============================================================================
+ * NavbarTopBar: Bilah Atas Header Modesy (Top Bar)
+ * ============================================================================
+ * Komponen bilah atas yang muncul pada tampilan desktop (tersembunyi di mobile):
+ * 1. Bagian Kiri:
+ *    - Tautan "Contact" dan "Sell on Modesy".
+ * 2. Bagian Kanan:
+ *    - Tombol Pemilih Lokasi Geografis (ikon MapPin).
+ *    - Dropdown Mata Uang (USD, EUR, IDR, GBP, dll).
+ *    - Dropdown Bahasa (ikon bendera negara).
+ *    - Menu Pengguna (NavbarUserMenu) jika login, atau tombol "Login / Register" jika guest.
+ */
+
 "use client";
 
 import Link from "next/link";

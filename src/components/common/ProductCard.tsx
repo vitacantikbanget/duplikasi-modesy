@@ -1,3 +1,26 @@
+/**
+ * ============================================================================
+ * ProductCard: Kartu Produk Etalase Modesy (Product Grid Card)
+ * ============================================================================
+ * Komponen kartu produk utama yang digunakan di beranda, katalog kategori,
+ * pencarian, dan etalase toko. Mengikuti spesifikasi visual asli Modesy:
+ * 1. Wadah Gambar (aspect-square):
+ *    - Mendukung efek crossfade gambar kedua saat kursor melayang (hover image).
+ *    - Label diskon merah (-X%) di sudut kiri atas.
+ *    - Label kondisi barang (Used / Classifieds) di sudut kanan atas.
+ * 2. Floating Action Overlay (Aksi Mengambang di Sudut Kanan Atas):
+ *    - Tombol "Add to Cart" cepat (ikon keranjang belanja).
+ *    - Tombol "Wishlist" cepat (ikon hati dengan status merah jika aktif).
+ * 3. Badan Kartu (Card Body):
+ *    - Judul produk 2 baris (line-clamp-2) dengan efek hover warna teal.
+ *    - Nama penjual/toko vendor dengan tautan ke profil penjual.
+ *    - Bintang ulasan rating (1-5 bintang kuning) dan jumlah peminat wishlist.
+ * 4. Bagian Harga (Product Price):
+ *    - Produk Reguler: Harga promo hijau (`price-green`) dan harga asli dicoret (`<del>`).
+ *    - Produk Gratis: Teks tebal "Free".
+ *    - Permintaan Penawaran: Tautan "Request a Quote".
+ */
+
 "use client";
 
 import Link from "next/link";
@@ -28,6 +51,9 @@ interface ProductCardProps {
   };
 }
 
+/**
+ * Peta gambar cadangan untuk efek hover jika data produk hanya memiliki 1 gambar
+ */
 const PRODUCT_HOVER_FALLBACKS: Record<string, string> = {
   "black-midi-skirt": "https://images.unsplash.com/photo-1583496661160-c588c4af16b2?w=500&q=80",
   "decorative-pillow": "/images/products/decorative-pillow-2.webp",
@@ -62,12 +88,14 @@ const PRODUCT_HOVER_FALLBACKS: Record<string, string> = {
 export default function ProductCard({ product }: ProductCardProps) {
   const { t, formatPrice, toggleWishlist, isInWishlist, addToCart } = useAppContext();
 
+  // Ambil nama dan slug vendor
   const vendorName = product.vendorName || product.vendor?.name || "Trendshop";
-  const vendorSlug = product.vendor?.slug || vendorName.toLowerCase().replace(/\s+/g, '-');
+  const vendorSlug = product.vendor?.slug || vendorName.toLowerCase().replace(/\s+/g, "-");
   
+  // Gambar default produk
   const defaultImage = product.imageUrl || product.images?.[0] || "/images/products/placeholder.webp";
 
-  // Resolve matching fallback hover image if hoverImageUrl is not provided or equals default
+  // Tentukan gambar kedua saat kursor melayang (hover image)
   let fallbackHover = "";
   for (const [key, val] of Object.entries(PRODUCT_HOVER_FALLBACKS)) {
     if (product.slug?.toLowerCase().includes(key) || defaultImage.toLowerCase().includes(key)) {
@@ -89,6 +117,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     ? product.wishlistCount
     : (typeof product.reviews === "number" ? product.reviews : 0);
 
+  // Status tipe harga khusus
   const isFree = product.price === "Free" || product.price === 0 || product.price === "Gratis";
   const isQuote = product.price === "Request a Quote" || product.price === "Minta Penawaran";
 
@@ -96,6 +125,9 @@ export default function ProductCard({ product }: ProductCardProps) {
     ? product.price
     : (isFree ? 0 : 49);
 
+  /**
+   * Menambahkan produk ke keranjang belanja saat tombol keranjang cepat diklik
+   */
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -110,6 +142,9 @@ export default function ProductCard({ product }: ProductCardProps) {
     });
   };
 
+  /**
+   * Menambahkan/menghapus produk dari wishlist favorit
+   */
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -120,23 +155,23 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div className="product-card group relative bg-white border border-[#eaeaea] rounded-[4px] overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-      {/* Product Image Container */}
+      {/* 1. Wadah Gambar Produk dengan Rasio Persegi (Aspect Square) */}
       <div className="product-image-container multi-image-container relative aspect-square bg-[#f8f9fa] overflow-hidden">
-        {/* Discount Badge */}
+        {/* Badge Diskon Merah */}
         {product.discount && (
           <div className="product-card-badge product-card-badge-red absolute top-2.5 left-2.5 z-10 bg-[#e74c3c] text-white text-[11px] font-bold px-1.5 py-0.5 rounded-[2px] shadow-2xs">
             -{product.discount}%
           </div>
         )}
 
-        {/* Condition Badge (e.g. Used / Classifieds) */}
+        {/* Badge Kondisi Barang (misal: Barang Bekas / Classified Ads) */}
         {product.condition && product.condition !== "New" && (
           <div className="absolute top-2.5 right-2.5 z-10 bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] shadow-2xs">
             {product.condition}
           </div>
         )}
 
-        {/* Image Links with Hover Crossfade */}
+        {/* Gambar Utama & Efek Crossfade Hover */}
         <Link href={`/product/${product.slug}`} className="block relative w-full h-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -157,7 +192,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </Link>
 
-        {/* Quick Action Floating Overlay */}
+        {/* Overlay Tombol Aksi Cepat (Add to Cart & Wishlist) */}
         <div className="product-actions-overlay">
           {!isQuote && (
             <button
@@ -188,19 +223,19 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </div>
 
-      {/* Card Body */}
+      {/* 2. Badan Kartu Informasi Produk */}
       <div className="card-body p-3.5 flex flex-col flex-1">
-        {/* Title */}
+        {/* Judul Produk (Maksimal 2 Baris) */}
         <h3 className="product-title font-medium text-[13px] leading-snug line-clamp-2 min-h-[36px] mb-1">
           <Link
             href={`/product/${product.slug}`}
             className="text-gray-800 hover:text-brand-primary transition-colors"
           >
-            {t("products." + product.slug.replace(/-/g, '_'), product.title)}
+            {t("products." + product.slug.replace(/-/g, "_"), product.title)}
           </Link>
         </h3>
 
-        {/* Seller */}
+        {/* Nama Penjual / Toko Vendor */}
         <div className="product-seller text-xs text-gray-400 truncate mb-2">
           <Link
             href={`/vendor/${vendorSlug}`}
@@ -210,7 +245,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </Link>
         </div>
 
-        {/* Rating and Wishlist Counter */}
+        {/* Rating Bintang & Counter Wishlist */}
         <div className="product-rating flex items-center justify-between text-xs mb-3">
           <div className="rating flex items-center gap-0.5">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -232,7 +267,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </span>
         </div>
 
-        {/* Price Section */}
+        {/* Area Harga Produk */}
         <div className="product-footer mt-auto pt-1">
           <div className="product-price flex items-baseline">
             {isFree ? (

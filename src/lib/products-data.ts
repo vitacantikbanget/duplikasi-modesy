@@ -1,56 +1,23 @@
-export interface ProductVariationColor {
-  name: string;
-  hex: string;
-}
+/**
+ * ============================================================================
+ * Mock Database Katalog Produk Modesy (Modesy Products Catalog Mock Data)
+ * ============================================================================
+ * Berkas ini menyediakan kumpulan data produk tiruan (mock data) yang mencerminkan
+ * skema dan jenis produk asli Modesy:
+ * - Produk Fisik (Physical Products): Barang berwujud dengan varian warna, ukuran,
+ *   stok inventaris, SKU, dan informasi pengiriman.
+ * - Produk Digital (Digital Products): File yang dapat diunduh langsung (misal lagu Piano).
+ * - Iklan Baris / Digunakan (Ordinary / Classifieds Listing): Barang bekas untuk COD/lokal.
+ * - Permintaan Penawaran (Request a Quote): Produk B2B khusus yang memerlukan penawaran harga.
+ *
+ * Tipe data diimpor langsung dari `@/types/product` untuk menjaga konsistensi tipe
+ * data di seluruh aplikasi (Single Source of Truth).
+ */
 
-export interface ProductReview {
-  id: string;
-  user: string;
-  avatar: string;
-  rating: number;
-  date: string;
-  comment: string;
-}
+import type { ProductItem, ProductReview, ProductVariationColor } from "@/types/product";
 
-export interface ProductItem {
-  id: string;
-  slug: string;
-  title: string;
-  category: string;
-  categorySlug: string;
-  subcategory: string;
-  subcategorySlug: string;
-  price: number | "Free" | "Request a Quote";
-  originalPrice?: number | null;
-  discount?: number | null;
-  productType: "physical" | "digital" | "license_key" | "quote" | "ordinary";
-  condition?: "New" | "Used - Like New" | "Used - Good" | "Used - Fair";
-  listingType?: "sale" | "ordinary" | "quote" | "license";
-  stock: number;
-  sku: string;
-  rating: number;
-  reviewsCount: number;
-  images: string[];
-  colors?: ProductVariationColor[];
-  sizes?: string[];
-  vendor: {
-    name: string;
-    slug: string;
-    avatar: string;
-    rating: number;
-    joinedDate: string;
-    location: string;
-    verified: boolean;
-  };
-  description: string;
-  specs: { label: string; value: string }[];
-  shippingInfo: {
-    estimatedDelivery: string;
-    shippingCost: string;
-    returnPolicy: string;
-  };
-  reviews: ProductReview[];
-}
+// Ekspor kembali tipe data agar berkas lain yang mengimpor dari sini tetap kompatibel
+export type { ProductItem, ProductReview, ProductVariationColor };
 
 export const ALL_PRODUCTS: ProductItem[] = [
   {

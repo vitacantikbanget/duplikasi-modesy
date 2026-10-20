@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * NavbarMobileMenu: Menu Navigasi Layar Seluler (Mobile Menu Drawer)
+ * ============================================================================
+ * Mengelola tombol hamburger menu dan laci navigasi samping pada layar mobile:
+ * - Menampilkan tombol login / profil.
+ * - Menampilkan daftar tautan kategori produk yang mudah disentuh (touch-friendly).
+ * - Menutup menu secara otomatis saat salah satu tautan ditekan.
+ */
+
 "use client";
 
 import Link from "next/link";

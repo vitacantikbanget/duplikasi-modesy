@@ -1,3 +1,20 @@
+/**
+ * ============================================================================
+ * EmptyProductListPage: Template Tabel Manajemen Produk Panel Admin
+ * ============================================================================
+ * Komponen tabel data terpadu untuk mengelola daftar produk berdasarkan filter status:
+ * - Pending Products: Produk menunggu persetujuan admin.
+ * - Hidden Products: Produk yang disembunyikan dari etalase publik.
+ * - Expired Products: Iklan produk yang masa aktifnya telah habis.
+ * - Sold Products: Produk yang stoknya sudah habis terjual.
+ * - Deleted Products: Tempat sampah produk yang dihapus.
+ *
+ * Fitur-Fitur Tabel:
+ * 1. Filter Multi-Kriteria: Pencarian teks, filter tipe produk, kategori, & pengurutan.
+ * 2. Operasi Massal (Bulk Actions): Pilih semua checkbox, hapus massal, atau ubah status.
+ * 3. Menu Aksi per Baris: Pratinjau (View), Edit, Setujui (Approve), atau Hapus (Delete).
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";

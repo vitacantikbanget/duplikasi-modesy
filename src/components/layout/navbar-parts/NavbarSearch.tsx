@@ -1,3 +1,21 @@
+/**
+ * ============================================================================
+ * NavbarSearch: Bilah Pencarian Produk & Autocomplete (Product Search Bar)
+ * ============================================================================
+ * Mengimplementasikan bilah pencarian produk pintar khas Modesy:
+ * 1. Filter Kategori Dropdown:
+ *    - Mengizinkan pengguna mempersempit pencarian ke kategori tertentu
+ *      (Clothing, Shoes, Home & Living, dll).
+ * 2. Pencarian Langsung / Autocomplete Cepat:
+ *    - Mendeteksi input teks secara langsung (minimal 2 karakter).
+ *    - Menampilkan dropdown hasil pencarian dengan thumbnail, judul, kategori, dan harga.
+ * 3. Navigasi & Enter:
+ *    - Menekan Enter atau mengklik tombol kaca pembesar mengarahkan ke halaman
+ *      katalog penuh: `/products?q={query}&category={category}`.
+ * 4. Integrasi Hook:
+ *    - Menggunakan `useClickOutside` untuk menutup dropdown saat mengklik area lain.
+ */
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";

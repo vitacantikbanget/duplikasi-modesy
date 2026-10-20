@@ -1,3 +1,22 @@
+/**
+ * ============================================================================
+ * AuthContext: Pengelolaan Autentikasi & Multi-Role Demo
+ * ============================================================================
+ * Context ini mengelola status autentikasi pengguna secara lokal dan persisten:
+ * 1. Mendukung Multi-Role:
+ *    - 'guest': Pengunjung umum tanpa login.
+ *    - 'member': Pembeli (Peter Jone).
+ *    - 'vendor': Penjual toko terverifikasi (Trendshop).
+ *    - 'admin' / 'super_admin': Administrator panel pengelola sistem.
+ * 2. Sinkronisasi Cookie & LocalStorage:
+ *    - Menyimpan nilai `demo_role` ke cookie HTTP (`SameSite=Lax`) agar terbaca
+ *      oleh Next.js Server Components dan Edge Middleware.
+ *    - Menyimpan cadangan ke `localStorage` untuk ketahanan sesi klien.
+ * 3. Deteksi Otomatis Berbasis Path:
+ *    - Jika URL berawalan `/admin`, role otomatis diarahkan ke admin.
+ *    - Jika URL berawalan `/dashboard`, role otomatis diarahkan ke vendor.
+ */
+
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
@@ -17,9 +36,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRoleState] = useState<UserRole>("guest");
 
+  // Inisialisasi peran saat pertama kali mount di browser
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // Helper untuk membaca nilai cookie berdasarkan namanya
     const getCookie = (name: string) => {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
@@ -31,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const cookieRole = getCookie("demo_role") as UserRole | null;
     const localRole = localStorage.getItem("modesy_role") as UserRole | null;
 
-    // Auto-detect role from URL path if matching dedicated portals
+    // Deteksi peran otomatis berdasarkan rute portal khusus
     let active: UserRole = "guest";
     if (pathname.startsWith("/admin")) {
       active = "admin";
@@ -52,6 +73,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  /**
+   * Mengubah role pengguna aktif serta menyinkronkan ke cookie dan localStorage
+   */
   const setRole = (newRole: UserRole) => {
     setRoleState(newRole);
     if (typeof document !== "undefined") {
@@ -70,6 +94,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  /**
+   * Logout: Menghapus cookie demo, menghapus localStorage, dan mengarahkan ke homepage
+   */
   const logout = () => {
     setRoleState("guest");
     if (typeof document !== "undefined") {
@@ -81,10 +108,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  /**
+   * Login cepat sebagai peran tertentu (shortcut pengujian)
+   */
   const loginAs = (newRole: UserRole) => {
     setRole(newRole);
   };
 
+  // Ambil data profil (nama, avatar, badge) berdasarkan role yang aktif
   const userProfile = ROLE_PROFILES[role] || null;
 
   return (
@@ -102,6 +133,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Custom Hook useAuth:
+ * Memudahkan akses state autentikasi di seluruh komponen klien
+ */
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {

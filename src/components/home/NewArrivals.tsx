@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * NewArrivals: Section Produk Terbaru (New Arrivals Grid)
+ * ============================================================================
+ * Menampilkan produk-produk yang baru diunggah oleh para penjual di marketplace:
+ * - Menggunakan format grid 6 kolom di desktop yang konsisten dengan gaya Modesy.
+ * - Tombol "View All" di header bagian yang mengarahkan pembeli ke katalog penuh (/products).
+ */
+
 "use client";
 
 import Link from "next/link";

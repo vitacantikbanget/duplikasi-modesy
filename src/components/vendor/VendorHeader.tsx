@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ * VendorHeader: Bilah Atas Portal Penjual (Vendor Header)
+ * ============================================================================
+ * Header bilah atas pada dashboard vendor Modesy:
+ * - Tombol Menu Hamburger: Toggle drawer sidebar pada perangkat mobile.
+ * - Tombol "Explore Site": Tautan cepat untuk melihat marketplace publik.
+ * - Pemilih Bahasa Toko.
+ * - Menu Profil Toko: Menampilkan nama vendor (Trendshop), avatar, saldo dompet,
+ *   link navigasi cepat ke produk/pesanan, dan tombol Logout.
+ */
+
 "use client";
 
 import Link from "next/link";

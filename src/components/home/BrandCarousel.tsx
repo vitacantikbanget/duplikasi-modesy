@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * BrandCarousel: Korsel Logo Merek Mitra (Official Brands Carousel)
+ * ============================================================================
+ * Menampilkan korsel logo merek/brand resmi yang bermitra di Modesy:
+ * - Navigasi Scroll Halus: Tombol panah kiri dan kanan dengan deteksi batas scroll aktif.
+ * - Desain Kotak Logo: Wadah logo putih bersih dengan border halus dan efek hover scale.
+ * - Tautan Dinamis: Mengarahkan pembeli ke produk-produk terkait merek yang dipilih.
+ */
+
 "use client";
 
 import { useRef, useState, useEffect } from "react";

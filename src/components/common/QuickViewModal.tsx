@@ -1,3 +1,22 @@
+/**
+ * ============================================================================
+ * QuickViewModal: Modal Pratinjau Cepat Produk (Quick View Modal)
+ * ============================================================================
+ * Memungkinkan calon pembeli memeriksa rincian produk secara langsung
+ * tanpa harus berpindah dari halaman etalase/katalog:
+ * 1. Galeri Gambar Interaktif:
+ *    - Thumbnail gambar yang dapat diklik untuk berganti foto utama.
+ *    - Indikator diskon produk (-X%).
+ * 2. Informasi Lengkap:
+ *    - Judul produk, rating bintang (1-5), tautan ke toko penjual.
+ *    - Harga promo terformat dan harga coret asli.
+ *    - Deskripsi ringkas produk.
+ * 3. Aksi Cepat:
+ *    - Pengatur jumlah barang beli (Quantity Counter +/-).
+ *    - Tombol "Add to Cart" dengan feedback animasi.
+ *    - Tombol "Wishlist" dan tautan "View Details" ke halaman penuh `/product/[slug]`.
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -52,7 +71,7 @@ export default function QuickViewModal() {
   const numericPrice =
     typeof quickViewProduct.price === "number"
       ? quickViewProduct.price
-      : quickViewProduct.price === "Free" || quickViewProduct.price === 0
+      : quickViewProduct.price === "Free" || Number(quickViewProduct.price) === 0
       ? 0
       : 49;
 

@@ -1,3 +1,14 @@
+/**
+ * ============================================================================
+ * AdminHeader: Bilah Atas Panel Admin (Modesy Admin Topbar)
+ * ============================================================================
+ * Header bilah atas panel admin dengan tinggi standar 50px:
+ * - Tombol Menu Hamburger: Toggle kolaps/melebarkan sidebar desktop atau membuka drawer mobile.
+ * - Tombol "View Site": Membuka etalase toko publik di tab baru (hijau khas Modesy `#00a65a`).
+ * - Pemilih Bahasa Admin.
+ * - Menu Profil Admin Dropdown: Informasi akun admin, tautan ke pengaturan, dan tombol Logout.
+ */
+
 "use client";
 
 import { Menu, Globe, ChevronDown, LayoutGrid, User, Wallet, ShoppingBasket, Tag, MessageSquare, Settings, LogOut } from 'lucide-react';

@@ -1,9 +1,27 @@
+/**
+ * ============================================================================
+ * LocalizationContext: Multi-Bahasa, Multi-Mata Uang, & Format Harga
+ * ============================================================================
+ * Mengelola aspek internasionalisasi (i18n & l10n) Modesy:
+ * 1. Multi-Mata Uang (Currency):
+ *    - Menyimpan mata uang terpilih (USD, EUR, IDR, dll) ke `localStorage`.
+ *    - `formatPrice`: Mengonversi nilai numerik dasar USD menggunakan kurs (`rate`)
+ *      dan memformat simbol secara lokal (misal: "Rp 150.000" untuk IDR atau "$10.50" untuk USD).
+ * 2. Multi-Bahasa (Languages & Translations):
+ *    - Mendukung EN, ID, ES, FR, TR, dan AR (Arab).
+ *    - Dukungan RTL (Right-to-Left): Otomatis menyetel atribut `dir="rtl"` pada HTML
+ *      ketika bahasa Arab dipilih, dan `dir="ltr"` untuk bahasa lainnya.
+ *    - Fungsi terjemahan `t(key, fallback)`: Membaca teks terjemahan bersarang (dot notation).
+ * 3. Filter Lokasi Geografis (Location):
+ *    - Menyimpan pilihan negara / kota yang dipilih melalui modal lokasi navbar.
+ */
+
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Currency, Language, LanguageCode } from "@/types/localization";
 import { currencies, DEFAULT_CURRENCY } from "@/constants/currencies";
-import { languages, DEFAULT_LANGUAGE } from "@/constants/languages";
+import { DEFAULT_LANGUAGE } from "@/constants/languages";
 import { translations } from "@/constants/translations";
 
 export interface LocalizationContextType {
@@ -24,6 +42,7 @@ export function LocalizationProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>(DEFAULT_LANGUAGE);
   const [location, setLocation] = useState<string>("Location");
 
+  // Pulihkan mata uang yang tersimpan di localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem("modesy_currency");
@@ -32,22 +51,27 @@ export function LocalizationProvider({ children }: { children: ReactNode }) {
         if (found) setCurrencyState(found);
       }
     } catch (e) {
-      console.error(e);
+      console.error("Gagal memuat preferensi mata uang:", e);
     }
   }, []);
 
+  /**
+   * Mengubah mata uang aktif dan menyimpannya ke localStorage
+   */
   const setCurrency = (c: Currency) => {
     setCurrencyState(c);
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("modesy_currency", c.code);
       } catch (e) {
-        console.error(e);
+        console.error("Gagal menyimpan mata uang ke localStorage:", e);
       }
     }
   };
 
-  // Synchronize document direction and language for RTL (Arabic)
+  /**
+   * Sinkronisasi arah teks dokumen (RTL/LTR) untuk Bahasa Arab
+   */
   useEffect(() => {
     if (typeof document !== "undefined") {
       if (language.code === "AR") {
@@ -60,26 +84,32 @@ export function LocalizationProvider({ children }: { children: ReactNode }) {
     }
   }, [language]);
 
+  /**
+   * Mengambil teks terjemahan berdasarkan path dot-notation (misal: 'common.save')
+   * Jika kata belum diterjemahkan dalam bahasa terpilih, fallback otomatis ke bahasa Inggris (EN).
+   */
   const t = (path: string, fallback?: string): string => {
     const keys = path.split(".");
-    let current: any = translations[language.code as LanguageCode];
-    if (!current) current = translations.EN;
+    let current: unknown = translations[language.code as LanguageCode] || translations.EN;
     for (const key of keys) {
-      if (current === undefined || current[key] === undefined) {
-        let enVal: any = translations.EN;
+      if (current === undefined || typeof current !== "object" || current === null || (current as Record<string, unknown>)[key] === undefined) {
+        let enVal: unknown = translations.EN;
         for (const enKey of keys) {
-          if (enVal === undefined || enVal[enKey] === undefined) {
+          if (enVal === undefined || typeof enVal !== "object" || enVal === null || (enVal as Record<string, unknown>)[enKey] === undefined) {
             return fallback !== undefined ? fallback : path;
           }
-          enVal = enVal[enKey];
+          enVal = (enVal as Record<string, unknown>)[enKey];
         }
-        return enVal;
+        return typeof enVal === "string" ? enVal : fallback !== undefined ? fallback : path;
       }
-      current = current[key];
+      current = (current as Record<string, unknown>)[key];
     }
-    return current;
+    return typeof current === "string" ? current : fallback !== undefined ? fallback : path;
   };
 
+  /**
+   * Format harga dengan kurs mata uang dan simbol yang tepat
+   */
   const formatPrice = (priceVal: number) => {
     const converted = priceVal * currency.rate;
     if (currency.code === "IDR") {
@@ -112,6 +142,10 @@ export function LocalizationProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Custom Hook useLocalization:
+ * Digunakan oleh komponen untuk memformat harga atau menerjemahkan teks
+ */
 export function useLocalization() {
   const context = useContext(LocalizationContext);
   if (!context) {

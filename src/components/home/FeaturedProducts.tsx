@@ -1,3 +1,17 @@
+/**
+ * ============================================================================
+ * FeaturedProducts: Grid 6 Kolom Produk Unggulan (Promoted / Featured Products)
+ * ============================================================================
+ * Menampilkan etalase produk unggulan yang dipromosikan oleh vendor:
+ * 1. Tata Letak Grid 6 Kolom:
+ *    - Mengikuti standar Modesy desktop: `lg:grid-cols-6` dengan celah antar kartu `gap-4 sm:gap-5`.
+ *    - Mobile: 2 kolom (`grid-cols-2`), tablet: 3-4 kolom.
+ * 2. Fitur "Load More" Interaktif:
+ *    - Tombol "Load More" di bagian bawah untuk memuat produk tambahan.
+ *    - Mengaktifkan animasi spinner 3-dot bounce khas Modesy saat data sedang dimuat.
+ *    - Menyembunyikan tombol saat seluruh produk sudah selesai ditampilkan (`hasMore = false`).
+ */
+
 "use client";
 
 import { useState } from "react";

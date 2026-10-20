@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * HomePromoBanners: Banner Promosi Horizontal 3 Kolom (Mid-Page Promo Banners)
+ * ============================================================================
+ * Menampilkan baris banner iklan grafis di antara bagian produk:
+ * - Menggunakan grid 3 kolom pada desktop (`lg:grid-cols-3`).
+ * - Efek hover zoom halus (`scale-[1.02] duration-300`) dan bayangan lembut saat kursor melayang.
+ * - Mengarahkan calon pembeli ke kategori atau kampanye promosi khusus.
+ */
+
 import Link from "next/link";
 
 const banners = [

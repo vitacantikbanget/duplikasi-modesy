@@ -1,3 +1,21 @@
+/**
+ * ============================================================================
+ * Navbar: Komponen Header Navigasi Utama Modesy (Main Storefront Header)
+ * ============================================================================
+ * Menggabungkan seluruh modul navigasi atas yang sesuai anatomi Modesy asli:
+ * 1. `NavbarTopBar`: Bilah atas untuk kontak, link "Sell on Modesy", pemilih lokasi,
+ *    pemilih mata uang (USD, IDR, dll), pemilih bahasa, & profil/login.
+ * 2. Bar Utama:
+ *    - Logo resmi Modesy (rasio 160x60).
+ *    - `NavbarSearch`: Kolom pencarian produk dengan filter kategori dropdown & autocomplete.
+ *    - `NavbarActions`: Tombol Wishlist dengan counter badge, tombol Cart dengan total harga,
+ *      serta tombol CTA "Sell Now".
+ * 3. `NavbarCategoryMenu`: Mega Menu kategori horizontal dengan dropdown bertingkat.
+ * 4. Modal Pendukung:
+ *    - `LocationModal`: Modal pemilih negara & kota.
+ *    - `LoginModal`: Modal popup login cepat tanpa harus pindah halaman.
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -17,6 +35,7 @@ import {
 export default function Navbar() {
   const mounted = useMounted();
 
+  // State lokal untuk mengontrol visibilitas menu & modal
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
@@ -40,7 +59,7 @@ export default function Navbar() {
   return (
     <>
       <header className="w-full bg-white border-b border-gray-200 relative z-40">
-        {/* Topbar */}
+        {/* 1. Top Bar Kontak, Lokasi, Mata Uang, & Bahasa */}
         <NavbarTopBar
           mounted={mounted}
           currency={currency}
@@ -56,9 +75,9 @@ export default function Navbar() {
           onLogout={logout}
         />
 
-        {/* Main Header */}
+        {/* 2. Header Utama (Logo, Search Bar, Cart/Wishlist Actions) */}
         <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 flex items-center justify-between gap-4 md:gap-8">
-          {/* Mobile Menu Button & Drawer */}
+          {/* Tombol Menu Mobile & Drawer Laci Samping */}
           <NavbarMobileMenu
             isOpen={mobileMenuOpen}
             onToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -66,7 +85,7 @@ export default function Navbar() {
             t={t}
           />
 
-          {/* Logo */}
+          {/* Logo Resmi Modesy */}
           <Link href="/" className="flex-shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -78,14 +97,14 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* Search Bar matching Modesy live layout */}
+          {/* Kolom Pencarian Produk Terintegrasi Autocomplete */}
           <NavbarSearch
             placeholder={t("search_placeholder")}
             mobileSearchOpen={mobileSearchOpen}
             onCloseMobileSearch={() => setMobileSearchOpen(false)}
           />
 
-          {/* Actions: Cart, Wishlist, Sell Now */}
+          {/* Aksi Cepat: Wishlist, Cart Counter, & Sell Now */}
           <NavbarActions
             mounted={mounted}
             cartCount={cartCount}
@@ -95,18 +114,18 @@ export default function Navbar() {
           />
         </div>
 
-        {/* Category Nav Bar (Desktop) with Megamenus */}
+        {/* 3. Mega Menu Navigasi Kategori Horizontal (Desktop) */}
         <NavbarCategoryMenu t={t} />
       </header>
 
-      {/* Location Modal */}
+      {/* Modal Dialog Pemilih Lokasi Geografis */}
       <LocationModal
         isOpen={locationModalOpen}
         onClose={() => setLocationModalOpen(false)}
         onSelectLocation={setLocation}
       />
 
-      {/* Login Modal */}
+      {/* Modal Dialog Login Cepat */}
       <LoginModal
         isOpen={loginModalOpen}
         onClose={() => setLoginModalOpen(false)}

@@ -1,3 +1,16 @@
+/**
+ * ============================================================================
+ * SpecialOffers: Section Penawaran Khusus & Diskon (Special Offers Carousel)
+ * ============================================================================
+ * Menampilkan korsel produk berdiskon tinggi dengan fitur:
+ * 1. Tombol Navigasi Panah (Chevron Left & Right):
+ *    - Menggeser baris produk secara horizontal dengan scroll behavior halus (`smooth`).
+ * 2. Hitung Mundur Promo (Deal Timer):
+ *    - Indikator waktu tersisa promo berbatas waktu.
+ * 3. Integrasi ProductCard:
+ *    - Menggunakan komponen `ProductCard` terstandar dengan label diskon merah (-X%).
+ */
+
 "use client";
 
 import { useRef, useState, useEffect } from "react";

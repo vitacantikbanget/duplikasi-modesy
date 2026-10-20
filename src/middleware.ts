@@ -1,52 +1,82 @@
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+/**
+ * ============================================================================
+ * Next.js Edge Middleware - Duplikasi Modesy
+ * ============================================================================
+ * Middleware ini berjalan di Edge runtime sebelum setiap request diteruskan ke
+ * halaman atau API route. Fungsinya meliputi:
+ * 1. Manajemen Sesi Demo (Demo Role Synchronization):
+ *    - Memastikan pengembang/penilai proyek dapat mengakses panel `/admin` secara
+ *      langsung tanpa hambatan login berulang, dengan mengatur cookie `demo_role=admin`.
+ *    - Mengatur cookie `demo_role=vendor` saat membuka dashboard `/dashboard`.
+ *    - Menjaga persistensi cookie selama 1 tahun (maxAge: 31536000 detik).
+ * 2. Integrasi Dasar Supabase SSR:
+ *    - Menyiapkan respons berbasis NextResponse agar siap disisipi token autentikasi
+ *      Supabase Auth pada fase produksi mendatang.
+ */
+
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
+  // Buat objek respons dasar yang mewarisi headers request
+  const supabaseResponse = NextResponse.next({
     request,
-  })
+  });
 
-  const path = request.nextUrl.pathname
-  const demoRole = request.cookies.get('demo_role')?.value
+  const path = request.nextUrl.pathname;
+  // Baca cookie demo_role yang tersimpan di browser klien
+  const demoRole = request.cookies.get("demo_role")?.value;
 
-  // 1. If visiting Admin panel (/admin)
-  if (path.startsWith('/admin')) {
-    if (path === '/admin/login') {
-      return supabaseResponse
+  // --------------------------------------------------------------------------
+  // Kasus 1: Pengguna membuka Panel Admin (/admin)
+  // --------------------------------------------------------------------------
+  if (path.startsWith("/admin")) {
+    // Abaikan rute login admin agar formulir login dapat diakses manual
+    if (path === "/admin/login") {
+      return supabaseResponse;
     }
-    // If not already in an admin role, auto-set demo admin role so session is never lost
-    if (!['super_admin', 'admin', 'moderator'].includes(demoRole || '')) {
-      // Set persistent 1-year cookie for admin
-      supabaseResponse.cookies.set('demo_role', 'admin', {
-        path: '/',
-        maxAge: 31536000,
-        sameSite: 'lax',
-      })
+
+    // Jika pengguna belum berstatus admin/super_admin/moderator,
+    // otomatis aktifkan role 'admin' ke cookie demo agar tidak terpental
+    if (!["super_admin", "admin", "moderator"].includes(demoRole || "")) {
+      supabaseResponse.cookies.set("demo_role", "admin", {
+        path: "/",
+        maxAge: 31536000, // 1 tahun
+        sameSite: "lax",
+      });
     }
-    return supabaseResponse
+    return supabaseResponse;
   }
 
-  // 2. If visiting Vendor Dashboard (/dashboard)
-  if (path.startsWith('/dashboard')) {
-    // If not in a vendor or super_admin role, auto-set demo vendor role so session is never lost
-    if (!['vendor', 'super_admin'].includes(demoRole || '')) {
-      // Set persistent 1-year cookie for vendor
-      supabaseResponse.cookies.set('demo_role', 'vendor', {
-        path: '/',
+  // --------------------------------------------------------------------------
+  // Kasus 2: Pengguna membuka Vendor Dashboard (/dashboard)
+  // --------------------------------------------------------------------------
+  if (path.startsWith("/dashboard")) {
+    // Jika belum memiliki hak akses vendor atau super_admin,
+    // otomatis atur cookie demo_role ke 'vendor'
+    if (!["vendor", "super_admin"].includes(demoRole || "")) {
+      supabaseResponse.cookies.set("demo_role", "vendor", {
+        path: "/",
         maxAge: 31536000,
-        sameSite: 'lax',
-      })
+        sameSite: "lax",
+      });
     }
-    return supabaseResponse
+    return supabaseResponse;
   }
 
-  // 3. For public storefront routes (/ and others)
-  // Keep active demoRole intact (whether guest, vendor, or admin)
-  return supabaseResponse
+  // --------------------------------------------------------------------------
+  // Kasus 3: Rute Etalase Publik Lainnya (Storefront)
+  // Biarkan role yang sedang aktif (apakah guest, member, vendor, atau admin)
+  // --------------------------------------------------------------------------
+  return supabaseResponse;
 }
 
+/**
+ * Konfigurasi Matcher Middleware:
+ * Mengecualikan berkas statis Next.js (_next/static, _next/image),
+ * favicon, serta file gambar (svg, png, jpg, webp) agar tidak membebani performa.
+ */
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
-}
+};

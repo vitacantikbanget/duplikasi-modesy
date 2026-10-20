@@ -86,13 +86,13 @@ export default function VendorSidebar({ sidebarOpenMobile, closeMobileSidebar }:
   const isItemActive = (href?: string) => {
     if (!href) return false;
     if (href === "/dashboard") {
-      return pathname === "/dashboard" || pathname === "/dashboard/vendor";
+      return pathname === "/dashboard";
     }
     if (href === "/dashboard/add-product") {
-      return pathname === "/dashboard/add-product" || pathname === "/dashboard/vendor/products/new";
+      return pathname === "/dashboard/add-product";
     }
     if (href === "/dashboard/bulk-product-upload") {
-      return pathname === "/dashboard/bulk-product-upload" || pathname === "/dashboard/bulk-upload";
+      return pathname === "/dashboard/bulk-product-upload";
     }
     if (href === "/dashboard/products") {
       return pathname === "/dashboard/products" && (!stParam || stParam === "");
@@ -106,8 +106,8 @@ export default function VendorSidebar({ sidebarOpenMobile, closeMobileSidebar }:
     if (href === "/dashboard/products?st=sold") {
       return (pathname === "/dashboard/products" && stParam === "sold") || pathname === "/dashboard/products/sold";
     }
-    if (href === "/dashboard/products?st=draft" || href === "/dashboard/products?st=drafts") {
-      return (pathname === "/dashboard/products" && (stParam === "draft" || stParam === "drafts")) || pathname === "/dashboard/products/drafts" || pathname === "/dashboard/products/draft";
+    if (href === "/dashboard/products?st=draft") {
+      return pathname === "/dashboard/products" && (stParam === "draft" || stParam === "drafts");
     }
     if (href === "/dashboard/sales") {
       return pathname === "/dashboard/sales" && (!stParam || stParam === "" || stParam === "active");

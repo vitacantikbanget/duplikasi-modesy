@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AppProvider } from "@/contexts/AppContext";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Home - Modesy - Marketplace - Classified Ads Script",
@@ -7,12 +9,11 @@ export const metadata: Metadata = {
   keywords: ["index", "home", "modesy", "marketplace", "classified ads"],
 };
 
-
-import { AppProvider } from "@/contexts/AppContext";
-import FrontendLayoutWrapper from "@/components/layout/FrontendLayoutWrapper";
-import { Suspense } from "react";
-
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <head>
@@ -26,9 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-white" suppressHydrationWarning>
         <AppProvider>
           <Suspense fallback={null}>
-            <FrontendLayoutWrapper>
-              {children}
-            </FrontendLayoutWrapper>
+            {children}
           </Suspense>
         </AppProvider>
       </body>

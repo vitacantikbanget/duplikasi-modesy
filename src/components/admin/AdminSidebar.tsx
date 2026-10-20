@@ -102,6 +102,13 @@ const SidebarItem = ({
   badgeColor?: string;
 }) => {
   const pathname = usePathname();
+  const [currentSearch, setCurrentSearch] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentSearch(window.location.search);
+    }
+  }, [pathname]);
 
   const itemContent = (
     <>
@@ -126,10 +133,10 @@ const SidebarItem = ({
     </>
   );
 
-  const baseClass = `flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none ${
+  const baseClass = `flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none border-l-[3px] ${
     active
-      ? "text-white font-medium bg-[#2a3038]/60"
-      : "text-[#8a99a8] hover:text-white hover:bg-[#2a3038]/40"
+      ? "text-white font-medium bg-[#2a3038]/60 border-[#00c0ef]"
+      : "text-[#8a99a8] hover:text-white hover:bg-[#2a3038]/40 border-transparent"
   }`;
 
   if (hasDropdown) {
@@ -146,7 +153,18 @@ const SidebarItem = ({
         {isOpen && subItems && subItems.length > 0 && (
           <ul className="bg-[#262b32] py-1.5 space-y-0.5">
             {subItems.map((sub, index) => {
-              const isSubActive = pathname === sub.href;
+              const isSubActive =
+                (pathname === sub.href && (!currentSearch || !sub.href.startsWith("/admin/products"))) ||
+                (sub.href === "/admin/featured-products" && currentSearch.includes("list=featured")) ||
+                (sub.href === "/admin/special-offers" && currentSearch.includes("list=special")) ||
+                (sub.href === "/admin/pending-products" && currentSearch.includes("list=pending")) ||
+                (sub.href === "/admin/hidden-products" && currentSearch.includes("list=hidden")) ||
+                (sub.href === "/admin/expired-products" && currentSearch.includes("list=expired")) ||
+                (sub.href === "/admin/sold-products" && currentSearch.includes("list=sold")) ||
+                (sub.href === "/admin/drafts" && currentSearch.includes("list=drafts")) ||
+                (sub.href === "/admin/deleted-products" && currentSearch.includes("list=deleted")) ||
+                (sub.href === "/admin/products" && pathname === "/admin/products" && !currentSearch.includes("list="));
+
               return (
                 <li key={index}>
                   <Link
@@ -255,16 +273,38 @@ export default function AdminSidebar() {
     };
   }, []);
 
+  const productPaths = [
+    "/admin/products",
+    "/admin/featured-products",
+    "/admin/special-offers",
+    "/admin/pending-products",
+    "/admin/hidden-products",
+    "/admin/expired-products",
+    "/admin/sold-products",
+    "/admin/drafts",
+    "/admin/deleted-products",
+    "/admin/add-product",
+    "/admin/bulk-product-upload",
+  ];
+
+  const isProductsActive = productPaths.some((p) => pathname.startsWith(p));
+
   // Accordion state for dropdown items
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
-    orders: false,
-    products: false,
-    payments: false,
-    content: false,
-    membership: false,
-    settings: false,
-    comments: false,
+    orders: pathname.startsWith('/admin/orders') || pathname.startsWith('/admin/transactions'),
+    products: isProductsActive,
+    payments: pathname.startsWith('/admin/payments') || pathname.startsWith('/admin/payment'),
+    content: pathname.startsWith('/admin/blog') || pathname.startsWith('/admin/pages'),
+    membership: pathname.startsWith('/admin/users') || pathname.startsWith('/admin/vendors') || pathname.startsWith('/admin/administrators'),
+    settings: pathname.startsWith('/admin/settings'),
+    comments: pathname.startsWith('/admin/comments') || pathname.startsWith('/admin/blog-comments'),
   });
+
+  useEffect(() => {
+    if (isProductsActive) {
+      setOpenMenus((prev) => ({ ...prev, products: true }));
+    }
+  }, [pathname, isProductsActive]);
 
   const toggleMenu = (key: string) => {
     setOpenMenus((prev) => ({

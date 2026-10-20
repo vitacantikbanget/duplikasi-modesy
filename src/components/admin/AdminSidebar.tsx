@@ -16,7 +16,7 @@ import {
   Folder,
   Tags,
   Asterisk,
-  GripHorizontal,
+  ToggleLeft,
   CreditCard,
   Banknote,
   DollarSign,
@@ -27,21 +27,19 @@ import {
   KeyRound,
   HelpCircle,
   Database,
-  BarChart,
+  BarChart3,
   Megaphone,
-  MessageSquare,
-  Mail,
+  MessagesSquare,
+  Send,
   StarHalf,
   MessageCircle,
-  Send,
-  Link as LinkIcon,
+  Mail,
+  Share2,
   AlertTriangle,
-  MailX,
+  Ban,
   Sliders,
   Settings,
-  DownloadCloud,
-  ChevronDown,
-  Circle,
+  ChevronLeft,
   X,
 } from "lucide-react";
 import { useAdminContext } from "@/contexts/AdminContext";
@@ -51,187 +49,272 @@ interface SubItem {
   href: string;
 }
 
-const SidebarSection = ({
-  title,
-  children,
-}: {
-  title?: string;
-  children: React.ReactNode;
-}) => (
-  <div className="mb-0">
-    {title && (
-      <h3 className="text-[11px] font-semibold text-[#7a8b9a] px-6 pt-5 pb-2 uppercase tracking-wider">
-        {title}
-      </h3>
-    )}
-    <ul className="space-y-0.5">{children}</ul>
-  </div>
-);
-
-const SidebarItem = ({
-  icon: Icon,
-  label,
-  href,
-  active,
-  hasDropdown,
-  subItems,
-  isOpen,
-  onToggle,
-  onItemClick,
-}: {
-  icon: any;
+interface MenuItem {
+  id: string;
   label: string;
+  icon: any;
   href?: string;
-  active?: boolean;
   hasDropdown?: boolean;
   subItems?: SubItem[];
-  isOpen?: boolean;
-  onToggle?: () => void;
-  onItemClick?: () => void;
-}) => {
-  const pathname = usePathname();
-  const [currentSearch, setCurrentSearch] = useState("");
+}
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setCurrentSearch(window.location.search);
-    }
-  }, [pathname]);
+interface Section {
+  title: string;
+  items: MenuItem[];
+}
 
-  const itemContent = (
-    <>
-      <div className="flex items-center">
-        <Icon className="w-[18px] h-[18px] mr-3 shrink-0" strokeWidth={active ? 2.5 : 2} />
-        <span className="text-[13.5px] truncate">{label}</span>
-      </div>
-      {hasDropdown && (
-        <ChevronDown
-          className={`w-3.5 h-3.5 opacity-60 transition-transform duration-200 shrink-0 ${isOpen ? "rotate-180" : "-rotate-90"
-            }`}
-        />
-      )}
-    </>
-  );
-
-  const baseClass = `flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none border-l-[3px] ${active
-      ? "text-white font-medium bg-[#2a3038]/60 border-[#00c0ef]"
-      : "text-[#8a99a8] hover:text-white hover:bg-[#2a3038]/40 border-transparent"
-    }`;
-
-  if (hasDropdown) {
-    return (
-      <li>
-        <button
-          type="button"
-          onClick={onToggle}
-          className={`w-full ${baseClass}`}
-        >
-          {itemContent}
-        </button>
-
-        {isOpen && subItems && subItems.length > 0 && (
-          <ul className="bg-[#262b32] py-1.5 space-y-0.5">
-            {subItems.map((sub, index) => {
-              const isSubActive =
-                (pathname === sub.href && (!currentSearch || !sub.href.startsWith("/admin/products"))) ||
-                (sub.href === "/admin/featured-products" && currentSearch.includes("list=featured")) ||
-                (sub.href === "/admin/special-offers" && currentSearch.includes("list=special")) ||
-                (sub.href === "/admin/pending-products" && currentSearch.includes("list=pending")) ||
-                (sub.href === "/admin/hidden-products" && currentSearch.includes("list=hidden")) ||
-                (sub.href === "/admin/expired-products" && currentSearch.includes("list=expired")) ||
-                (sub.href === "/admin/sold-products" && currentSearch.includes("list=sold")) ||
-                (sub.href === "/admin/drafts" && currentSearch.includes("list=drafts")) ||
-                (sub.href === "/admin/deleted-products" && currentSearch.includes("list=deleted")) ||
-                (sub.href === "/admin/products" && pathname === "/admin/products" && !currentSearch.includes("list="));
-
-              return (
-                <li key={index}>
-                  <Link
-                    href={sub.href}
-                    onClick={onItemClick}
-                    className={`block pl-12 pr-6 py-2 text-[13px] transition-colors ${isSubActive
-                        ? "text-white font-medium bg-[#1e2329]"
-                        : "text-[#8a99a8] hover:text-white hover:bg-[#1e2329]/60"
-                      }`}
-                  >
-                    {sub.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </li>
-    );
-  }
-
-  if (href) {
-    return (
-      <li>
-        <Link href={href} onClick={onItemClick} className={baseClass}>
-          {itemContent}
-        </Link>
-      </li>
-    );
-  }
-
-  return (
-    <li>
-      <button
-        type="button"
-        onClick={onToggle || onItemClick}
-        className={`w-full ${baseClass}`}
-      >
-        {itemContent}
-      </button>
-    </li>
-  );
-};
+// 8 Sections exactly as provided - strictly unchanged
+const SIDEBAR_SECTIONS: Section[] = [
+  {
+    title: "NAVIGATION",
+    items: [
+      { id: "home", label: "Home", icon: Home, href: "/admin" },
+      { id: "theme", label: "Theme", icon: Paintbrush, href: "/admin/theme" },
+      { id: "slider", label: "Slider", icon: SlidersHorizontal, href: "/admin/slider" },
+      { id: "homepage-manager", label: "Homepage Manager", icon: LayoutTemplate, href: "/admin/homepage-manager" },
+    ],
+  },
+  {
+    title: "ORDERS",
+    items: [
+      {
+        id: "orders",
+        label: "Orders",
+        icon: ShoppingCart,
+        hasDropdown: true,
+        subItems: [
+          { label: "Orders", href: "/admin/orders" },
+          { label: "Transactions", href: "/admin/transactions" },
+          { label: "Digital Sales", href: "/admin/digital-sales" },
+          { label: "Refund Requests", href: "/admin/refund-requests" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "PRODUCTS",
+    items: [
+      {
+        id: "products",
+        label: "Products",
+        icon: ShoppingBasket,
+        hasDropdown: true,
+        subItems: [
+          { label: "Products", href: "/admin/products" },
+          { label: "Featured Products", href: "/admin/featured-products" },
+          { label: "Special Offers", href: "/admin/special-offers" },
+          { label: "Pending Products", href: "/admin/pending-products" },
+          { label: "Hidden Products", href: "/admin/hidden-products" },
+          { label: "Expired Products", href: "/admin/expired-products" },
+          { label: "Sold Products", href: "/admin/sold-products" },
+          { label: "Drafts", href: "/admin/drafts" },
+          { label: "Deleted Products", href: "/admin/deleted-products" },
+          { label: "Add Product", href: "/admin/add-product" },
+          { label: "Bulk Product Upload", href: "/admin/bulk-product-upload" },
+        ],
+      },
+      { id: "quote-requests", label: "Quote Requests", icon: Tag, href: "/admin/quote-requests" },
+      { id: "categories", label: "Categories", icon: Folder, href: "/admin/categories" },
+      { id: "tags", label: "Tags", icon: Tags, href: "/admin/tags" },
+      { id: "brands", label: "Brands", icon: Asterisk, href: "/admin/brands" },
+      { id: "custom-fields", label: "Custom Fields", icon: ToggleLeft, href: "/admin/custom-fields" },
+    ],
+  },
+  {
+    title: "PAYMENTS",
+    items: [
+      {
+        id: "payments",
+        label: "Payments",
+        icon: CreditCard,
+        hasDropdown: true,
+        subItems: [
+          { label: "Membership Payments", href: "/admin/membership-payments" },
+          { label: "Promotion Payments", href: "/admin/promotion-payments" },
+          { label: "Wallet Deposits", href: "/admin/wallet-deposits" },
+          { label: "Bank Transfer Reports", href: "/admin/bank-transfer-reports" },
+        ],
+      },
+      {
+        id: "earnings",
+        label: "Earnings",
+        icon: Banknote,
+        hasDropdown: true,
+        subItems: [
+          { label: "Earnings", href: "/admin/earnings" },
+          { label: "Seller Balances", href: "/admin/seller-balances" },
+        ],
+      },
+      {
+        id: "payouts",
+        label: "Payouts",
+        icon: DollarSign,
+        hasDropdown: true,
+        subItems: [
+          { label: "Add Payout", href: "/admin/add-payout" },
+          { label: "Payout Requests", href: "/admin/payout-requests" },
+          { label: "Payout Settings", href: "/admin/payout-settings" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "CONTENT",
+    items: [
+      { id: "pages", label: "Pages", icon: FileText, href: "/admin/pages" },
+      {
+        id: "blog",
+        label: "Blog",
+        icon: Newspaper,
+        hasDropdown: true,
+        subItems: [
+          { label: "Posts", href: "/admin/blog-posts" },
+          { label: "Categories", href: "/admin/blog-categories" },
+        ],
+      },
+      {
+        id: "location",
+        label: "Location",
+        icon: MapPin,
+        hasDropdown: true,
+        subItems: [
+          { label: "Countries", href: "/admin/countries" },
+          { label: "States", href: "/admin/states" },
+          { label: "Cities", href: "/admin/cities" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "MEMBERSHIP",
+    items: [
+      {
+        id: "membership",
+        label: "Membership",
+        icon: Users,
+        hasDropdown: true,
+        subItems: [
+          { label: "Users", href: "/admin/users" },
+          { label: "Membership Plans", href: "/admin/membership-plans" },
+          { label: "Shop Opening Requests", href: "/admin/shop-opening-requests" },
+          { label: "User Login Activities", href: "/admin/user-login-activities" },
+          { label: "Account Deletion Requests", href: "/admin/account-deletion-requests" },
+        ],
+      },
+      { id: "roles", label: "Roles & Permissions", icon: KeyRound, href: "/admin/roles" },
+    ],
+  },
+  {
+    title: "MANAGEMENT TOOLS",
+    items: [
+      {
+        id: "help-center",
+        label: "Help Center",
+        icon: HelpCircle,
+        hasDropdown: true,
+        subItems: [
+          { label: "Support Tickets", href: "/admin/support-tickets" },
+          { label: "Knowledge Base", href: "/admin/knowledge-base" },
+        ],
+      },
+      { id: "cache-system", label: "Cache System", icon: Database, href: "/admin/cache-system" },
+      { id: "seo-tools", label: "SEO Tools", icon: BarChart3, href: "/admin/seo-tools" },
+      { id: "ad-spaces", label: "Ad Spaces", icon: Megaphone, href: "/admin/ad-spaces" },
+      { id: "chat-messages", label: "Chat Messages", icon: MessagesSquare, href: "/admin/chat-messages" },
+      { id: "contact-messages", label: "Contact Messages", icon: Send, href: "/admin/contact-messages" },
+      { id: "reviews", label: "Reviews", icon: StarHalf, href: "/admin/reviews" },
+      {
+        id: "comments",
+        label: "Comments",
+        icon: MessageCircle,
+        hasDropdown: true,
+        subItems: [
+          { label: "Product Comments", href: "/admin/product-comments" },
+          { label: "Blog Comments", href: "/admin/blog-comments" },
+        ],
+      },
+      { id: "newsletter", label: "Newsletter", icon: Mail, href: "/admin/newsletter" },
+      { id: "affiliate", label: "Affiliate Program", icon: Share2, href: "/admin/affiliate" },
+      { id: "abuse-reports", label: "Abuse Reports", icon: AlertTriangle, href: "/admin/abuse-reports" },
+      { id: "email-blacklist", label: "Email Blacklist", icon: Ban, href: "/admin/email-blacklist" },
+    ],
+  },
+  {
+    title: "SETTINGS",
+    items: [
+      { id: "preferences", label: "Preferences", icon: Sliders, href: "/admin/preferences" },
+      {
+        id: "settings",
+        label: "Settings",
+        icon: Settings,
+        hasDropdown: true,
+        subItems: [
+          { label: "General Settings", href: "/admin/general-settings" },
+          { label: "Language Settings", href: "/admin/language-settings" },
+          { label: "Product Settings", href: "/admin/product-settings" },
+          { label: "Payment Settings", href: "/admin/payment-settings" },
+          { label: "Currency Settings", href: "/admin/currency-settings" },
+          { label: "Email Settings", href: "/admin/email-settings" },
+          { label: "Social Login", href: "/admin/social-login" },
+          { label: "Visual Settings", href: "/admin/visual-settings" },
+          { label: "Font Settings", href: "/admin/font-settings" },
+          { label: "Route Settings", href: "/admin/route-settings" },
+        ],
+      },
+    ],
+  },
+];
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const { sidebarOpenMobile, sidebarCollapsed, closeMobileSidebar } = useAdminContext();
-
-  const productPaths = [
-    "/admin/products",
-    "/admin/featured-products",
-    "/admin/special-offers",
-    "/admin/pending-products",
-    "/admin/hidden-products",
-    "/admin/expired-products",
-    "/admin/sold-products",
-    "/admin/drafts",
-    "/admin/deleted-products",
-    "/admin/add-product",
-    "/admin/bulk-product-upload",
-  ];
-
-  const isProductsActive = productPaths.some((p) => pathname.startsWith(p));
-
-  // Accordion state for dropdown items
-  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
-    orders: pathname.startsWith('/admin/orders') || pathname.startsWith('/admin/transactions'),
-    products: isProductsActive,
-    payments: pathname.startsWith('/admin/payments') || pathname.startsWith('/admin/payment'),
-    content: pathname.startsWith('/admin/blog') || pathname.startsWith('/admin/pages'),
-    membership: pathname.startsWith('/admin/users') || pathname.startsWith('/admin/vendors') || pathname.startsWith('/admin/administrators'),
-    settings: pathname.startsWith('/admin/settings'),
-  });
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    if (isProductsActive) {
-      setOpenMenus((prev) => ({ ...prev, products: true }));
-    }
-  }, [pathname, isProductsActive]);
+    const updated: Record<string, boolean> = {};
+    SIDEBAR_SECTIONS.forEach((sec) => {
+      sec.items.forEach((item) => {
+        if (item.hasDropdown && item.subItems) {
+          const match = item.subItems.some((sub) => {
+            if (sub.href === "/admin") return pathname === "/admin";
+            return pathname.startsWith(sub.href);
+          });
+          if (match) {
+            updated[item.id] = true;
+          }
+        }
+      });
+    });
+    setOpenMenus((prev) => ({ ...prev, ...updated }));
+  }, [pathname]);
 
-  const toggleMenu = (key: string) => {
+  const toggleDropdown = (id: string) => {
     setOpenMenus((prev) => ({
       ...prev,
-      [key]: !prev[key],
+      [id]: !prev[id],
     }));
   };
 
-  const isActive = (path: string) => pathname === path;
+  const isItemActive = (item: MenuItem): boolean => {
+    if (item.href) {
+      if (item.href === "/admin") {
+        return pathname === "/admin";
+      }
+      return pathname.startsWith(item.href);
+    }
+    if (item.hasDropdown && item.subItems) {
+      return item.subItems.some((sub) => {
+        if (sub.href === "/admin") return pathname === "/admin";
+        return pathname.startsWith(sub.href);
+      });
+    }
+    return false;
+  };
+
+  const isSubActive = (subHref: string): boolean => {
+    if (subHref === "/admin") return pathname === "/admin";
+    return pathname.startsWith(subHref);
+  };
 
   return (
     <>
@@ -239,370 +322,165 @@ export default function AdminSidebar() {
       {sidebarOpenMobile && (
         <div
           onClick={closeMobileSidebar}
-          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-xs transition-opacity"
+          className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-xs transition-opacity"
         />
       )}
 
-      {/* Main Sidebar */}
+      {/* Main Sidebar - Exact #323B4A Dark Slate-Navy from User Screenshot */}
       <aside
-        className={`bg-[#323842] text-[#8a99a8] h-screen flex flex-col z-50 transition-all duration-300 ease-in-out shrink-0 select-none
+        className={`bg-[#323B4A] text-[#8a99a8] h-screen flex flex-col z-50 transition-all duration-300 ease-in-out shrink-0 select-none font-sans
           ${
-          /* Mobile drawer */
-          sidebarOpenMobile
-            ? "fixed inset-y-0 left-0 w-[260px] translate-x-0 shadow-2xl"
-            : "fixed inset-y-0 left-0 -translate-x-full md:translate-x-0 md:static"
+            sidebarOpenMobile
+              ? "fixed inset-y-0 left-0 w-[230px] translate-x-0 shadow-2xl"
+              : "fixed inset-y-0 left-0 -translate-x-full md:translate-x-0 md:static"
           }
           ${
-          /* Desktop collapse toggle */
-          sidebarCollapsed
-            ? "md:-ml-[260px] md:opacity-0 md:pointer-events-none"
-            : "md:ml-0 md:opacity-100 md:w-[260px]"
+            sidebarCollapsed
+              ? "md:-ml-[230px] md:opacity-0 md:pointer-events-none"
+              : "md:ml-0 md:opacity-100 md:w-[230px]"
           }
         `}
       >
-        {/* Header / Brand */}
-        <div className="pt-6 pb-5 px-6 flex items-center justify-between relative">
+        {/* Header / Brand Logo: Centered Modesy Panel */}
+        <div className="pt-6 pb-4 px-6 flex items-center justify-center relative">
           <Link
             href="/admin"
             onClick={closeMobileSidebar}
-            className="text-[22px] tracking-wide text-center text-white font-bold w-full"
+            className="text-[21px] tracking-normal text-center text-white block w-full hover:opacity-95 transition-opacity"
           >
-            Modesy <span className="font-light">Panel</span>
+            <span className="font-bold">Modesy</span>{" "}
+            <span className="font-light text-white/95">Panel</span>
           </Link>
           {/* Close button on mobile */}
           <button
             onClick={closeMobileSidebar}
-            className="md:hidden text-gray-400 hover:text-white p-1 absolute right-4"
+            className="md:hidden text-white/70 hover:text-white p-1 absolute right-3 top-5"
+            aria-label="Close sidebar"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Admin Info Banner */}
-        <div className="px-6 py-2 flex items-center mb-2">
+        {/* User Panel - Matching Screenshot (Orb avatar + Admin + green dot Online) */}
+        <div className="px-6 py-3 flex items-center bg-transparent">
           <div className="relative shrink-0">
             <img
-              src="https://i.pravatar.cc/150?u=admin"
+              src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=100&auto=format&fit=crop&q=80"
               alt="Admin"
-              className="w-[50px] h-[50px] rounded-full object-cover shadow-sm border border-gray-600"
+              className="w-[46px] h-[46px] rounded-full object-cover shadow-sm"
             />
           </div>
-          <div className="ml-4 overflow-hidden">
-            <p className="text-[14px] font-bold text-white mb-0.5">Admin</p>
-            <div className="flex items-center text-[11px] text-white">
-              <Circle className="w-2.5 h-2.5 fill-[#00a65a] text-[#00a65a] mr-1.5" />
+          <div className="ml-3.5 overflow-hidden">
+            <p className="text-[14px] font-bold text-white leading-tight mb-1 truncate">
+              Admin
+            </p>
+            <div className="flex items-center text-[11px] text-white/90">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#00a65a] mr-1.5 shrink-0 inline-block"></span>
               Online
             </div>
           </div>
         </div>
 
-        {/* Scrollable Navigation Menu */}
-        <div className="flex-1 overflow-y-auto pb-8 scrollbar-thin scrollbar-thumb-slate-600">
-          <SidebarSection title="NAVIGATION">
-            <SidebarItem
-              icon={Home}
-              label="Home"
-              href="/admin"
-              active={isActive("/admin")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Paintbrush}
-              label="Theme"
-              href="/admin/theme"
-              active={isActive("/admin/theme")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={SlidersHorizontal}
-              label="Slider"
-              href="/admin/slider"
-              active={isActive("/admin/slider")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={LayoutTemplate}
-              label="Homepage Manager"
-              href="/admin/homepage-manager"
-              active={isActive("/admin/homepage-manager")}
-              onItemClick={closeMobileSidebar}
-            />
-          </SidebarSection>
+        {/* Navigation Menu */}
+        <div className="flex-1 overflow-y-auto pb-8 scrollbar-thin scrollbar-thumb-[#242b37] scrollbar-track-transparent">
+          <ul className="space-y-0 text-[13.5px] list-none p-0 m-0">
+            {SIDEBAR_SECTIONS.map((section, sIdx) => (
+              <li key={sIdx} className="list-none">
+                {/* Section Header: Soft grayish blue uppercase tracking-wider */}
+                <div className="px-6 pt-5 pb-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-[#637487] select-none">
+                  {section.title}
+                </div>
 
-          <SidebarSection title="ORDERS">
-            <SidebarItem
-              icon={ShoppingCart}
-              label="Orders"
-              hasDropdown
-              active={pathname.startsWith('/admin/orders') || pathname.startsWith('/admin/transactions')}
-              isOpen={openMenus.orders !== undefined ? openMenus.orders : (pathname.startsWith('/admin/orders') || pathname.startsWith('/admin/transactions'))}
-              onToggle={() => toggleMenu("orders")}
-              subItems={[
-                { label: "Orders", href: "/admin/orders" },
-                { label: "Transactions", href: "/admin/transactions" },
-              ]}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={ShoppingBag}
-              label="Digital Sales"
-              href="/admin/digital-sales"
-              active={isActive("/admin/digital-sales")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Flag}
-              label="Refund Requests"
-              href="/admin/refund-requests"
-              active={isActive("/admin/refund-requests")}
-              onItemClick={closeMobileSidebar}
-            />
-          </SidebarSection>
+                {/* Section Items */}
+                <ul className="space-y-0 list-none p-0 m-0">
+                  {section.items.map((item) => {
+                    const active = isItemActive(item);
+                    const isOpen = !!openMenus[item.id];
+                    const Icon = item.icon;
 
-          <SidebarSection title="PRODUCTS">
-            <SidebarItem
-              icon={ShoppingBasket}
-              label="Products"
-              hasDropdown
-              isOpen={openMenus.products}
-              active={isProductsActive}
-              onToggle={() => toggleMenu("products")}
-              subItems={[
-                { label: "Products", href: "/admin/products" },
-                { label: "Featured Products", href: "/admin/featured-products" },
-                { label: "Special Offers", href: "/admin/special-offers" },
-                { label: "Pending Products", href: "/admin/pending-products" },
-                { label: "Hidden Products", href: "/admin/hidden-products" },
-                { label: "Expired Products", href: "/admin/expired-products" },
-                { label: "Sold Products", href: "/admin/sold-products" },
-                { label: "Drafts", href: "/admin/drafts" },
-                { label: "Deleted Products", href: "/admin/deleted-products" },
-                { label: "Add Product", href: "/admin/add-product" },
-                { label: "Bulk Product Upload", href: "/admin/bulk-product-upload" },
-              ]}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Tag}
-              label="Quote Requests"
-              href="/admin/quote-requests"
-              active={isActive("/admin/quote-requests")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Folder}
-              label="Categories"
-              href="/admin/categories"
-              active={isActive("/admin/categories")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Tags}
-              label="Tags"
-              href="/admin/tags"
-              active={isActive("/admin/tags")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Asterisk}
-              label="Brands"
-              href="/admin/brands"
-              active={isActive("/admin/brands")}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={GripHorizontal}
-              label="Custom Fields"
-              href="/admin/custom-fields"
-              active={isActive("/admin/custom-fields")}
-              onItemClick={closeMobileSidebar}
-            />
-          </SidebarSection>
+                    if (item.hasDropdown && item.subItems) {
+                      return (
+                        <li key={item.id} className="relative">
+                          <button
+                            type="button"
+                            onClick={() => toggleDropdown(item.id)}
+                            className={`w-full flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer text-left select-none ${
+                              active
+                                ? "text-white font-medium"
+                                : "text-[#8a99a8] hover:text-white hover:bg-[#28303c]/50"
+                            }`}
+                          >
+                            <div className="flex items-center min-w-0 pr-2">
+                              <Icon className="w-[16px] h-[16px] mr-3.5 shrink-0" strokeWidth={active ? 2.2 : 1.8} />
+                              <span className="truncate">{item.label}</span>
+                            </div>
+                            <ChevronLeft
+                              className={`w-3.5 h-3.5 shrink-0 opacity-60 transition-transform duration-200 ${
+                                isOpen ? "-rotate-90 text-white opacity-90" : "rotate-0"
+                              }`}
+                            />
+                          </button>
 
-          <SidebarSection title="PAYMENTS">
-            <SidebarItem
-              icon={CreditCard}
-              label="Payments"
-              hasDropdown
-              isOpen={openMenus.payments}
-              onToggle={() => toggleMenu("payments")}
-              subItems={[
-                { label: "Payment History", href: "/admin/payment-history" },
-                { label: "Payment Settings", href: "/admin/payment-settings" },
-              ]}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Banknote}
-              label="Earnings"
-              href="/admin/earnings"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={DollarSign}
-              label="Payouts"
-              href="/admin/payouts"
-              onItemClick={closeMobileSidebar}
-            />
-          </SidebarSection>
+                          {/* Submenu Dropdown Tree */}
+                          {isOpen && (
+                            <ul className="bg-[#28303c] py-1.5 space-y-0.5 list-none m-0">
+                              {item.subItems.map((sub, subIdx) => {
+                                const subActive = isSubActive(sub.href);
+                                return (
+                                  <li key={subIdx}>
+                                    <Link
+                                      href={sub.href}
+                                      onClick={closeMobileSidebar}
+                                      className={`flex items-center pl-11 pr-6 py-2 text-[12.5px] transition-colors ${
+                                        subActive
+                                          ? "text-white font-medium bg-[#222933]"
+                                          : "text-[#8a99a8] hover:text-white hover:bg-[#222933]/50"
+                                      }`}
+                                    >
+                                      <span
+                                        className={`inline-block w-1.5 h-1.5 rounded-full border mr-2.5 shrink-0 transition-colors ${
+                                          subActive
+                                            ? "border-white bg-white"
+                                            : "border-[#8a99a8] bg-transparent"
+                                        }`}
+                                      />
+                                      <span className="truncate">{sub.label}</span>
+                                    </Link>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+                        </li>
+                      );
+                    }
 
-          <SidebarSection title="CONTENT">
-            <SidebarItem
-              icon={FileText}
-              label="Pages"
-              href="/admin/pages"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Newspaper}
-              label="Blog"
-              hasDropdown
-              isOpen={openMenus.content}
-              onToggle={() => toggleMenu("content")}
-              subItems={[
-                { label: "Posts", href: "/admin/blog-posts" },
-                { label: "Categories", href: "/admin/blog-categories" },
-              ]}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={MapPin}
-              label="Location"
-              href="/admin/locations"
-              onItemClick={closeMobileSidebar}
-            />
-          </SidebarSection>
-
-          <SidebarSection title="MEMBERSHIP">
-            <SidebarItem
-              icon={Users}
-              label="Membership"
-              hasDropdown
-              isOpen={openMenus.membership}
-              onToggle={() => toggleMenu("membership")}
-              subItems={[
-                { label: "Users", href: "/admin/users" },
-                { label: "Vendors", href: "/admin/vendors" },
-                { label: "Administrators", href: "/admin/administrators" },
-              ]}
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={KeyRound}
-              label="Roles & Permissions"
-              href="/admin/roles"
-              active={isActive("/admin/roles")}
-              onItemClick={closeMobileSidebar}
-            />
-          </SidebarSection>
-
-          <SidebarSection title="MANAGEMENT TOOLS">
-            <SidebarItem
-              icon={HelpCircle}
-              label="Help Center"
-              href="/admin/help-center"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Database}
-              label="Cache System"
-              href="/admin/cache-system"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={BarChart}
-              label="SEO Tools"
-              href="/admin/seo-tools"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Megaphone}
-              label="Ad Spaces"
-              href="/admin/ad-spaces"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={MessageSquare}
-              label="Chat Messages"
-              href="/admin/chat-messages"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Send}
-              label="Contact Messages"
-              href="/admin/contact-messages"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={StarHalf}
-              label="Reviews"
-              href="/admin/reviews"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={MessageCircle}
-              label="Comments"
-              href="/admin/comments"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Mail}
-              label="Newsletter"
-              href="/admin/newsletter"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={LinkIcon}
-              label="Affiliate Program"
-              href="/admin/affiliate"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={AlertTriangle}
-              label="Abuse Reports"
-              href="/admin/abuse-reports"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={MailX}
-              label="Email Blacklist"
-              href="/admin/email-blacklist"
-              onItemClick={closeMobileSidebar}
-            />
-          </SidebarSection>
-
-          <SidebarSection title="SETTINGS">
-            <SidebarItem
-              icon={Sliders}
-              label="Preferences"
-              href="/admin/preferences"
-              onItemClick={closeMobileSidebar}
-            />
-            <SidebarItem
-              icon={Settings}
-              label="Settings"
-              hasDropdown
-              isOpen={openMenus.settings}
-              onToggle={() => toggleMenu("settings")}
-              subItems={[
-                { label: "General Settings", href: "/admin/settings" },
-                { label: "Visual Settings", href: "/admin/visual-settings" },
-                { label: "Email Settings", href: "/admin/email-settings" },
-              ]}
-              onItemClick={closeMobileSidebar}
-            />
-          </SidebarSection>
-
-          <div className="px-6 mt-8 mb-4">
-            <button
-              type="button"
-              onClick={() => alert("Database backup download started...")}
-              className="w-full flex items-center justify-center py-2 px-3 bg-[#2a3038] hover:bg-[#252a31] text-[#8a99a8] hover:text-white rounded text-xs transition-colors border border-[#252a31] cursor-pointer"
-            >
-              <DownloadCloud className="w-4 h-4 mr-2" />
-              Download Database Backup
-            </button>
-          </div>
+                    return (
+                      <li key={item.id}>
+                        <Link
+                          href={item.href || "#"}
+                          onClick={closeMobileSidebar}
+                          className={`flex items-center justify-between px-6 py-[9px] transition-colors cursor-pointer select-none ${
+                            active
+                              ? "text-white font-semibold"
+                              : "text-[#8a99a8] hover:text-white hover:bg-[#28303c]/50"
+                          }`}
+                        >
+                          <div className="flex items-center min-w-0">
+                            <Icon
+                              className={`w-[16px] h-[16px] mr-3.5 shrink-0 ${active ? "text-white" : "text-[#8a99a8]"}`}
+                              strokeWidth={active ? 2.3 : 1.8}
+                            />
+                            <span className="truncate">{item.label}</span>
+                          </div>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            ))}
+          </ul>
         </div>
       </aside>
     </>

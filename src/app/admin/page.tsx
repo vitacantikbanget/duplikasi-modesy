@@ -1,86 +1,179 @@
-import { ShoppingCart, ShoppingBag, EyeOff, Users, Minus, X, ArrowRight, Star } from 'lucide-react';
-import Link from 'next/link';
+"use client";
 
-const StatCard = ({ title, value, icon: Icon, colorClass }: { title: string, value: string | number, icon: any, colorClass: string }) => (
-  <div className={`rounded-[3px] shadow-[0_1px_1px_rgba(0,0,0,0.1)] text-white overflow-hidden flex flex-col ${colorClass}`}>
-    <div className="p-5 flex justify-between items-start relative">
-      <div className="z-10">
-        <h3 className="text-[38px] font-bold leading-none mb-2">{value}</h3>
-        <p className="text-[15px]">{title}</p>
-      </div>
-      <Icon className="w-16 h-16 absolute -right-2 top-4 opacity-20 transform transition-transform hover:scale-110 duration-300" />
+import React, { useState } from "react";
+import Link from "next/link";
+import {
+  ShoppingCart,
+  ShoppingBag,
+  EyeOff,
+  Users,
+  Minus,
+  X,
+  ArrowRight,
+} from "lucide-react";
+
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  icon: any;
+  colorClass: string;
+  href?: string;
+}
+
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, colorClass, href = "#" }) => (
+  <div
+    className={`rounded-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.08)] text-white overflow-hidden relative flex flex-col justify-between ${colorClass}`}
+  >
+    <div className="px-5 pt-4 pb-2 relative z-10 flex flex-col justify-center">
+      <h3 className="text-[36px] font-bold leading-none mb-1 tracking-tight">{value}</h3>
+      <p className="text-[14px] font-normal opacity-95">{title}</p>
+      <Icon className="w-20 h-20 absolute -right-2 top-2 opacity-20 transform transition-transform duration-200 pointer-events-none" />
     </div>
-    <Link href="#" className="bg-black/10 hover:bg-black/15 py-1.5 flex justify-center items-center text-sm transition-colors z-10">
-      More info <ArrowRight className="w-4 h-4 ml-1" />
+    <Link
+      href={href}
+      className="bg-black/15 hover:bg-black/25 text-white/90 hover:text-white py-1 px-4 text-[12px] flex items-center justify-center gap-1.5 transition-colors z-10"
+    >
+      <span>More info</span>
+      <ArrowRight className="w-3.5 h-3.5" />
     </Link>
   </div>
 );
 
-const WidgetPanel = ({ title, children, showViewAll = true }: { title: string, children: React.ReactNode, showViewAll?: boolean }) => (
-  <div className="bg-white shadow-[0_1px_1px_rgba(0,0,0,0.1)] rounded-[3px] border-t-[3px] border-transparent flex flex-col h-full relative">
-    <div className="px-2.5 py-2.5 border-b border-[#f4f4f4] flex justify-between items-center">
-      <h3 className="text-gray-700 text-[15px] font-normal">{title}</h3>
-      <div className="flex space-x-1 text-gray-400">
-        <button className="p-1 hover:bg-gray-100 rounded text-gray-500"><Minus className="w-3.5 h-3.5" /></button>
-        <button className="p-1 hover:bg-gray-100 rounded text-gray-500"><X className="w-3.5 h-3.5" /></button>
+interface WidgetPanelProps {
+  title: string;
+  children: React.ReactNode;
+  showViewAll?: boolean;
+  viewAllHref?: string;
+}
+
+const WidgetPanel: React.FC<WidgetPanelProps> = ({
+  title,
+  children,
+  showViewAll = true,
+  viewAllHref = "#",
+}) => {
+  const [collapsed, setCollapsed] = useState(false);
+  const [closed, setClosed] = useState(false);
+
+  if (closed) return null;
+
+  return (
+    <div className="bg-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] rounded-[3px] border border-gray-200/70 flex flex-col h-full relative">
+      <div className="px-4 py-3 border-b border-[#f4f4f4] flex justify-between items-center bg-white rounded-t-[3px]">
+        <h3 className="text-gray-800 text-[14.5px] font-semibold">{title}</h3>
+        <div className="flex items-center space-x-1.5 text-gray-400">
+          <button
+            type="button"
+            onClick={() => setCollapsed(!collapsed)}
+            className="p-1 hover:bg-gray-100 rounded text-gray-400 hover:text-gray-600 cursor-pointer"
+            title="Minimize"
+          >
+            <Minus className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setClosed(true)}
+            className="p-1 hover:bg-gray-100 rounded text-gray-400 hover:text-gray-600 cursor-pointer"
+            title="Close"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
+
+      {!collapsed && (
+        <>
+          <div className="p-0 flex-1 overflow-y-auto max-h-[360px] scrollbar-thin scrollbar-thumb-gray-200">
+            {children}
+          </div>
+          {showViewAll && (
+            <div className="px-4 py-2.5 border-t border-[#f4f4f4] bg-white flex justify-end rounded-b-[3px]">
+              <Link
+                href={viewAllHref}
+                className="text-[11.5px] bg-[#f4f4f4] hover:bg-[#e8e8e8] text-[#444] border border-[#d2d6de] px-3 py-1 rounded-[3px] transition-colors font-medium shadow-2xs"
+              >
+                View All
+              </Link>
+            </div>
+          )}
+        </>
+      )}
     </div>
-    <div className="p-0 flex-1 overflow-y-auto max-h-[350px] scrollbar-thin scrollbar-thumb-gray-300">
-      {children}
-    </div>
-    {showViewAll && (
-      <div className="p-3 border-t border-[#f4f4f4] bg-white flex justify-end">
-        <Link href="#" className="text-xs bg-[#f4f4f4] border border-[#ddd] text-[#444] px-3 py-1 hover:bg-[#e7e7e7] transition-colors rounded-[3px]">
-          View All
-        </Link>
-      </div>
-    )}
-  </div>
-);
+  );
+};
 
 export default function AdminDashboard() {
+  const [showDemoAlert, setShowDemoAlert] = useState(true);
+
   return (
-    <div className="space-y-4">
-      {/* Stats Cards */}
+    <div className="space-y-4 font-sans max-w-full">
+      {/* Demo Account Alert Banner (Exactly matching screenshot) */}
+      {showDemoAlert && (
+        <div className="px-4 py-2.5 bg-[#f8d7da] border border-[#f5c6cb] text-[#721c24] rounded-[3px] text-[13px] flex items-center justify-between shadow-2xs transition-all">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[14px] leading-none">✕</span>
+            <span>You have no permission for this as demo account!</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowDemoAlert(false)}
+            className="text-[#721c24] hover:opacity-75 p-0.5 cursor-pointer"
+            aria-label="Dismiss alert"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* 4 Stat Cards - Exact Colors & Numbers from Screenshot */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Orders" value="41" icon={ShoppingCart} colorClass="bg-[#00a65a]" />
-        <StatCard title="Products" value="47" icon={ShoppingBag} colorClass="bg-[#605ca8]" />
-        <StatCard title="Pending Products" value="0" icon={EyeOff} colorClass="bg-[#dd4b39]" />
-        <StatCard title="Members" value="15" icon={Users} colorClass="bg-[#f39c12]" />
+        <StatCard title="Orders" value="46" icon={ShoppingCart} colorClass="bg-[#00a65a]" href="/admin/orders" />
+        <StatCard title="Products" value="47" icon={ShoppingBag} colorClass="bg-[#605ca8]" href="/admin/products" />
+        <StatCard title="Pending Products" value="0" icon={EyeOff} colorClass="bg-[#dd4b39]" href="/admin/pending-products" />
+        <StatCard title="Members" value="19" icon={Users} colorClass="bg-[#f39c12]" href="/admin/users" />
       </div>
 
-      {/* Row 1 */}
+      {/* Row 1: Latest Orders & Latest Transactions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Latest Orders */}
-        <WidgetPanel title="Latest Orders">
-          <table className="w-full text-[13px] text-left text-gray-700 m-0">
-            <thead className="border-b-2 border-gray-200">
+        <WidgetPanel title="Latest Orders" viewAllHref="/admin/orders">
+          <table className="w-full text-[12.5px] text-left text-gray-700 m-0 border-collapse">
+            <thead className="border-b border-gray-200/80 bg-white">
               <tr>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Order</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Total</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Status</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Date</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4] text-right">Details</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800">Order</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800">Total</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800">Status</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800">Date</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800 text-right">Details</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { id: '#10041', amount: '$60.20', status: 'Processing', date: '2026-10-05 / 15:38' },
-                { id: '#10040', amount: '$138.00', status: 'Processing', date: '2026-09-29 / 12:00' },
-                { id: '#10039', amount: '$94.00', status: 'Processing', date: '2026-09-29 / 00:34' },
-                { id: '#10038', amount: '$381.85', status: 'Processing', date: '2026-09-28 / 22:48' },
-                { id: '#10037', amount: '$71.95', status: 'Processing', date: '2026-09-28 / 15:39' },
-                { id: '#10036', amount: '$336.00', status: 'Processing', date: '2026-09-28 / 06:49' },
+                { id: "#10046", amount: "$84.35", status: "Completed", statusBg: "bg-[#00a65a]", date: "2026-10-17 / 19:08" },
+                { id: "#10045", amount: "$60.20", status: "Processing", statusBg: "bg-[#f39c12]", date: "2026-10-17 / 08:08" },
+                { id: "#10044", amount: "$154", status: "Processing", statusBg: "bg-[#f39c12]", date: "2026-10-14 / 20:42" },
+                { id: "#10043", amount: "$1,519.45", status: "Processing", statusBg: "bg-[#f39c12]", date: "2026-10-14 / 19:49" },
+                { id: "#10042", amount: "$236.25", status: "Processing", statusBg: "bg-[#f39c12]", date: "2026-10-12 / 19:26" },
+                { id: "#10041", amount: "$60.20", status: "Processing", statusBg: "bg-[#f39c12]", date: "2026-10-05 / 15:38" },
               ].map((order, i) => (
-                <tr key={i} className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]">
-                  <td className="px-4 py-2 text-[#3c8dbc]">{order.id}</td>
-                  <td className="px-4 py-2">{order.amount}</td>
-                  <td className="px-4 py-2 text-gray-600">
-                    <span className="bg-[#f39c12] text-white px-2 py-0.5 rounded text-[11px] font-bold">{order.status}</span>
+                <tr key={i} className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9] transition-colors">
+                  <td className="px-4 py-2.5 text-[#3c8dbc] font-medium hover:underline cursor-pointer">
+                    <Link href="/admin/orders">{order.id}</Link>
                   </td>
-                  <td className="px-4 py-2 text-gray-500">{order.date}</td>
-                  <td className="px-4 py-2 text-right">
-                    <button className="bg-[#00c0ef] text-white text-[11px] font-bold px-2.5 py-[3px] rounded-[3px] hover:bg-[#00acd6]">Details</button>
+                  <td className="px-4 py-2.5 font-medium text-gray-800">{order.amount}</td>
+                  <td className="px-4 py-2.5">
+                    <span className={`${order.statusBg} text-white px-2 py-0.5 rounded-[2px] text-[11px] font-semibold tracking-wide`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2.5 text-gray-500 whitespace-nowrap">{order.date}</td>
+                  <td className="px-4 py-2.5 text-right">
+                    <Link
+                      href="/admin/orders"
+                      className="inline-block bg-[#00c0ef] hover:bg-[#00acd6] text-white text-[11px] font-semibold px-2.5 py-1 rounded-[2px] transition-colors shadow-2xs"
+                    >
+                      Details
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -89,35 +182,37 @@ export default function AdminDashboard() {
         </WidgetPanel>
 
         {/* Latest Transactions */}
-        <WidgetPanel title="Latest Transactions">
-          <table className="w-full text-[13px] text-left text-gray-700 m-0">
-            <thead className="border-b-2 border-gray-200">
+        <WidgetPanel title="Latest Transactions" viewAllHref="/admin/transactions">
+          <table className="w-full text-[12.5px] text-left text-gray-700 m-0 border-collapse">
+            <thead className="border-b border-gray-200/80 bg-white">
               <tr>
-                <th className="px-4 py-2 font-bold w-12 border-b border-[#f4f4f4]">Id</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Order</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Payment Amount</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Payment Method</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Status</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Date</th>
+                <th className="px-3 py-2.5 font-semibold text-gray-800 w-10">Id</th>
+                <th className="px-3 py-2.5 font-semibold text-gray-800">Order</th>
+                <th className="px-3 py-2.5 font-semibold text-gray-800">Payment Amount</th>
+                <th className="px-3 py-2.5 font-semibold text-gray-800">Payment Method</th>
+                <th className="px-3 py-2.5 font-semibold text-gray-800">Status</th>
+                <th className="px-3 py-2.5 font-semibold text-gray-800">Date</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { id: '18', order: '#10033', amount: '$191.10', method: 'Wallet Balance', status: 'Succeeded', date: '2026-09-23 / 17:23' },
-                { id: '17', order: '#10031', amount: '$257.00', method: 'Wallet Balance', status: 'Succeeded', date: '2026-09-23 / 02:08' },
-                { id: '16', order: '#10029', amount: '$259.05', method: 'Wallet Balance', status: 'Succeeded', date: '2026-09-22 / 06:40' },
-                { id: '15', order: '#10025', amount: 'N149479.73', method: 'PayStack', status: 'success', date: '2026-09-16 / 10:38' },
-                { id: '14', order: '#10019', amount: '$182.10', method: 'Wallet Balance', status: 'Succeeded', date: '2026-09-09 / 11:39' },
-                { id: '13', order: '#10018', amount: '$149.50', method: 'Wallet Balance', status: 'Succeeded', date: '2026-09-09 / 05:59' },
-                { id: '12', order: '#10017', amount: '$87.00', method: 'Wallet Balance', status: 'Succeeded', date: '2026-09-06 / 02:16' },
+                { id: "20", order: "#10046", amount: "$84.35", method: "Wallet Balance", status: "Succeeded", date: "2026-10-17 / 19:08" },
+                { id: "19", order: "#10042", amount: "$236.25", method: "Wallet Balance", status: "Succeeded", date: "2026-10-12 / 19:26" },
+                { id: "18", order: "#10033", amount: "$191.10", method: "Wallet Balance", status: "Succeeded", date: "2026-09-23 / 17:23" },
+                { id: "17", order: "#10031", amount: "$257", method: "Wallet Balance", status: "Succeeded", date: "2026-09-23 / 02:08" },
+                { id: "16", order: "#10029", amount: "$259.05", method: "Wallet Balance", status: "Succeeded", date: "2026-09-22 / 06:40" },
+                { id: "15", order: "#10025", amount: "#149479.73", method: "PayStack", status: "success", date: "2026-09-16 / 10:38" },
+                { id: "14", order: "#10019", amount: "$182.10", method: "Wallet Balance", status: "Succeeded", date: "2026-09-09 / 11:39" },
               ].map((tx, i) => (
-                <tr key={i} className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]">
-                  <td className="px-4 py-2.5">{tx.id}</td>
-                  <td className="px-4 py-2.5 text-[#3c8dbc]">{tx.order}</td>
-                  <td className="px-4 py-2.5">{tx.amount}</td>
-                  <td className="px-4 py-2.5">{tx.method}</td>
-                  <td className="px-4 py-2.5">{tx.status}</td>
-                  <td className="px-4 py-2.5 text-gray-500 whitespace-nowrap">{tx.date}</td>
+                <tr key={i} className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9] transition-colors">
+                  <td className="px-3 py-2.5 text-gray-500">{tx.id}</td>
+                  <td className="px-3 py-2.5 text-[#3c8dbc] font-medium hover:underline cursor-pointer">
+                    <Link href="/admin/orders">{tx.order}</Link>
+                  </td>
+                  <td className="px-3 py-2.5 font-medium text-gray-800">{tx.amount}</td>
+                  <td className="px-3 py-2.5 text-gray-600">{tx.method}</td>
+                  <td className="px-3 py-2.5 font-medium text-gray-700">{tx.status}</td>
+                  <td className="px-3 py-2.5 text-gray-500 whitespace-nowrap">{tx.date}</td>
                 </tr>
               ))}
             </tbody>
@@ -125,37 +220,63 @@ export default function AdminDashboard() {
         </WidgetPanel>
       </div>
 
-      {/* Row 2 */}
+      {/* Row 2: Latest Products & Latest Pending Products */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Latest Products */}
-        <WidgetPanel title="Latest Products">
-          <table className="w-full text-[13px] text-left text-gray-700 m-0">
-            <thead className="border-b-2 border-gray-200">
+        <WidgetPanel title="Latest Products" viewAllHref="/admin/products">
+          <table className="w-full text-[12.5px] text-left text-gray-700 m-0 border-collapse">
+            <thead className="border-b border-gray-200/80 bg-white">
               <tr>
-                <th className="px-4 py-2 font-bold w-12 border-b border-[#f4f4f4]">Id</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Name</th>
-                <th className="px-4 py-2 font-bold text-right border-b border-[#f4f4f4]">Details</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800 w-12">Id</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800">Name</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800 text-right">Details</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { id: '47', name: 'Colorful women scarves', date: '2 months ago', img: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=150&h=150&fit=crop' },
-                { id: '46', name: 'Women\'s ankle boot with different colors', date: '2 months ago', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=150&h=150&fit=crop' },
-                { id: '45', name: 'Navy polka dot dress', date: '2 months ago', img: 'https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=150&h=150&fit=crop' },
+                {
+                  id: "47",
+                  name: "Colorful women scarves",
+                  date: "3 months ago",
+                  img: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=100&h=100&fit=crop&q=80",
+                },
+                {
+                  id: "46",
+                  name: "Women's ankle boot with different colors",
+                  date: "3 months ago",
+                  img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=100&h=100&fit=crop&q=80",
+                },
+                {
+                  id: "45",
+                  name: "Navy polka dot dress",
+                  date: "3 months ago",
+                  img: "https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=100&h=100&fit=crop&q=80",
+                },
               ].map((product, i) => (
-                <tr key={i} className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]">
-                  <td className="px-4 py-3 align-middle">{product.id}</td>
+                <tr key={i} className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9] transition-colors">
+                  <td className="px-4 py-3 align-middle text-gray-500 font-medium">{product.id}</td>
                   <td className="px-4 py-3 align-middle">
                     <div className="flex items-center">
-                      <img src={product.img} alt={product.name} className="w-12 h-12 object-cover shadow-sm mr-3 border border-gray-200" />
+                      <img
+                        src={product.img}
+                        alt={product.name}
+                        className="w-11 h-11 object-cover shadow-2xs mr-3 border border-gray-200 rounded-[2px]"
+                      />
                       <div>
-                        <p className="text-[#3c8dbc] hover:text-[#72afd2] cursor-pointer mb-0.5">{product.name}</p>
-                        <p className="text-[#999] text-[11px]">{product.date}</p>
+                        <p className="text-gray-800 hover:text-[#3c8dbc] cursor-pointer text-[12.5px] font-medium leading-tight mb-0.5">
+                          <Link href="/admin/products">{product.name}</Link>
+                        </p>
+                        <p className="text-gray-400 text-[11px]">{product.date}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-right align-middle">
-                    <button className="bg-[#00c0ef] text-white text-[11px] font-bold px-2.5 py-[3px] rounded-[3px] hover:bg-[#00acd6]">Details</button>
+                    <Link
+                      href="/admin/products"
+                      className="inline-block bg-[#00c0ef] hover:bg-[#00acd6] text-white text-[11px] font-semibold px-2.5 py-1 rounded-[2px] transition-colors shadow-2xs"
+                    >
+                      Details
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -164,124 +285,23 @@ export default function AdminDashboard() {
         </WidgetPanel>
 
         {/* Latest Pending Products */}
-        <WidgetPanel title="Latest Pending Products">
-          <table className="w-full text-[13px] text-left text-gray-700 m-0">
-            <thead className="border-b-2 border-gray-200">
+        <WidgetPanel title="Latest Pending Products" viewAllHref="/admin/pending-products">
+          <table className="w-full text-[12.5px] text-left text-gray-700 m-0 border-collapse">
+            <thead className="border-b border-gray-200/80 bg-white">
               <tr>
-                <th className="px-4 py-2 font-bold w-12 border-b border-[#f4f4f4]">Id</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Name</th>
-                <th className="px-4 py-2 font-bold text-right border-b border-[#f4f4f4]">Details</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800 w-12">Id</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800">Name</th>
+                <th className="px-4 py-2.5 font-semibold text-gray-800 text-right">Details</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td colSpan={3} className="px-4 py-8 text-center text-gray-400 border-b border-[#f4f4f4]">
+                <td colSpan={3} className="px-4 py-12 text-center text-gray-400 text-xs">
                   No records found.
                 </td>
               </tr>
             </tbody>
           </table>
-        </WidgetPanel>
-      </div>
-
-      {/* Row 3 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Latest Transactions (Featured Products) */}
-        <WidgetPanel title="Latest Transactions (Featured Products)">
-          <table className="w-full text-[13px] text-left text-gray-700 m-0">
-            <tbody>
-              {[
-                { id: '5', method: 'Razorpay', amount: '₹555.24', status: 'captured', date: '2026-08-04 / 10:09' },
-                { id: '4', method: 'PayPal', amount: '$31.50', status: 'COMPLETED', date: '2026-08-04 / 10:06' },
-                { id: '3', method: 'PayStack', amount: '₦16073.55', status: 'success', date: '2026-08-03 / 23:29' },
-                { id: '2', method: 'Stripe', amount: '$8.40', status: 'Paid', date: '2026-08-03 / 22:09' },
-                { id: '1', method: 'PayPal', amount: '$6.30', status: 'COMPLETED', date: '2026-08-03 / 22:06' },
-              ].map((tx, i) => (
-                <tr key={i} className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]">
-                  <td className="px-4 py-3 text-gray-500 w-12 text-center">{tx.id}</td>
-                  <td className="px-4 py-3">{tx.method}</td>
-                  <td className="px-4 py-3">{tx.amount}</td>
-                  <td className="px-4 py-3 text-gray-600">{tx.status}</td>
-                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{tx.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </WidgetPanel>
-
-        {/* Latest Reviews */}
-        <WidgetPanel title="Latest Reviews">
-          <table className="w-full text-[13px] text-left text-gray-700 m-0">
-            <tbody>
-              {[
-                { id: '3', user: 'Admin', text: 'This skirt is beautiful and the floral pattern is very charming. The material feels nice and it drapes', date: '2 months ago', stars: 4 },
-                { id: '2', user: 'Admin', text: 'The visuals are vibrant, and it really captures the essence of each vacation spot. It\'s both informative', date: '2 months ago', stars: 5 },
-                { id: '1', user: 'Admin', text: 'The light blue color is soft and flattering, and the fabric feels high-quality and breathable. It fits', date: '2 months ago', stars: 5 },
-              ].map((review, i) => (
-                <tr key={i} className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]">
-                  <td className="px-4 py-4 align-top w-12 text-center text-gray-500">{review.id}</td>
-                  <td className="px-4 py-4 align-top w-24 text-[#3c8dbc]">{review.user}</td>
-                  <td className="px-4 py-4 align-top">
-                    <div className="flex text-[#f39c12] mb-1">
-                      {[...Array(5)].map((_, idx) => (
-                        <Star key={idx} className={`w-3.5 h-3.5 ${idx < review.stars ? 'fill-current' : 'text-[#d2d6de]'}`} />
-                      ))}
-                    </div>
-                    <p className="text-gray-600 mb-1 leading-relaxed">{review.text}</p>
-                    <p className="text-[11px] text-[#999]">{review.date}</p>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </WidgetPanel>
-      </div>
-
-      {/* Row 4 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Latest Comments */}
-        <WidgetPanel title="Latest Comments">
-          <table className="w-full text-[13px] text-left text-gray-700 m-0">
-            <thead className="border-b-2 border-gray-200">
-              <tr>
-                <th className="px-4 py-2 font-bold w-12 border-b border-[#f4f4f4] text-center">Id</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">User</th>
-                <th className="px-4 py-2 font-bold border-b border-[#f4f4f4]">Comment</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-[#f4f4f4] hover:bg-[#f9f9f9]">
-                <td className="px-4 py-3 align-top text-center text-gray-500">1</td>
-                <td className="px-4 py-3 align-top whitespace-nowrap">Peter Jone</td>
-                <td className="px-4 py-3">
-                  <p className="text-gray-700">good</p>
-                  <p className="text-[11px] text-[#999] mt-0.5">27 days ago</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </WidgetPanel>
-
-        {/* Latest Members */}
-        <WidgetPanel title="Latest Members">
-          <div className="p-4 flex gap-6 overflow-x-auto border-b border-[#f4f4f4]">
-              {[
-                { name: 'goldie gl...', date: '1 day ago' },
-                { name: 'Atukund...', date: '7 days ago' },
-                { name: 'ismail el...', date: '11 days ago' },
-                { name: 'Caleb Pr...', date: '15 days ago' },
-                { name: 'rixebav7...', date: '17 days ago' },
-                { name: 'Resa sz', date: '19 days ago' },
-              ].map((member, i) => (
-                <div key={i} className="flex flex-col items-center flex-shrink-0 text-center">
-                  <div className="w-14 h-14 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-gray-400 overflow-hidden">
-                    <Users className="w-6 h-6 opacity-50" />
-                  </div>
-                  <span className="text-[13px] text-[#3c8dbc] truncate w-20 hover:text-blue-500 cursor-pointer">{member.name}</span>
-                  <span className="text-[11px] text-gray-500">{member.date}</span>
-                </div>
-              ))}
-          </div>
         </WidgetPanel>
       </div>
     </div>

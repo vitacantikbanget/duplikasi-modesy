@@ -1,225 +1,199 @@
 "use client";
 
+/**
+ * ============================================================================
+ * HALAMAN DOMPET PENGGUNA (Customer / Member Wallet Page)
+ * ============================================================================
+ * 
+ * FUNGSI UTAMA:
+ * Menampilkan saldo dompet pengguna, navigasi riwayat komisi transaksi (Earnings),
+ * riwayat isi saldo manual (Deposits), pengeluaran (Expenses), penarikan dana
+ * (Payouts), serta konfigurasi akun bank/PayPal penarikan (Set Payout Account).
+ * 
+ * FITUR:
+ * 1. Kartu Saldo Dompet (Wallet Balance Card) dengan tombol Add Funds.
+ * 2. Navigasi Tab Pills (Earnings, Deposits, Expenses, Payouts, Set Payout Account).
+ * 3. Tabel Riwayat Pendapatan / Earnings (Total, PPN, Rincian Komisi & Diskon, Ongkir, Pendapatan Bersih).
+ * 4. Modal Isi Saldo / Add Funds ke dompet via Bank Transfer atau Kartu.
+ * 5. Konfigurasi rekening bank pencairan dana.
+ */
+
 import { useState } from "react";
 import Link from "next/link";
 import {
   CreditCard,
   X,
   CheckCircle2,
-  Wallet as WalletIcon,
   DollarSign,
   ArrowUpRight,
   ArrowDownLeft,
 } from "lucide-react";
 
+/**
+ * Tipe data untuk baris transaksi pendapatan (Earnings item)
+ */
 export interface EarningItem {
-  id: string;
-  orderNumber: string;
-  total: string;
-  vat: string;
-  commission: string;
-  referrerCommission: string;
-  referralDiscount: string;
-  discountCoupon: string;
-  shippingCost: string;
-  earnedAmount: string;
-  date: string;
+  id: string;                   // ID unik baris data
+  orderNumber: string;          // Nomor pesanan (e.g. #10051)
+  total: string;                // Total nilai transaksi (e.g. $240 (USD))
+  vat: string;                  // Nilai PPN / VAT
+  commission: string;           // Nilai komisi platform
+  referrerCommission: string;   // Nilai komisi afiliasi
+  referralDiscount: string;     // Nilai diskon referral
+  discountCoupon: string;       // Nilai kupon potongan harga
+  shippingCost: string;         // Ongkos kirim
+  earnedAmount: string;         // Pendapatan bersih penjual / penerima
+  date: string;                 // Tanggal transaksi
 }
 
+/**
+ * Data transaksi riwayat pendapatan toko
+ */
 const EARNINGS_DATA: EarningItem[] = [
   {
     id: "1",
-    orderNumber: "#10033",
-    total: "$69 (USD)",
-    vat: "$6.90 (10%)",
-    commission: "$6.90 (10%)",
+    orderNumber: "#10051",
+    total: "$240 (USD)",
+    vat: "$0",
+    commission: "$12 (5%)",
     referrerCommission: "$0 (0%)",
     referralDiscount: "$0 (0%)",
     discountCoupon: "$0",
-    shippingCost: "$2",
-    earnedAmount: "$71 (USD)",
-    date: "2026-10-04 / 20:20",
+    shippingCost: "$5",
+    earnedAmount: "$255 (USD)",
+    date: "2026-10-17 / 21:39",
   },
   {
     id: "2",
-    orderNumber: "#10010",
-    total: "$40 (USD)",
-    vat: "$4 (10%)",
-    commission: "$6 (15%)",
+    orderNumber: "#10033",
+    total: "$80 (USD)",
+    vat: "$0",
+    commission: "$12 (15%)",
     referrerCommission: "$0 (0%)",
     referralDiscount: "$0 (0%)",
     discountCoupon: "$0",
-    shippingCost: "$1.67",
-    earnedAmount: "$39.67 (USD)",
-    date: "2026-09-25 / 14:03",
+    shippingCost: "$0",
+    earnedAmount: "$68 (USD)",
+    date: "2026-10-04 / 20:20",
   },
   {
     id: "3",
-    orderNumber: "#10010",
-    total: "$69 (USD)",
-    vat: "$6.90 (10%)",
-    commission: "$6.90 (10%)",
+    orderNumber: "#10033",
+    total: "$15 (USD)",
+    vat: "$0",
+    commission: "$0.75 (5%)",
     referrerCommission: "$0 (0%)",
     referralDiscount: "$0 (0%)",
     discountCoupon: "$0",
-    shippingCost: "$1.67",
-    earnedAmount: "$70.67 (USD)",
-    date: "2026-09-25 / 14:03",
+    shippingCost: "$0",
+    earnedAmount: "$14.25 (USD)",
+    date: "2026-09-23 / 17:23",
   },
   {
     id: "4",
-    orderNumber: "#10029",
-    total: "$29 (USD)",
-    vat: "$2.90 (10%)",
-    commission: "$2.90 (10%)",
+    orderNumber: "#10010",
+    total: "$59 (USD)",
+    vat: "$0",
+    commission: "$5.90 (10%)",
     referrerCommission: "$0 (0%)",
     referralDiscount: "$0 (0%)",
     discountCoupon: "$0",
-    shippingCost: "$2.50",
-    earnedAmount: "$31.50 (USD)",
-    date: "2026-09-22 / 06:40",
+    shippingCost: "$0",
+    earnedAmount: "$53.10 (USD)",
+    date: "2026-09-16 / 10:12",
   },
   {
     id: "5",
-    orderNumber: "#10025",
-    total: "₦43,737.51 (NGN)",
-    vat: "₦4,373.75 (10%)",
-    commission: "₦4,373.75 (10%)",
-    referrerCommission: "₦0 (0%)",
-    referralDiscount: "₦0 (0%)",
-    discountCoupon: "₦0",
-    shippingCost: "₦0",
-    earnedAmount: "₦43,737.51 (NGN) (29.00 USD)",
-    date: "2026-09-16 / 10:38",
+    orderNumber: "#10011",
+    total: "$49 (USD)",
+    vat: "$0",
+    commission: "$2.45 (5%)",
+    referrerCommission: "$0 (0%)",
+    referralDiscount: "$0 (0%)",
+    discountCoupon: "$0",
+    shippingCost: "$0",
+    earnedAmount: "$46.55 (USD)",
+    date: "2026-09-16 / 10:12",
   },
   {
     id: "6",
-    orderNumber: "#10015",
-    total: "$36 (USD)",
-    vat: "$3.60 (10%)",
-    commission: "$3.60 (10%)",
-    referrerCommission: "$0 (0%)",
-    referralDiscount: "$0 (0%)",
-    discountCoupon: "$0",
-    shippingCost: "$0",
-    earnedAmount: "$36 (USD)",
-    date: "2026-09-06 / 02:14",
-  },
-  {
-    id: "7",
-    orderNumber: "#10011",
-    total: "$10 (USD)",
-    vat: "$1 (10%)",
-    commission: "$1 (10%)",
-    referrerCommission: "$0 (0%)",
-    referralDiscount: "$0 (0%)",
-    discountCoupon: "$0",
-    shippingCost: "$0",
-    earnedAmount: "$10 (USD)",
-    date: "2026-08-31 / 18:56",
-  },
-  {
-    id: "8",
     orderNumber: "#10010",
-    total: "$29 (USD)",
-    vat: "$2.90 (10%)",
-    commission: "$2.90 (10%)",
+    total: "$19 (USD)",
+    vat: "$0",
+    commission: "$0.95 (5%)",
     referrerCommission: "$0 (0%)",
     referralDiscount: "$0 (0%)",
     discountCoupon: "$0",
-    shippingCost: "$1.67",
-    earnedAmount: "$30.67 (USD)",
+    shippingCost: "$0",
+    earnedAmount: "$18.05 (USD)",
     date: "2026-08-31 / 17:37",
   },
   {
-    id: "9",
-    orderNumber: "#10008",
-    total: "$25 (USD)",
-    vat: "$2.50 (10%)",
-    commission: "$2.50 (10%)",
+    id: "7",
+    orderNumber: "#10009",
+    total: "$100 (USD)",
+    vat: "$0",
+    commission: "$5 (5%)",
     referrerCommission: "$0 (0%)",
     referralDiscount: "$0 (0%)",
     discountCoupon: "$0",
-    shippingCost: "$0",
-    earnedAmount: "$25 (USD)",
-    date: "2026-08-05 / 13:57",
+    shippingCost: "$10",
+    earnedAmount: "$105 (USD)",
+    date: "2026-08-05 / 14:38",
+  },
+  {
+    id: "8",
+    orderNumber: "#10006",
+    total: "$160 (USD)",
+    vat: "$0",
+    commission: "$24 (15%)",
+    referrerCommission: "$0 (0%)",
+    referralDiscount: "$0 (0%)",
+    discountCoupon: "$0",
+    shippingCost: "$10",
+    earnedAmount: "$146 (USD)",
+    date: "2026-08-05 / 12:48",
+  },
+  {
+    id: "9",
+    orderNumber: "#10005",
+    total: "$49 (USD)",
+    vat: "$0",
+    commission: "$2.45 (5%)",
+    referrerCommission: "$2.45 (5%)",
+    referralDiscount: "$2.45 (5%)",
+    discountCoupon: "$0",
+    shippingCost: "$10",
+    earnedAmount: "$51.65 (USD)",
+    date: "2026-08-05 / 12:46",
   },
   {
     id: "10",
-    orderNumber: "#10007",
-    total: "$29 (USD)",
-    vat: "$2.90 (10%)",
-    commission: "$2.90 (10%)",
-    referrerCommission: "$2.90 (10%)",
-    referralDiscount: "$1.45 (5%)",
+    orderNumber: "#10004",
+    total: "$150 (USD)",
+    vat: "$0",
+    commission: "$22.50 (15%)",
+    referrerCommission: "$7.50 (5%)",
+    referralDiscount: "$7.50 (5%)",
     discountCoupon: "$0",
-    shippingCost: "$0",
-    earnedAmount: "$24.65 (USD)",
-    date: "2026-08-05 / 13:50",
-  },
-  {
-    id: "11",
-    orderNumber: "#10003",
-    total: "$108 (USD)",
-    vat: "$10.80 (10%)",
-    commission: "$16.20 (15%)",
-    referrerCommission: "$0 (0%)",
-    referralDiscount: "$0 (0%)",
-    discountCoupon: "$16.20 (41GNOLDX)",
-    shippingCost: "$5",
-    earnedAmount: "$91.40 (USD)",
-    date: "2026-08-05 / 13:02",
-  },
-  {
-    id: "12",
-    orderNumber: "#10002",
-    total: "$48 (USD)",
-    vat: "$4.80 (10%)",
-    commission: "$4.80 (10%)",
-    referrerCommission: "$0 (0%)",
-    referralDiscount: "$0 (0%)",
-    discountCoupon: "$0",
-    shippingCost: "$1.67",
-    earnedAmount: "$49.67 (USD)",
-    date: "2026-08-04 / 15:16",
-  },
-  {
-    id: "13",
-    orderNumber: "#10002",
-    total: "$65 (USD)",
-    vat: "$6.50 (10%)",
-    commission: "$6.50 (10%)",
-    referrerCommission: "$0 (0%)",
-    referralDiscount: "$0 (0%)",
-    discountCoupon: "$0",
-    shippingCost: "$1.67",
-    earnedAmount: "$66.67 (USD)",
-    date: "2026-08-04 / 15:16",
-  },
-  {
-    id: "14",
-    orderNumber: "#10001",
-    total: "$65 (USD)",
-    vat: "$6.50 (10%)",
-    commission: "$3.25 (5%)",
-    referrerCommission: "$0 (0%)",
-    referralDiscount: "$0 (0%)",
-    discountCoupon: "$0",
-    shippingCost: "$5",
-    earnedAmount: "$73.25 (USD)",
-    date: "2026-08-04 / 12:14",
+    shippingCost: "$10",
+    earnedAmount: "$122.50 (USD)",
+    date: "2026-08-05 / 12:21",
   },
 ];
 
 export default function WalletPage() {
+  // State tab dompet aktif
   const [activeTab, setActiveTab] = useState<
     "earnings" | "deposits" | "expenses" | "payouts" | "set-payout"
   >("earnings");
 
+  // State untuk modal tambah saldo (Add Funds)
   const [addFundsOpen, setAddFundsOpen] = useState(false);
   const [fundsAmount, setFundsAmount] = useState("500000");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Helper menampilkan notifikasi toast sementara
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
@@ -227,6 +201,7 @@ export default function WalletPage() {
     }, 3000);
   };
 
+  // Handler pengajuan penambahan dana
   const handleDepositSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setAddFundsOpen(false);
@@ -234,8 +209,8 @@ export default function WalletPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] pb-16 font-sans">
-      {/* Toast Notification */}
+    <div className="min-h-screen bg-[#fcfcfc] pb-16 font-sans text-[#495057]">
+      {/* Toast Notifikasi Feedback */}
       {toastMessage && (
         <div className="fixed top-5 right-5 z-50 bg-[#00ab97] text-white px-5 py-3 rounded-[3px] shadow-lg flex items-center gap-2.5 text-[13.5px] animate-in fade-in slide-in-from-top-2 duration-200">
           <CheckCircle2 className="w-4 h-4 text-white" />
@@ -243,60 +218,65 @@ export default function WalletPage() {
         </div>
       )}
 
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 pt-5">
-        {/* Breadcrumb */}
-        <nav className="text-[12.5px] text-[#6c757d] mb-4">
+      <div className="max-w-[1320px] mx-auto px-4 sm:px-6 pt-5">
+        {/* Breadcrumb Navigasi */}
+        <nav className="text-[12px] text-[#868e96] mb-3">
           <Link href="/" className="hover:text-[#00ab97] transition-colors">
             Home
           </Link>
-          <span className="mx-2 text-gray-400">/</span>
-          <span className="text-[#2c333e] font-medium">Wallet</span>
+          <span className="mx-1.5 text-gray-400">/</span>
+          <span className="text-[#495057]">Wallet</span>
         </nav>
 
-        {/* Page Title */}
-        <h1 className="text-[22px] font-bold text-[#2c333e] mb-6 font-sans">
+        {/* Judul Halaman */}
+        <h1 className="text-[20px] font-bold text-[#2c333e] mb-6 font-sans">
           Wallet
         </h1>
 
-        {/* Center Wallet Balance Card */}
-        <div className="max-w-[620px] mx-auto bg-white rounded-[4px] border border-[#e9ecef] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.03)] relative text-center mb-8">
-          {/* Add Funds Button */}
-          <div className="absolute right-5 top-5">
+        {/* 1. KARTU SALDO DOMPET (Wallet Balance Card) */}
+        <div className="max-w-[580px] mx-auto bg-white rounded-[2px] border border-[#dee2e6] p-7 relative text-center mb-6 shadow-2xs">
+          {/* Tombol Tambah Saldo di Pojok Kanan Atas */}
+          <div className="absolute right-4 top-4">
             <button
               type="button"
               onClick={() => setAddFundsOpen(true)}
-              className="px-3.5 py-1.5 bg-[#f4f6f9] hover:bg-[#e9ecef] text-[#495057] border border-[#dee2e6] rounded-[3px] text-[12px] font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-2.5 py-1 bg-[#f8f9fa] hover:bg-[#e9ecef] text-[#495057] border border-[#dee2e6] rounded-[2px] text-[11px] font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <CreditCard className="w-3.5 h-3.5 text-gray-500" />
               <span>Add Funds</span>
             </button>
           </div>
 
-          {/* Wallet Icon */}
-          <div className="w-16 h-16 mx-auto mb-3 rounded-[8px] bg-[#e0f7f5] flex items-center justify-center">
-            <WalletIcon className="w-9 h-9 text-[#00ab97] stroke-[1.8]" />
+          {/* Ikon Dompet Teal */}
+          <div className="w-12 h-12 mx-auto mb-2 text-[#00ab97] flex items-center justify-center">
+            <svg 
+              className="w-10 h-10 fill-[#00ab97]" 
+              viewBox="0 0 24 24"
+            >
+              <path d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28c.59-.35 1-.98 1-1.72V9c0-.74-.41-1.37-1-1.72zM20 9v6h-7V9h7zM5 19V5h14v2h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6v2H5z"/>
+              <circle cx="16" cy="12" r="1.5" fill="#ffffff" />
+            </svg>
           </div>
 
-          {/* Wallet Balance Label */}
-          <div className="text-[13px] text-[#6c757d] font-normal mb-1">
+          <div className="text-[12px] text-[#868e96] font-normal mb-1">
             Wallet Balance
           </div>
 
-          {/* Amount */}
-          <div className="text-[32px] sm:text-[36px] font-bold text-[#2c333e] tracking-tight font-sans">
-            Rp13,079,629.84
+          {/* Nilai Saldo Pengguna */}
+          <div className="text-[28px] sm:text-[32px] font-bold text-[#2c333e] tracking-tight font-sans">
+            Rp20,540,352.76
           </div>
         </div>
 
-        {/* Navigation Tabs / Pills */}
+        {/* 2. TAB PILLS NAVIGASI DOMPET */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
           <button
             type="button"
             onClick={() => setActiveTab("earnings")}
-            className={`px-5 py-2 rounded-[3px] text-[13px] font-medium transition-colors cursor-pointer ${
+            className={`px-4 py-1.5 rounded-[2px] text-[12px] font-medium transition-colors cursor-pointer ${
               activeTab === "earnings"
-                ? "bg-[#00ab97] text-white shadow-2xs"
-                : "bg-white border border-[#e9ecef] text-[#495057] hover:text-[#00ab97]"
+                ? "bg-[#00ab97] text-white"
+                : "bg-white border border-[#dee2e6] text-[#495057] hover:text-[#00ab97]"
             }`}
           >
             Earnings
@@ -304,10 +284,10 @@ export default function WalletPage() {
           <button
             type="button"
             onClick={() => setActiveTab("deposits")}
-            className={`px-5 py-2 rounded-[3px] text-[13px] font-medium transition-colors cursor-pointer ${
+            className={`px-4 py-1.5 rounded-[2px] text-[12px] font-medium transition-colors cursor-pointer ${
               activeTab === "deposits"
-                ? "bg-[#00ab97] text-white shadow-2xs"
-                : "bg-white border border-[#e9ecef] text-[#495057] hover:text-[#00ab97]"
+                ? "bg-[#00ab97] text-white"
+                : "bg-white border border-[#dee2e6] text-[#495057] hover:text-[#00ab97]"
             }`}
           >
             Deposits
@@ -315,10 +295,10 @@ export default function WalletPage() {
           <button
             type="button"
             onClick={() => setActiveTab("expenses")}
-            className={`px-5 py-2 rounded-[3px] text-[13px] font-medium transition-colors cursor-pointer ${
+            className={`px-4 py-1.5 rounded-[2px] text-[12px] font-medium transition-colors cursor-pointer ${
               activeTab === "expenses"
-                ? "bg-[#00ab97] text-white shadow-2xs"
-                : "bg-white border border-[#e9ecef] text-[#495057] hover:text-[#00ab97]"
+                ? "bg-[#00ab97] text-white"
+                : "bg-white border border-[#dee2e6] text-[#495057] hover:text-[#00ab97]"
             }`}
           >
             Expenses
@@ -326,10 +306,10 @@ export default function WalletPage() {
           <button
             type="button"
             onClick={() => setActiveTab("payouts")}
-            className={`px-5 py-2 rounded-[3px] text-[13px] font-medium transition-colors cursor-pointer ${
+            className={`px-4 py-1.5 rounded-[2px] text-[12px] font-medium transition-colors cursor-pointer ${
               activeTab === "payouts"
-                ? "bg-[#00ab97] text-white shadow-2xs"
-                : "bg-white border border-[#e9ecef] text-[#495057] hover:text-[#00ab97]"
+                ? "bg-[#00ab97] text-white"
+                : "bg-white border border-[#dee2e6] text-[#495057] hover:text-[#00ab97]"
             }`}
           >
             Payouts
@@ -337,56 +317,56 @@ export default function WalletPage() {
           <button
             type="button"
             onClick={() => setActiveTab("set-payout")}
-            className={`px-5 py-2 rounded-[3px] text-[13px] font-medium transition-colors cursor-pointer ${
+            className={`px-4 py-1.5 rounded-[2px] text-[12px] font-medium transition-colors cursor-pointer ${
               activeTab === "set-payout"
-                ? "bg-[#00ab97] text-white shadow-2xs"
-                : "bg-white border border-[#e9ecef] text-[#495057] hover:text-[#00ab97]"
+                ? "bg-[#00ab97] text-white"
+                : "bg-white border border-[#dee2e6] text-[#495057] hover:text-[#00ab97]"
             }`}
           >
             Set Payout Account
           </button>
         </div>
 
-        {/* ================= TAB CONTENT ================= */}
+        {/* 3. KONTEN TAB UTAMA */}
 
-        {/* 1. EARNINGS TAB */}
+        {/* TAB 1: RIWAYAT PENDAPATAN / EARNINGS */}
         {activeTab === "earnings" && (
-          <div className="bg-white rounded-[4px] border border-[#e9ecef] p-6 lg:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+          <div className="bg-white rounded-[2px] border border-[#dee2e6] p-4 lg:p-6 shadow-xs">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-[13px] border-collapse min-w-[950px]">
+              <table className="w-full text-left text-[12px] border-collapse min-w-[950px]">
                 <thead>
-                  <tr className="text-[#2c333e] font-semibold text-[13px] border-b border-[#f1f3f5]">
-                    <th className="pb-3.5 pr-4 pl-1 font-semibold w-[90px]">Order</th>
-                    <th className="pb-3.5 pr-4 font-semibold w-[140px]">Total</th>
-                    <th className="pb-3.5 pr-4 font-semibold w-[140px]">VAT</th>
-                    <th className="pb-3.5 pr-6 font-semibold min-w-[260px]">
+                  <tr className="text-[#2c333e] font-semibold text-[12px] border-b border-[#dee2e6]">
+                    <th className="pb-3 pr-4 pl-1 font-semibold w-[90px]">Order</th>
+                    <th className="pb-3 pr-4 font-semibold w-[130px]">Total</th>
+                    <th className="pb-3 pr-4 font-semibold w-[90px]">VAT</th>
+                    <th className="pb-3 pr-6 font-semibold min-w-[260px]">
                       Commissions & Discounts
                     </th>
-                    <th className="pb-3.5 pr-4 font-semibold w-[120px]">Shipping Cost</th>
-                    <th className="pb-3.5 pr-4 font-semibold w-[180px]">Earned Amount</th>
-                    <th className="pb-3.5 pr-1 font-semibold w-[160px]">Date</th>
+                    <th className="pb-3 pr-4 font-semibold w-[120px]">Shipping Cost</th>
+                    <th className="pb-3 pr-4 font-semibold w-[160px]">Earned Amount</th>
+                    <th className="pb-3 pr-1 font-semibold w-[160px]">Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#f8f9fa]">
+                <tbody className="divide-y divide-[#e9ecef]">
                   {EARNINGS_DATA.map((item) => (
                     <tr key={item.id} className="hover:bg-[#fafbfc] transition-colors">
-                      {/* Order Number */}
-                      <td className="py-4 pr-4 pl-1 text-[#2c333e] align-top font-normal">
+                      {/* Nomor Order */}
+                      <td className="py-3.5 pr-4 pl-1 text-[#2c333e] align-top font-normal">
                         {item.orderNumber}
                       </td>
 
-                      {/* Total */}
-                      <td className="py-4 pr-4 text-[#2c333e] align-top font-normal">
+                      {/* Total Kotor */}
+                      <td className="py-3.5 pr-4 text-[#2c333e] align-top font-normal">
                         {item.total}
                       </td>
 
-                      {/* VAT */}
-                      <td className="py-4 pr-4 text-[#2c333e] align-top font-normal">
+                      {/* Pajak PPN */}
+                      <td className="py-3.5 pr-4 text-[#2c333e] align-top font-normal">
                         {item.vat}
                       </td>
 
-                      {/* Commissions & Discounts */}
-                      <td className="py-4 pr-6 text-[#2c333e] align-top leading-relaxed text-[12.5px]">
+                      {/* Rincian Komisi & Diskon */}
+                      <td className="py-3.5 pr-6 text-[#495057] align-top leading-relaxed text-[11.5px]">
                         <div>
                           Commission:{" "}
                           <span className="text-[#e74c3c] font-normal">
@@ -413,18 +393,18 @@ export default function WalletPage() {
                         </div>
                       </td>
 
-                      {/* Shipping Cost */}
-                      <td className="py-4 pr-4 text-[#2c333e] align-top font-normal">
+                      {/* Biaya Kirim */}
+                      <td className="py-3.5 pr-4 text-[#2c333e] align-top font-normal">
                         {item.shippingCost}
                       </td>
 
-                      {/* Earned Amount */}
-                      <td className="py-4 pr-4 text-[#28a745] font-semibold align-top whitespace-nowrap">
+                      {/* Pendapatan Bersih (Teks Tebal Hijau) */}
+                      <td className="py-3.5 pr-4 text-[#28a745] font-semibold align-top whitespace-nowrap">
                         {item.earnedAmount}
                       </td>
 
-                      {/* Date */}
-                      <td className="py-4 pr-1 text-[#2c333e] align-top whitespace-nowrap font-normal">
+                      {/* Tanggal */}
+                      <td className="py-3.5 pr-1 text-[#6c757d] align-top whitespace-nowrap font-normal">
                         {item.date}
                       </td>
                     </tr>
@@ -435,61 +415,61 @@ export default function WalletPage() {
           </div>
         )}
 
-        {/* 2. DEPOSITS TAB */}
+        {/* TAB 2: RIWAYAT DEPOSIT (DEPOSITS) */}
         {activeTab === "deposits" && (
-          <div className="bg-white rounded-[4px] border border-[#e9ecef] p-8 text-center shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+          <div className="bg-white rounded-[2px] border border-[#dee2e6] p-8 text-center">
             <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <ArrowDownLeft className="w-6 h-6" />
             </div>
-            <h3 className="text-[16px] font-bold text-[#2c333e] mb-1">Deposit History</h3>
-            <p className="text-[13px] text-gray-500 mb-6">
+            <h3 className="text-[15px] font-bold text-[#2c333e] mb-1">Deposit History</h3>
+            <p className="text-[12px] text-gray-500 mb-6">
               You haven't made any manual deposit transactions yet.
             </p>
             <button
               onClick={() => setAddFundsOpen(true)}
-              className="px-5 py-2 bg-[#00ab97] hover:bg-[#009684] text-white text-[13px] font-medium rounded-[3px] transition-colors"
+              className="px-4 py-1.5 bg-[#00ab97] hover:bg-[#009684] text-white text-[12px] font-medium rounded-[2px] transition-colors"
             >
               Deposit Funds Now
             </button>
           </div>
         )}
 
-        {/* 3. EXPENSES TAB */}
+        {/* TAB 3: PENGELUARAN (EXPENSES) */}
         {activeTab === "expenses" && (
-          <div className="bg-white rounded-[4px] border border-[#e9ecef] p-8 text-center shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+          <div className="bg-white rounded-[2px] border border-[#dee2e6] p-8 text-center">
             <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center">
               <ArrowUpRight className="w-6 h-6" />
             </div>
-            <h3 className="text-[16px] font-bold text-[#2c333e] mb-1">Expenses History</h3>
-            <p className="text-[13px] text-gray-500">
+            <h3 className="text-[15px] font-bold text-[#2c333e] mb-1">Expenses History</h3>
+            <p className="text-[12px] text-gray-500">
               No store expenses recorded for this billing cycle.
             </p>
           </div>
         )}
 
-        {/* 4. PAYOUTS TAB */}
+        {/* TAB 4: PENARIKAN DANA (PAYOUTS) */}
         {activeTab === "payouts" && (
-          <div className="bg-white rounded-[4px] border border-[#e9ecef] p-8 text-center shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+          <div className="bg-white rounded-[2px] border border-[#dee2e6] p-8 text-center">
             <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
               <DollarSign className="w-6 h-6" />
             </div>
-            <h3 className="text-[16px] font-bold text-[#2c333e] mb-1">Payout History</h3>
-            <p className="text-[13px] text-gray-500 mb-6">
+            <h3 className="text-[15px] font-bold text-[#2c333e] mb-1">Payout History</h3>
+            <p className="text-[12px] text-gray-500 mb-6">
               Your available balance is eligible for withdrawal once minimum payout threshold is reached.
             </p>
             <button
               onClick={() => showToast("Payout request submitted for review!")}
-              className="px-5 py-2 bg-[#00ab97] hover:bg-[#009684] text-white text-[13px] font-medium rounded-[3px] transition-colors"
+              className="px-4 py-1.5 bg-[#00ab97] hover:bg-[#009684] text-white text-[12px] font-medium rounded-[2px] transition-colors"
             >
               Request Payout
             </button>
           </div>
         )}
 
-        {/* 5. SET PAYOUT ACCOUNT TAB */}
+        {/* TAB 5: PENGATURAN REKENING PENARIKAN (SET PAYOUT ACCOUNT) */}
         {activeTab === "set-payout" && (
-          <div className="bg-white rounded-[4px] border border-[#e9ecef] p-6 lg:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.03)] max-w-xl mx-auto">
-            <h3 className="text-[17px] font-bold text-[#2c333e] mb-6">
+          <div className="bg-white rounded-[2px] border border-[#dee2e6] p-6 lg:p-8 max-w-xl mx-auto">
+            <h3 className="text-[15px] font-bold text-[#2c333e] mb-6">
               Set Payout Account
             </h3>
             <form
@@ -497,7 +477,7 @@ export default function WalletPage() {
                 e.preventDefault();
                 showToast("Payout account settings saved successfully!");
               }}
-              className="space-y-4 text-[13px]"
+              className="space-y-4 text-[12px]"
             >
               <div>
                 <label className="block font-semibold text-[#2c333e] mb-1.5">
@@ -506,7 +486,7 @@ export default function WalletPage() {
                 <input
                   type="text"
                   defaultValue="BCA (Bank Central Asia)"
-                  className="w-full px-3 py-2 border border-[#d2d6de] rounded-[3px] focus:border-[#00ab97] focus:outline-hidden"
+                  className="w-full px-3 py-1.5 border border-[#dee2e6] rounded-[2px] focus:border-[#00ab97] focus:outline-hidden"
                 />
               </div>
 
@@ -517,7 +497,7 @@ export default function WalletPage() {
                 <input
                   type="text"
                   defaultValue="882019482103"
-                  className="w-full px-3 py-2 border border-[#d2d6de] rounded-[3px] focus:border-[#00ab97] focus:outline-hidden"
+                  className="w-full px-3 py-1.5 border border-[#dee2e6] rounded-[2px] focus:border-[#00ab97] focus:outline-hidden"
                 />
               </div>
 
@@ -527,8 +507,8 @@ export default function WalletPage() {
                 </label>
                 <input
                   type="text"
-                  defaultValue="Trendshop Official"
-                  className="w-full px-3 py-2 border border-[#d2d6de] rounded-[3px] focus:border-[#00ab97] focus:outline-hidden"
+                  defaultValue="Admin Official"
+                  className="w-full px-3 py-1.5 border border-[#dee2e6] rounded-[2px] focus:border-[#00ab97] focus:outline-hidden"
                 />
               </div>
 
@@ -538,15 +518,15 @@ export default function WalletPage() {
                 </label>
                 <input
                   type="email"
-                  defaultValue="billing@trendshop.com"
-                  className="w-full px-3 py-2 border border-[#d2d6de] rounded-[3px] focus:border-[#00ab97] focus:outline-hidden"
+                  defaultValue="admin@example.com"
+                  className="w-full px-3 py-1.5 border border-[#dee2e6] rounded-[2px] focus:border-[#00ab97] focus:outline-hidden"
                 />
               </div>
 
               <div className="pt-3">
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#00ab97] hover:bg-[#009684] text-white rounded-[3px] font-medium transition-colors"
+                  className="px-4 py-2 bg-[#00ab97] hover:bg-[#009684] text-white rounded-[2px] font-medium transition-colors"
                 >
                   Save Payout Account
                 </button>
@@ -556,12 +536,12 @@ export default function WalletPage() {
         )}
       </div>
 
-      {/* ================= MODAL: ADD FUNDS ================= */}
+      {/* 4. MODAL ISI SALDO / TAMBAH DANA (ADD FUNDS MODAL) */}
       {addFundsOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-2xs">
-          <div className="bg-white rounded-[4px] shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-4 border-b border-[#e9ecef] flex items-center justify-between bg-[#fbfcfd]">
-              <h3 className="text-[16px] font-bold text-[#2c333e]">
+          <div className="bg-white rounded-[2px] shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-4 border-b border-[#dee2e6] flex items-center justify-between bg-[#fbfcfd]">
+              <h3 className="text-[15px] font-bold text-[#2c333e]">
                 Add Funds to Wallet
               </h3>
               <button
@@ -573,7 +553,7 @@ export default function WalletPage() {
               </button>
             </div>
 
-            <form onSubmit={handleDepositSubmit} className="p-6 space-y-4 text-[13px]">
+            <form onSubmit={handleDepositSubmit} className="p-6 space-y-4 text-[12px]">
               <div>
                 <label className="block font-semibold text-[#2c333e] mb-1.5">
                   Deposit Amount (IDR)
@@ -585,7 +565,7 @@ export default function WalletPage() {
                   required
                   value={fundsAmount}
                   onChange={(e) => setFundsAmount(e.target.value)}
-                  className="w-full px-3 py-2 border border-[#d2d6de] rounded-[3px] text-[#2c333e] focus:border-[#00ab97] focus:outline-hidden"
+                  className="w-full px-3 py-1.5 border border-[#dee2e6] rounded-[2px] text-[#2c333e] focus:border-[#00ab97] focus:outline-hidden"
                 />
               </div>
 
@@ -594,32 +574,32 @@ export default function WalletPage() {
                   Payment Method
                 </label>
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2 p-2.5 border border-[#dee2e6] rounded-[3px] cursor-pointer hover:bg-gray-50">
+                  <label className="flex items-center gap-2 p-2.5 border border-[#dee2e6] rounded-[2px] cursor-pointer hover:bg-gray-50">
                     <input type="radio" name="method" defaultChecked className="text-[#00ab97]" />
                     <span className="text-[#2c333e] font-medium">Bank Transfer / Virtual Account</span>
                   </label>
-                  <label className="flex items-center gap-2 p-2.5 border border-[#dee2e6] rounded-[3px] cursor-pointer hover:bg-gray-50">
+                  <label className="flex items-center gap-2 p-2.5 border border-[#dee2e6] rounded-[2px] cursor-pointer hover:bg-gray-50">
                     <input type="radio" name="method" className="text-[#00ab97]" />
                     <span className="text-[#2c333e] font-medium">Credit / Debit Card (Stripe)</span>
                   </label>
-                  <label className="flex items-center gap-2 p-2.5 border border-[#dee2e6] rounded-[3px] cursor-pointer hover:bg-gray-50">
+                  <label className="flex items-center gap-2 p-2.5 border border-[#dee2e6] rounded-[2px] cursor-pointer hover:bg-gray-50">
                     <input type="radio" name="method" className="text-[#00ab97]" />
                     <span className="text-[#2c333e] font-medium">PayPal</span>
                   </label>
                 </div>
               </div>
 
-              <div className="pt-3 flex justify-end gap-2 border-t border-[#f1f3f5]">
+              <div className="pt-3 flex justify-end gap-2 border-t border-[#dee2e6]">
                 <button
                   type="button"
                   onClick={() => setAddFundsOpen(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-[3px] text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="px-4 py-1.5 border border-gray-300 rounded-[2px] text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#00ab97] hover:bg-[#009684] text-white rounded-[3px] font-medium transition-colors"
+                  className="px-4 py-1.5 bg-[#00ab97] hover:bg-[#009684] text-white rounded-[2px] font-medium transition-colors"
                 >
                   Proceed to Payment
                 </button>

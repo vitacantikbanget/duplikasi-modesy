@@ -2,27 +2,35 @@
 
 /**
  * ============================================================================
- * HALAMAN PESANAN SAYA (My Orders)
+ * HALAMAN PESANAN PEMBELI / MEMBER (Customer Orders & Transactions Page)
  * ============================================================================
- * Halaman ini tempat pembeli melihat semua barang yang pernah dibeli di toko.
- * Di halaman ini ada 4 menu samping:
- * 1. Orders: Daftar barang yang dibeli (nomor pesanan, total bayar, status, dan tombol Detail).
- * 2. Quote Requests: Daftar permintaan penawaran harga khusus (misal beli borongan/grosir).
- * 3. Downloads: Daftar file digital yang sudah dibeli dan siap di-download ke laptop/HP.
- * 4. Refund Requests: Daftar pengajuan minta uang kembali kalau barang rusak atau tidak sesuai.
+ * 
+ * FUNGSI UTAMA:
+ * Menampilkan daftar pesanan riwayat belanja pelanggan, penawaran harga
+ * (Quote Requests), unduhan produk digital (Downloads), serta pengajuan
+ * komplain / pengembalian dana (Refund Requests).
+ * 
+ * FITUR:
+ * 1. Sidebar Navigasi Akun Pelanggan (Orders, Quote Requests, Downloads, Refund Requests).
+ * 2. Daftar Pesanan Belanja (Order ID, Total Harga, Status Pembayaran/Pengiriman, Tanggal).
+ * 3. Modal Rincian Pesanan (Detail Produk, Kurir, Resi Pelacakan, Tombol Cetak Invoice).
+ * 4. Paginasi Halaman Pesanan.
+ * 5. Tab Penawaran Harga (Quote Requests) dengan status tawaran dan tombol hapus.
+ * 6. Tab Unduhan File Digital (Downloads) dengan rating bintang dan link unduh.
+ * 7. Tab Pengembalian Dana (Refund Requests) dan tombol form klaim refund.
  */
 
 import { useState } from "react";
 import Link from "next/link";
-import { 
-  ShoppingBasket, 
-  Tag, 
-  DownloadCloud, 
-  RotateCcw, 
-  Clock, 
-  Info, 
-  X, 
-  Printer, 
+import {
+  ShoppingBasket,
+  Tag,
+  DownloadCloud,
+  RotateCcw,
+  Clock,
+  Info,
+  X,
+  Printer,
   Download,
   Plus,
   Star,
@@ -31,27 +39,16 @@ import {
 import { cn } from "@/lib/utils";
 
 /**
- * Format data untuk setiap pesanan pembeli:
- * - id: nomor urut pesanan
- * - orderNumber: nomor nota/faktur (misal #10049)
- * - total: total harga belanjaan yang harus dibayar
- * - status: kondisi pesanan saat ini:
- *     * 'Pending Payment' = Menunggu pembeli bayar
- *     * 'Completed'       = Pesanan sudah selesai & diterima
- *     * 'Processing'      = Pesanan lagi dikemas / dalam perjalanan kirim
- * - date: tanggal dan jam order dibuat
- * - carrier: nama ekspedisi/kurir (J&T, JNE, SiCepat)
- * - trackingNumber: nomor resi pengiriman kurir
- * - items: daftar barang-barang apa saja yang dibeli di dalam pesanan ini
+ * Tipe data untuk baris pesanan belanja (Order item)
  */
 interface OrderRow {
-  id: string;
-  orderNumber: string;
-  total: string;
-  status: "Pending Payment" | "Completed" | "Processing";
-  date: string;
-  carrier?: string;
-  trackingNumber?: string;
+  id: string;               // ID pesanan unik
+  orderNumber: string;      // Kode nomor order (e.g. #10049)
+  total: string;            // Total nilai belanja
+  status: "Pending Payment" | "Completed" | "Processing"; // Status pesanan
+  date: string;             // Tanggal dan waktu pesanan
+  carrier?: string;         // Nama kurir ekspedisi pengiriman
+  trackingNumber?: string;  // Nomor resi pengiriman
   items?: {
     title: string;
     seller: string;
@@ -61,7 +58,9 @@ interface OrderRow {
   }[];
 }
 
-// 15 data riwayat belanja pembeli
+/**
+ * Data mock riwayat pesanan (15 pesanan sesuai tampilan dashboard Modesy)
+ */
 const ALL_ORDERS: OrderRow[] = [
   {
     id: "10049",
@@ -213,7 +212,7 @@ const ALL_ORDERS: OrderRow[] = [
 ];
 
 /**
- * Format data untuk penawaran harga grosir (Quote Requests):
+ * Tipe data untuk penawaran harga khusus (Quote Request item)
  */
 interface QuoteItem {
   id: string;
@@ -226,7 +225,9 @@ interface QuoteItem {
   bidPrice?: string;
 }
 
-// 4 data penawaran harga
+/**
+ * Data mock penawaran harga grosir / custom
+ */
 const QUOTES_DATA: QuoteItem[] = [
   {
     id: "q-10",
@@ -269,7 +270,7 @@ const QUOTES_DATA: QuoteItem[] = [
 ];
 
 /**
- * Format data untuk produk unduhan digital (Downloads):
+ * Tipe data untuk berkas unduhan digital
  */
 interface DownloadItem {
   id: string;
@@ -279,7 +280,9 @@ interface DownloadItem {
   image: string;
 }
 
-// 6 data produk digital yang bisa diunduh
+/**
+ * Data mock unduhan produk digital yang telah dibeli
+ */
 const DOWNLOADS_DATA: DownloadItem[] = [
   {
     id: "dl-1",
@@ -326,7 +329,7 @@ const DOWNLOADS_DATA: DownloadItem[] = [
 ];
 
 /**
- * Format data untuk pengajuan komplain & pengembalian dana:
+ * Tipe data untuk pengajuan komplain & pengembalian dana
  */
 interface RefundItem {
   id: string;
@@ -337,7 +340,9 @@ interface RefundItem {
   image: string;
 }
 
-// 2 data pengajuan klaim garansi / pengembalian dana
+/**
+ * Data mock pengajuan klaim pengembalian dana (Refund Requests)
+ */
 const REFUNDS_DATA: RefundItem[] = [
   {
     id: "rf-1",
@@ -357,26 +362,26 @@ const REFUNDS_DATA: RefundItem[] = [
   },
 ];
 
-export default function CustomerOrdersPage({ 
-  initialTab = "orders" 
-}: { 
-  initialTab?: "orders" | "quotes" | "downloads" | "refunds" 
+export default function CustomerOrdersPage({
+  initialTab = "orders"
+}: {
+  initialTab?: "orders" | "quotes" | "downloads" | "refunds"
 } = {}) {
-  // Menu tab mana yang lagi dibuka user saat ini
+  // State untuk tab kategori yang sedang aktif
   const [activeTab, setActiveTab] = useState<"orders" | "quotes" | "downloads" | "refunds">(initialTab);
-  // Pesanan mana yang lagi dibuka detailnya (kalau null berarti pop-up tertutup)
+  // State modal order details
   const [selectedOrder, setSelectedOrder] = useState<OrderRow | null>(null);
-  // Daftar data penawaran harga yang bisa dihapus jika tidak jadi
+  // State daftar quote requests
   const [quotesList, setQuotesList] = useState<QuoteItem[]>(QUOTES_DATA);
-  // Nomor halaman yang lagi aktif (halaman 1 atau 2)
+  // State nomor halaman paginasi
   const [page, setPage] = useState(1);
 
-  // Fungsi untuk menghapus salah satu penawaran harga jika pembeli tidak tertarik lagi
+  // Handler menghapus penawaran harga
   const handleDeleteQuote = (id: string) => {
     setQuotesList((prev) => prev.filter((q) => q.id !== id));
   };
 
-  // Fungsi untuk mengganti judul halaman sesuai menu yang lagi dibuka
+  // Helper mendapatkan judul halaman dinamis
   const getPageTitle = () => {
     switch (activeTab) {
       case "quotes":
@@ -392,7 +397,7 @@ export default function CustomerOrdersPage({
 
   return (
     <div className="bg-[#fcfcfc] min-h-screen pb-16 font-sans text-[#495057]">
-      {/* 1. Petunjuk jalan / Breadcrumb */}
+      {/* 1. Breadcrumb Navigasi */}
       <div className="max-w-[1320px] mx-auto px-4 pt-5 pb-2">
         <nav className="text-[12px] text-[#868e96] flex items-center gap-1.5">
           <Link href="/" className="hover:text-[#00ab97] transition-colors">
@@ -403,10 +408,10 @@ export default function CustomerOrdersPage({
         </nav>
       </div>
 
-      {/* 2. Isi Halaman */}
+      {/* 2. Container Halaman Utama */}
       <div className="max-w-[1320px] mx-auto px-4 pt-2">
-        
-        {/* Judul Besar Halaman & Tombol Buat Refund kalau lagi di tab Refund */}
+
+        {/* Header judul halaman & tombol aksi pada tab Refund */}
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-[20px] font-bold text-[#2c333e] leading-none">
             {getPageTitle()}
@@ -415,7 +420,7 @@ export default function CustomerOrdersPage({
           {activeTab === "refunds" && (
             <button
               type="button"
-              onClick={() => alert("Silakan pilih pesanan yang sudah selesai untuk mengajukan pengembalian dana.")}
+              onClick={() => alert("Please select an eligible completed order to request a refund.")}
               className="px-4 py-2 bg-[#00ab97] hover:bg-[#009684] text-white text-[12px] font-semibold rounded-[2px] flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
@@ -425,11 +430,10 @@ export default function CustomerOrdersPage({
         </div>
 
         <div className="flex flex-col md:flex-row items-start gap-6">
-          
-          {/* MENU SAMPING KIRI (Orders, Quote Requests, Downloads, Refund Requests) */}
+
+          {/* SIDEBAR NAVIGASI MENU (KIRI) */}
           <aside className="w-full md:w-[220px] shrink-0">
             <div className="bg-white border border-[#dee2e6] rounded-[2px] p-2 space-y-0.5">
-              {/* Tombol Tab 1: Orders */}
               <button
                 type="button"
                 onClick={() => setActiveTab("orders")}
@@ -444,7 +448,6 @@ export default function CustomerOrdersPage({
                 <span>Orders</span>
               </button>
 
-              {/* Tombol Tab 2: Quote Requests */}
               <button
                 type="button"
                 onClick={() => setActiveTab("quotes")}
@@ -459,7 +462,6 @@ export default function CustomerOrdersPage({
                 <span>Quote Requests</span>
               </button>
 
-              {/* Tombol Tab 3: Downloads */}
               <button
                 type="button"
                 onClick={() => setActiveTab("downloads")}
@@ -474,7 +476,6 @@ export default function CustomerOrdersPage({
                 <span>Downloads</span>
               </button>
 
-              {/* Tombol Tab 4: Refund Requests */}
               <button
                 type="button"
                 onClick={() => setActiveTab("refunds")}
@@ -491,10 +492,10 @@ export default function CustomerOrdersPage({
             </div>
           </aside>
 
-          {/* AREA KANAN SESUAI MENU YANG DIPILIH */}
+          {/* AREA KONTEN UTAMA (KANAN) */}
           <main className="flex-1 min-w-0 w-full">
-            
-            {/* 1. TAMPILAN TAB ORDERS (Daftar Riwayat Belanja) */}
+
+            {/* 1. KONTEN TAB: DAFTAR PESANAN (ORDERS) */}
             {activeTab === "orders" && (
               <div className="space-y-3">
                 {ALL_ORDERS.map((order) => {
@@ -518,7 +519,7 @@ export default function CustomerOrdersPage({
                         <span className="font-bold text-[#2c333e]">{order.total}</span>
                       </div>
 
-                      {/* Label Status (Warna hijau jika sudah selesai, biru jika dikirim, abu jika nunggu bayar) */}
+                      {/* Status Pembayaran & Pengiriman */}
                       <div className="w-36 shrink-0">
                         <span
                           className={cn(
@@ -526,21 +527,21 @@ export default function CustomerOrdersPage({
                             isCompleted
                               ? "bg-[#d3f9d8] text-[#2b8a3e]"
                               : isProcessing
-                              ? "bg-[#e3fafc] text-[#0c8599]"
-                              : "bg-[#f1f3f5] text-[#6c757d]"
+                                ? "bg-[#e3fafc] text-[#0c8599]"
+                                : "bg-[#f1f3f5] text-[#6c757d]"
                           )}
                         >
                           {order.status}
                         </span>
                       </div>
 
-                      {/* Tanggal & Waktu Order Dibuat */}
+                      {/* Waktu Pesanan */}
                       <div className="w-44 shrink-0 flex items-center gap-1.5 text-xs text-[#6c757d]">
                         <Clock className="w-3 h-3 text-[#adb5bd]" />
                         <span>{order.date}</span>
                       </div>
 
-                      {/* Tombol "Details" untuk membuka jendela rincian isi pesanan */}
+                      {/* Tombol Rincian Order (Details) */}
                       <div className="shrink-0">
                         <button
                           type="button"
@@ -555,7 +556,7 @@ export default function CustomerOrdersPage({
                   );
                 })}
 
-                {/* Tombol Pindah Halaman (Paginasi: 1, 2, >) */}
+                {/* Navigasi Paginasi Halaman */}
                 <div className="flex items-center justify-center gap-1 pt-4 pb-2">
                   <button
                     type="button"
@@ -592,7 +593,7 @@ export default function CustomerOrdersPage({
               </div>
             )}
 
-            {/* 2. TAMPILAN TAB QUOTE REQUESTS (Penawaran Harga) */}
+            {/* 2. KONTEN TAB: PENAWARAN HARGA (QUOTE REQUESTS) */}
             {activeTab === "quotes" && (
               <div className="space-y-3">
                 {quotesList.map((quote) => {
@@ -604,7 +605,6 @@ export default function CustomerOrdersPage({
                       className="bg-white border border-[#dee2e6] rounded-[2px] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                     >
                       <div className="flex items-start gap-4">
-                        {/* Foto barang yang ditawar */}
                         <img
                           src={quote.image}
                           alt={quote.title}
@@ -624,7 +624,6 @@ export default function CustomerOrdersPage({
                       </div>
 
                       <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-xs">
-                        {/* Status tawaran */}
                         <span
                           className={cn(
                             "inline-block text-[11px] font-medium px-2.5 py-0.5 rounded-[2px] text-center",
@@ -636,7 +635,6 @@ export default function CustomerOrdersPage({
                           {quote.status}
                         </span>
 
-                        {/* Harga tawaran dari penjual */}
                         {quote.bidPrice && (
                           <div className="text-xs">
                             <span className="text-[#6c757d]">Seller's Bid: </span>
@@ -649,7 +647,6 @@ export default function CustomerOrdersPage({
                           <span>{quote.timeAgo}</span>
                         </div>
 
-                        {/* Tombol Hapus Permintaan */}
                         <button
                           type="button"
                           onClick={() => handleDeleteQuote(quote.id)}
@@ -665,7 +662,7 @@ export default function CustomerOrdersPage({
               </div>
             )}
 
-            {/* 3. TAMPILAN TAB DOWNLOADS (Unduh File Digital) */}
+            {/* 3. KONTEN TAB: UNDUHAN PRODUK DIGITAL (DOWNLOADS) */}
             {activeTab === "downloads" && (
               <div className="space-y-3">
                 {DOWNLOADS_DATA.map((item) => (
@@ -674,7 +671,6 @@ export default function CustomerOrdersPage({
                     className="bg-white border border-[#dee2e6] rounded-[2px] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                   >
                     <div className="flex items-center gap-4">
-                      {/* Foto produk digital */}
                       <img
                         src={item.image}
                         alt={item.title}
@@ -691,7 +687,6 @@ export default function CustomerOrdersPage({
                     </div>
 
                     <div className="flex items-center gap-6">
-                      {/* Bintang Penilaian Produk */}
                       <div className="flex items-center gap-1.5 text-xs text-[#868e96]">
                         <span className="text-[11px]">Rate this product:</span>
                         <div className="flex items-center gap-0.5">
@@ -709,11 +704,10 @@ export default function CustomerOrdersPage({
                         </div>
                       </div>
 
-                      {/* Tombol Download Berkas */}
                       <div className="relative group">
                         <button
                           type="button"
-                          onClick={() => alert(`Mengunduh berkas "${item.title}"...`)}
+                          onClick={() => alert(`Downloading "${item.title}" files...`)}
                           className="px-3 py-1.5 bg-[#00ab97] hover:bg-[#009684] text-white text-xs font-semibold rounded-[2px] flex items-center gap-1.5 transition-colors cursor-pointer"
                         >
                           <Download className="w-3 h-3" />
@@ -727,7 +721,7 @@ export default function CustomerOrdersPage({
               </div>
             )}
 
-            {/* 4. TAMPILAN TAB REFUND REQUESTS (Komplain / Uang Kembali) */}
+            {/* 4. KONTEN TAB: PENGEMBALIAN DANA (REFUND REQUESTS) */}
             {activeTab === "refunds" && (
               <div className="space-y-3">
                 {REFUNDS_DATA.map((rf) => (
@@ -736,7 +730,6 @@ export default function CustomerOrdersPage({
                     className="bg-white border border-[#dee2e6] rounded-[2px] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                   >
                     <div className="flex items-center gap-4">
-                      {/* Foto produk yang mau direfund */}
                       <img
                         src={rf.image}
                         alt={rf.productTitle}
@@ -753,7 +746,6 @@ export default function CustomerOrdersPage({
                     </div>
 
                     <div className="flex items-center gap-5">
-                      {/* Status peninjauan refund */}
                       <span className="bg-[#e3fafc] text-[#0c8599] text-[11px] font-medium px-2.5 py-0.5 rounded-[2px]">
                         {rf.status}
                       </span>
@@ -763,10 +755,9 @@ export default function CustomerOrdersPage({
                         <span>{rf.timeAgo}</span>
                       </div>
 
-                      {/* Tombol Lihat Detail Komplain */}
                       <button
                         type="button"
-                        onClick={() => alert(`Melihat detail klaim pengembalian dana untuk pesanan ${rf.orderNumber}`)}
+                        onClick={() => alert(`Viewing refund details for order ${rf.orderNumber}`)}
                         className="bg-[#f8f9fa] hover:bg-[#e9ecef] text-[#495057] hover:text-[#2c333e] border border-[#dee2e6] text-xs font-semibold px-3 py-1 rounded-[2px] flex items-center gap-1.5 transition-colors cursor-pointer"
                       >
                         <Info className="w-3 h-3 text-[#6c757d]" />
@@ -782,12 +773,12 @@ export default function CustomerOrdersPage({
         </div>
       </div>
 
-      {/* 3. JENDELA POP-UP RINCIAN PESANAN (MUNCUL PAS KLIK TOMBOL DETAILS) */}
+      {/* 3. MODAL RINCIAN PESANAN (ORDER DETAILS MODAL) */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-2xs p-4 animate-in fade-in duration-150">
           <div className="bg-white rounded-[2px] max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 flex flex-col">
-            
-            {/* Bagian atas pop-up: Nomor order dan tombol silang X */}
+
+            {/* Header Modal */}
             <div className="p-4 border-b border-[#dee2e6] flex items-center justify-between sticky top-0 bg-white z-10">
               <div className="flex items-center gap-2">
                 <ShoppingBasket className="w-4 h-4 text-[#00ab97]" />
@@ -804,10 +795,10 @@ export default function CustomerOrdersPage({
               </button>
             </div>
 
-            {/* Isi rincian: Tanggal, Total, Status, Barang apa saja yang dibeli */}
+            {/* Isi Konten Modal */}
             <div className="p-5 space-y-4 text-xs text-[#495057]">
-              
-              {/* Ringkasan Pesanan */}
+
+              {/* Ringkasan Status & Total */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-[#f8f9fa] border border-[#dee2e6] rounded-[2px]">
                 <div>
                   <span className="text-[11px] text-[#868e96] block">Order Date</span>
@@ -827,7 +818,7 @@ export default function CustomerOrdersPage({
                 </div>
               </div>
 
-              {/* Daftar Barang yang Dibeli */}
+              {/* Rincian Produk yang Dibeli */}
               <div>
                 <h4 className="font-bold text-xs text-[#2c333e] mb-2">Order Products</h4>
                 <div className="border border-[#dee2e6] rounded-[2px] divide-y divide-[#dee2e6]">
@@ -858,7 +849,7 @@ export default function CustomerOrdersPage({
                 </div>
               </div>
 
-              {/* Kurir & Resi Pengiriman */}
+              {/* Ekspedisi Pengiriman & Resi */}
               {selectedOrder.carrier && (
                 <div className="p-3 bg-white border border-[#dee2e6] rounded-[2px]">
                   <h4 className="font-bold text-xs text-[#2c333e] mb-1">Shipping & Tracking</h4>
@@ -870,7 +861,7 @@ export default function CustomerOrdersPage({
 
             </div>
 
-            {/* Bagian bawah pop-up: Tombol cetak nota (Print Invoice) dan tombol tutup */}
+            {/* Footer Modal: Tombol Cetak & Tutup */}
             <div className="p-4 border-t border-[#dee2e6] bg-[#f8f9fa] flex items-center justify-between">
               <button
                 type="button"

@@ -1,3 +1,13 @@
+// Komponen Pengaturan Akun Member (Member Settings).
+// Berfungsi untuk mengelola semua informasi akun pengguna:
+// 1. Edit Profil (nama, username, bio/deskripsi, upload foto profil)
+// 2. Lokasi Tempat Tinggal (negara, provinsi, kota, kode pos)
+// 3. Alamat Pengiriman Belanja (Shipping Address: tambah, edit, hapus alamat kurir)
+// 4. Tautan Afiliasi (Affiliate Links: link referral untuk komisi belanja)
+// 5. Media Sosial (tautan Facebook, Twitter, Instagram, dll)
+// 6. Ganti Kata Sandi (Change Password: ubah password akun)
+// 7. Hapus Akun (Delete Account)
+
 "use client";
 
 import React, { useState, useEffect } from "react";

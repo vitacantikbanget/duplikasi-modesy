@@ -1,3 +1,9 @@
+// Bilah menu samping (Sidebar) untuk Dashboard Penjual (Vendor Sidebar).
+// Berfungsi untuk mengelola seluruh operasional toko online penjual:
+// Manajemen Produk (Tambah Produk, Produk Aktif, Draft, Pending), Penjualan & Pesanan,
+// Permintaan Penawaran Harga (Quote Requests), Kupon Diskon Toko, Permintaan Pengembalian Dana (Refund),
+// Dompet Saldo & Pembayaran Promosi, Ulasan Pembeli, dan Pengaturan Pengiriman Toko.
+
 "use client";
 
 import { useState, useEffect } from "react";

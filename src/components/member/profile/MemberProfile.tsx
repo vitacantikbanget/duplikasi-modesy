@@ -1,3 +1,7 @@
+// Komponen Halaman Profil Pengguna / Member Modesy.
+// Menampilkan banner profil, avatar, nama, jumlah pengikut (followers), yang diikuti (following),
+// serta tab ulasan/review produk yang pernah ditulis oleh pengguna dengan fitur hapus review.
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -5,19 +9,21 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
 
+// Struktur data ulasan/komentar produk dari pengguna
 interface MemberReview {
-  id: string;
-  productTitle: string;
-  productHref: string;
-  userName: string;
-  userAvatar: string;
-  rating: number;
-  comment: string;
-  date: string;
+  id: string;          // ID unik ulasan
+  productTitle: string;// Nama produk yang diulas
+  productHref: string; // Tautan ke halaman produk
+  userName: string;    // Nama pengguna yang mengulas
+  userAvatar: string;  // Foto profil
+  rating: number;      // Bintang penilaian (1 sampai 5)
+  comment: string;     // Isi tulisan ulasan/komentar
+  date: string;        // Waktu ulasan diberikan
 }
 
 export default function MemberProfile() {
   const { userProfile } = useAppContext();
+  // Tab aktif yang sedang dilihat (Followers, Following, atau Reviews)
   const [activeTab, setActiveTab] = useState<"followers" | "following" | "reviews">("followers");
 
   const name = userProfile?.name || "Peter Jone";

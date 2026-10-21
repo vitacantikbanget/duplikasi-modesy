@@ -1,3 +1,8 @@
+// Komponen Bagian Bawah Halaman (Footer) Modesy.
+// Menampilkan informasi tentang marketplace, formulir langganan newsletter (email promo),
+// tautan cepat (Quick Links: Bantuan, Syarat & Ketentuan, Blog, Toko),
+// ikon media sosial, metode pembayaran yang diterima, dan hak cipta copyright.
+
 "use client";
 
 import Link from "next/link";
@@ -12,6 +17,7 @@ import {
 } from "lucide-react";
 
 export default function Footer() {
+  // State untuk input email formulir berlangganan newsletter
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success">("idle");
 

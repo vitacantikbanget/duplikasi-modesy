@@ -1,17 +1,22 @@
+// Komponen Kupon Diskon Belanja (Member Coupons).
+// Berfungsi untuk menampilkan voucher atau kode promo diskon yang dimiliki pengguna,
+// lengkap dengan nama toko penerbit, batas masa berlaku voucher, dan tombol salin kode kupon.
+
 "use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
 import { Clock, Check } from "lucide-react";
 
+// Struktur data satu item voucher diskon
 interface CouponItem {
-  id: string;
-  vendorName: string;
-  title: string;
-  validTill: string;
-  code: string;
-  avatar: string;
-  link: string;
+  id: string;         // ID kupon
+  vendorName: string; // Nama toko yang memberi kupon (misal: Admin atau Trendshop)
+  title: string;      // Judul kupon (contoh: 10% Coupon)
+  validTill: string;  // Tanggal kedaluwarsa kupon
+  code: string;       // Kode voucher unik yang dimasukkan saat checkout
+  avatar: string;     // Foto logo toko penerbit kupon
+  link: string;       // Tautan ke produk atau toko yang bisa memakai kupon ini
 }
 
 const COUPONS_DATA: CouponItem[] = [

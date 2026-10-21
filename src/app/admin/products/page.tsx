@@ -1,11 +1,14 @@
+// Halaman Pengelolaan Produk Panel Admin Modesy.
+// Berfungsi untuk melihat seluruh inventaris produk di marketplace, memfilter berdasarkan kategori,
+// tipe produk (fisik/digital), stok, atau status khusus (Featured Products, Special Offers, Drafts, dll),
+// serta melakukan aksi massal (tambah ke featured, hapus produk, atau export data ke Excel/CSV).
+
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+
 import Link from "next/link";
-import FeaturedProductsPage from "../featured-products/page";
-import SpecialOffersPage from "../special-offers/page";
-import DraftsPage from "../drafts/page";
 import EmptyProductListPage from "@/components/admin/EmptyProductListPage";
 import {
   ChevronDown,
@@ -23,12 +26,14 @@ import {
   Eye,
 } from "lucide-react";
 
+// Struktur lencana khusus produk (misalnya: produk unggulan 'featured' atau diskon)
 interface ProductBadge {
   type: "featured" | "special_offer" | "discount";
   label?: string;
   value?: number;
 }
 
+// Struktur data lengkap satu item produk pada tabel admin
 interface AdminProduct {
   id: number;
   slug: string;
@@ -485,8 +490,21 @@ const INITIAL_PRODUCTS: AdminProduct[] = [
   },
 ];
 
-function AdminProductsView() {
-  const [products, setProducts] = useState<AdminProduct[]>(INITIAL_PRODUCTS);
+function AdminProductsView({
+  filterType = "all",
+  title = "Products",
+}: {
+  filterType?: "all" | "featured" | "special";
+  title?: string;
+} = {}) {
+  const initialData =
+    filterType === "featured"
+      ? INITIAL_PRODUCTS.filter((p) => p.badges.some((b) => b.type === "featured"))
+      : filterType === "special"
+      ? INITIAL_PRODUCTS.filter((p) => p.badges.some((b) => b.type === "special_offer"))
+      : INITIAL_PRODUCTS;
+
+  const [products, setProducts] = useState<AdminProduct[]>(initialData);
 
   // Filters State matching Modesy screenshot
   const [showCount, setShowCount] = useState<number>(15);
@@ -738,7 +756,7 @@ function AdminProductsView() {
     <div className="w-full text-[#333333] pb-12">
       {/* Title */}
       <div className="mb-4">
-        <h1 className="text-[24px] font-normal text-[#333333]">Products</h1>
+        <h1 className="text-[24px] font-normal text-[#333333]">{title}</h1>
       </div>
 
       {/* Main Content Box (AdminLTE White Box) */}
@@ -1416,13 +1434,13 @@ function AdminProductsDispatcher() {
   const list = searchParams ? searchParams.get("list") : null;
 
   if (list === "featured") {
-    return <FeaturedProductsPage />;
+    return <AdminProductsView filterType="featured" title="Featured Products" />;
   }
   if (list === "special") {
-    return <SpecialOffersPage />;
+    return <AdminProductsView filterType="special" title="Special Offers" />;
   }
   if (list === "drafts") {
-    return <DraftsPage />;
+    return <EmptyProductListPage title="Drafts" listKey="drafts" />;
   }
   if (list === "pending") {
     return <EmptyProductListPage title="Pending Products" listKey="pending" />;

@@ -1,43 +1,51 @@
+// Modul ini bertugas mengelola saldo dompet digital member (Member Wallet).
+// Menyimpan riwayat setor dana (deposit), riwayat pengeluaran belanja (expenses),
+// penarikan dana ke rekening bank (payouts), dan pengaturan rekening penarikan (PayPal, Bitcoin, IBAN, SWIFT).
+
+// Struktur data untuk catatan setor dana (Deposit)
 export interface WalletDeposit {
-  id: string;
-  paymentId: string;
-  paymentMethod: string;
-  amount: number;
-  currency: string;
-  status: "Completed" | "Pending Payment";
-  isReported: boolean;
-  date: string;
+  id: string;             // ID unik deposit
+  paymentId: string;      // Nomor resi pembayaran (misal: BTR-HMDQRCZDHE-CPZTJXWK)
+  paymentMethod: string;  // Metode setor dana (Transfer Bank, Kartu Kredit, dll)
+  amount: number;         // Jumlah uang yang disetor
+  currency: string;       // Mata uang (USD, IDR, dll)
+  status: "Completed" | "Pending Payment"; // Status apakah uang sudah masuk atau menunggu konfirmasi
+  isReported: boolean;    // Apakah pengguna sudah mengirim bukti transfer
+  date: string;           // Tanggal dan waktu transaksi
 }
 
+// Struktur data untuk catatan uang keluar / belanja produk
 export interface WalletExpense {
-  id: string;
-  paymentId: string;
-  expenseTitle: string;
-  orderNumber: string;
-  amount: number;
-  currency: string;
-  date: string;
+  id: string;             // ID pengeluaran
+  paymentId: string;      // ID pembayaran
+  expenseTitle: string;   // Keterangan belanja (contoh: Pembelian Tas Ransel)
+  orderNumber: string;    // Nomor pesanan barang
+  amount: number;         // Jumlah saldo yang terpotong
+  currency: string;       // Mata uang
+  date: string;           // Waktu transaksi
 }
 
+// Struktur data untuk penarikan dana ke rekening pribadi
 export interface WalletPayout {
-  id: string;
-  withdrawalMethod: string;
-  withdrawalAmount: number;
-  currency: string;
-  status: string;
-  date: string;
+  id: string;             // ID penarikan
+  withdrawalMethod: string; // Metode penarikan (Bank Transfer / PayPal)
+  withdrawalAmount: number; // Jumlah dana yang ditarik
+  currency: string;       // Mata uang
+  status: string;         // Status proses transfer dari admin
+  date: string;           // Waktu pengajuan penarikan
 }
 
+// Pengaturan rekening tujuan penarikan dana milik member
 export interface PayoutSettings {
-  paypalEmail: string;
-  btcAddress: string;
-  iban: {
+  paypalEmail: string;    // Alamat email akun PayPal
+  btcAddress: string;     // Alamat dompet Bitcoin (crypto)
+  iban: {                 // Data rekening bank internasional (IBAN)
     fullName: string;
     country: string;
     bankName: string;
     ibanNumber: string;
   };
-  swift: {
+  swift: {                // Data rekening bank lokal/antarnegara (SWIFT/BIC)
     fullName: string;
     country: string;
     bankName: string;
@@ -47,14 +55,16 @@ export interface PayoutSettings {
   };
 }
 
+// Format lengkap seluruh data dompet pengguna
 export interface WalletData {
-  balance: number;
-  deposits: WalletDeposit[];
-  expenses: WalletExpense[];
-  payouts: WalletPayout[];
-  payoutSettings: PayoutSettings;
+  balance: number;                  // Saldo aktif yang bisa dipakai belanja atau ditarik
+  deposits: WalletDeposit[];        // Daftar riwayat setor dana
+  expenses: WalletExpense[];        // Daftar riwayat pengeluaran
+  payouts: WalletPayout[];          // Daftar riwayat penarikan dana
+  payoutSettings: PayoutSettings;   // Data nomor rekening milik member
 }
 
+// Data awal dompet saat pertama kali membuka website (saldo awal $45.00)
 export const DEFAULT_MEMBER_WALLET: WalletData = {
   balance: 45.0,
   deposits: [
@@ -144,6 +154,7 @@ export const DEFAULT_MEMBER_WALLET: WalletData = {
 const STORAGE_KEY = "modesy_wallet_member";
 export const WALLET_CHANGE_EVENT = "modesy_wallet_change";
 
+// Mengambil data saldo dompet dari penyimpanan browser (localStorage)
 export function getMemberWallet(): WalletData {
   if (typeof window === "undefined") return DEFAULT_MEMBER_WALLET;
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -158,12 +169,15 @@ export function getMemberWallet(): WalletData {
   }
 }
 
+// Menyimpan data dompet yang diperbarui ke penyimpanan browser dan mengirim sinyal update
 export function saveMemberWallet(wallet: WalletData): void {
   if (typeof window === "undefined") return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(wallet));
+  // Beritahu semua bagian halaman lain bahwa saldo sudah berubah
   window.dispatchEvent(new CustomEvent(WALLET_CHANGE_EVENT, { detail: wallet }));
 }
 
+// Fungsi ketika member melakukan top up / setor dana baru
 export function addMemberDeposit(params: {
   amount: number;
   paymentMethod: string;
@@ -172,6 +186,7 @@ export function addMemberDeposit(params: {
 }): { success: boolean; newBalance: number; deposit: WalletDeposit } {
   const wallet = getMemberWallet();
   const isBank = params.paymentMethod.toLowerCase().includes("bank");
+  // Pembayaran selain transfer bank otomatis langsung bertambah ke saldo
   const isCompleted = !isBank || params.isReported;
   const amount = Number(params.amount);
   const newBalance = isCompleted
@@ -185,6 +200,7 @@ export function addMemberDeposit(params: {
     now.getMinutes()
   ).padStart(2, "0")}`;
 
+  // Buat nomor resi pembayaran acak yang unik
   const randSuffix1 = Math.random().toString(36).substring(2, 8).toUpperCase();
   const randSuffix2 = Math.random().toString(36).substring(2, 8).toUpperCase();
   const paymentId = isBank
@@ -212,6 +228,7 @@ export function addMemberDeposit(params: {
   return { success: true, newBalance, deposit };
 }
 
+// Fungsi konfirmasi setelah member mengirimkan bukti transfer bank
 export function reportBankTransfer(depositId: string): { success: boolean; newBalance: number } {
   const wallet = getMemberWallet();
   let depositAmount = 0;
@@ -238,6 +255,7 @@ export function reportBankTransfer(depositId: string): { success: boolean; newBa
   return { success: true, newBalance };
 }
 
+// Fungsi penarikan saldo ke rekening pribadi (Payout)
 export function requestMemberPayout(params: {
   amount: number;
   method: string;
@@ -245,11 +263,12 @@ export function requestMemberPayout(params: {
   const wallet = getMemberWallet();
   const amount = Number(params.amount);
 
+  // Validasi: jumlah tarik dana tidak boleh melebihi saldo yang tersedia
   if (amount > wallet.balance) {
     return {
       success: false,
       newBalance: wallet.balance,
-      error: "Withdrawal amount cannot exceed available wallet balance.",
+      error: "Jumlah penarikan tidak boleh melebihi sisa saldo dompet Anda.",
     };
   }
 
@@ -269,6 +288,7 @@ export function requestMemberPayout(params: {
     date: dateStr,
   };
 
+  // Kurangi saldo dompet dengan nominal yang ditarik
   const newBalance = Number((wallet.balance - amount).toFixed(2));
   const updated: WalletData = {
     ...wallet,
@@ -280,6 +300,7 @@ export function requestMemberPayout(params: {
   return { success: true, newBalance, payout };
 }
 
+// Menyimpan pembaruan nomor rekening tujuan penarikan dana
 export function updateMemberPayoutSettings(settings: PayoutSettings): { success: boolean } {
   const wallet = getMemberWallet();
   const updated: WalletData = {

@@ -1,17 +1,24 @@
+// Komponen Daftar Riwayat Pesanan (Member Orders).
+// Menampilkan kartu daftar belanjaan yang pernah dibeli pengguna,
+// beserta nomor pesanan, total biaya, status pembayaran (Pending / Completed),
+// dan tautan detail pesanan.
+
 "use client";
 
 import React from "react";
 import Link from "next/link";
 import { Clock, Info } from "lucide-react";
 
+// Struktur data satu item riwayat pesanan
 export interface ModesyOrder {
-  id: string;
-  orderNumber: string;
-  total: string;
-  status: "Pending Payment" | "Completed" | "Processing" | "Cancelled";
-  date: string;
+  id: string;          // ID pesanan
+  orderNumber: string; // Nomor pesanan untuk pelacakan (misal: 10044)
+  total: string;       // Total harga tagihan
+  status: "Pending Payment" | "Completed" | "Processing" | "Cancelled"; // Status pesanan
+  date: string;        // Tanggal transaksi
 }
 
+// Data simulasi pesanan pembeli
 const MODESY_ORDERS: ModesyOrder[] = [
   { id: "10044", orderNumber: "10044", total: "$154", status: "Pending Payment", date: "2026-10-14 / 20:42" },
   { id: "10026", orderNumber: "10026", total: "$121.25", status: "Pending Payment", date: "2026-09-17 / 18:28" },

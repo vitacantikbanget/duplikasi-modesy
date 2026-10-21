@@ -1,26 +1,32 @@
+// Komponen Fitur Chat / Pesan Pengguna (Member Messages).
+// Berfungsi untuk mengobrol (chatting) langsung antara pembeli dan penjual atau admin toko,
+// melihat daftar percakapan, mengirim pesan baru, serta tautan ke produk yang sedang didiskusikan.
+
 "use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
 import { Search, Trash2, Send } from "lucide-react";
 
+// Struktur data satu gelembung pesan chat
 interface MessageItem {
-  id: string;
-  sender: "user" | "admin";
-  text: string;
-  time: string;
+  id: string;              // ID unik pesan
+  sender: "user" | "admin";// Siapa pengirim pesan (pengguna atau admin/penjual)
+  text: string;            // Isi teks pesan obrolan
+  time: string;            // Waktu pesan terkirim
 }
 
+// Struktur data ruang percakapan / utas chat
 interface ChatThread {
-  id: string;
-  partnerName: string;
-  partnerAvatar: string;
-  productTitle: string;
-  productLink: string;
-  lastMessage: string;
-  time: string;
-  isOnline: boolean;
-  messages: MessageItem[];
+  id: string;              // ID ruang obrolan
+  partnerName: string;     // Nama lawan bicara (misal: Admin atau Trendshop)
+  partnerAvatar: string;   // Foto profil lawan bicara
+  productTitle: string;    // Produk yang sedang dibahas
+  productLink: string;     // Tautan ke produk terkait
+  lastMessage: string;     // Pesan terakhir yang dikirim
+  time: string;            // Waktu pesan terakhir
+  isOnline: boolean;       // Status online lawan bicara
+  messages: MessageItem[]; // Seluruh riwayat pesan di utas ini
 }
 
 const INITIAL_THREADS: ChatThread[] = [

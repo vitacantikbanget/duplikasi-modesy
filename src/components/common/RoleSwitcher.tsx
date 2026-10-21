@@ -1,3 +1,7 @@
+// Komponen Pengalih Peran (Role Switcher).
+// Fungsinya memudahkan developer atau penguji demo untuk berganti peran secara instan
+// antara: Tamu (Guest), Pembeli (Member), Penjual (Vendor), dan Pengelola Toko (Admin).
+
 "use client";
 
 import { useState } from "react";
@@ -20,8 +24,10 @@ export default function RoleSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
   const { role, setRole } = useAppContext();
+  // State untuk membuka atau menutup panel kartu pilihan peran
   const [isOpen, setIsOpen] = useState(false);
 
+  // Konfigurasi 4 mode peran utama yang bisa dicoba
   const rolesConfig: {
     id: UserRole;
     title: string;
@@ -74,8 +80,10 @@ export default function RoleSwitcher() {
     },
   ];
 
+  // Menentukan konfigurasi peran yang sedang aktif saat ini
   const currentRoleConfig = rolesConfig.find(r => r.id === role || (role === "super_admin" && r.id === "admin")) || rolesConfig[1];
 
+  // Fungsi saat tombol ganti peran diklik: simpan peran baru dan arahkan ke halaman terkait
   const handleSelectRole = (newRole: UserRole, destination?: string) => {
     setRole(newRole);
     if (destination && pathname !== destination) {
@@ -85,7 +93,7 @@ export default function RoleSwitcher() {
 
   return (
     <>
-      {/* 1. Official Modesy Scroll to Top Button on bottom right (matching screenshot) */}
+      {/* 1. Tombol resmi Modesy untuk gulir cepat ke atas halaman (Scroll to Top) di pojok kanan bawah */}
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -96,12 +104,12 @@ export default function RoleSwitcher() {
         <ChevronUp className="w-4 h-4 stroke-[2.5]" />
       </button>
 
-      {/* 2. Role Switcher anchored cleanly to bottom-left */}
+      {/* 2. Tombol Role Switcher melayang di pojok kiri bawah layar */}
       <div className="fixed bottom-4 left-4 z-[9999] font-sans text-xs select-none">
-        {/* Expanded Switcher Card */}
+        {/* Kotak popup pilihan role saat tombol melayang dibuka */}
         {isOpen && (
           <div className="mb-2 w-[340px] bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-in fade-in slide-in-from-bottom-3 duration-200">
-            {/* Header */}
+            {/* Header Popup */}
             <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -118,7 +126,7 @@ export default function RoleSwitcher() {
               </button>
             </div>
 
-            {/* Body: Role Cards */}
+            {/* Daftar pilihan role */}
             <div className="p-3 space-y-2 bg-[#f8f9fa]">
               {rolesConfig.map((r) => {
                 const Icon = r.icon;
@@ -183,7 +191,7 @@ export default function RoleSwitcher() {
               })}
             </div>
 
-            {/* Footer Info */}
+            {/* Informasi footer popup */}
             <div className="px-3 py-2 bg-white border-t border-gray-200 flex items-center justify-between text-[11px] text-gray-500">
               <span className="flex items-center gap-1">
                 <Lock className="w-3 h-3 text-emerald-600" />
@@ -199,7 +207,7 @@ export default function RoleSwitcher() {
           </div>
         )}
 
-        {/* Floating Pill Toggle Button on bottom left */}
+        {/* Tombol kecil melayang berbentuk kapsul */}
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}

@@ -1,3 +1,8 @@
+// Komponen Halaman Dompet Member (Member Wallet).
+// Berfungsi untuk menampilkan saldo aktif, tombol deposit (setor saldo),
+// tombol penarikan uang (withdraw payout), riwayat setor dana, pengeluaran belanja,
+// serta form pengaturan rekening bank / PayPal member.
+
 "use client";
 
 import React, { useState, useEffect } from "react";

@@ -1,3 +1,7 @@
+// Bilah menu samping (Sidebar) utama untuk Panel Admin Modesy.
+// Komponen ini memuat semua navigasi menu admin: Navigasi Home, Manajemen Tema & Slider,
+// Pengelolaan Pesanan, Inventaris Produk, Transaksi Pembayaran, Pengguna, dan Pengaturan Sistem.
+
 "use client";
 
 import Link from "next/link";
@@ -46,11 +50,13 @@ import {
 } from "lucide-react";
 import { useAdminContext } from "@/contexts/AdminContext";
 
+// Struktur data untuk sub-menu di dalam menu yang memiliki dropdown
 interface SubItem {
-  label: string;
-  href: string;
+  label: string; // Nama sub-menu
+  href: string;  // Alamat URL tujuan
 }
 
+// Komponen pembagi bagian menu (contoh: ORDERS, PRODUCTS, PAYMENTS)
 const SidebarSection = ({
   title,
   children,

@@ -1,3 +1,7 @@
+// Header bilah atas untuk Dashboard Penjual (Vendor Header).
+// Menampilkan tombol navigasi menu toko, tombol pintas ke etalase utama ("View Site"),
+// pemilih bahasa, serta menu profil akun penjual (Dashboard, Profil, Dompet, Pesanan, Logout).
+
 "use client";
 
 import Link from "next/link";

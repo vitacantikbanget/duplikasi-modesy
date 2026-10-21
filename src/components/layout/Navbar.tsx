@@ -1,3 +1,8 @@
+// Komponen Navigasi Utama (Navbar) untuk seluruh etalase publik Modesy.
+// Berfungsi menyediakan bilah pencarian langsung (live autocomplete search), pemilihan lokasi/negara,
+// pemilih bahasa dan mata uang, tombol keranjang belanja dengan counter jumlah barang,
+// daftar barang favorit (wishlist), serta menu profil akun untuk login, register, atau navigasi member/vendor.
+
 "use client";
 
 import {
@@ -28,6 +33,7 @@ import { createClient } from "@/lib/supabase/client";
 import { ALL_PRODUCTS, ProductItem } from "@/lib/products-data";
 import { cn } from "@/lib/utils";
 
+// Daftar pilihan kategori untuk filter pencarian cepat di bilah search
 const SEARCH_CATEGORIES = [
   { name: "All Categories", slug: "all" },
   { name: "Clothing", slug: "clothing" },

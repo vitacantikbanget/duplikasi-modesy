@@ -1,3 +1,8 @@
+// Context utama aplikasi Modesy.
+// File ini berfungsi sebagai "otak penyimpan data sementara" (Global State) di browser.
+// Menyimpan informasi mata uang, bahasa terpilih, peran pengguna (Guest/Member/Vendor/Admin),
+// isi keranjang belanja, dan produk favorit (Wishlist).
+
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
@@ -5,6 +10,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 type CurrencyCode = "USD" | "EUR" | "BRL" | "GBP" | "IDR" | "INR" | "NGN" | "RUB" | "TRY";
 type LanguageCode = "EN" | "ID";
 
+// Daftar mata uang yang didukung beserta simbol dan kurs konversinya
 export const currencies = [
   { label: "USD ($)", code: "USD", symbol: "$", rate: 1 },
   { label: "EUR (€)", code: "EUR", symbol: "€", rate: 0.92 },
@@ -732,8 +738,10 @@ export const translations = {
   }
 };
 
+// Tipe peran pengguna yang tersedia di marketplace Modesy
 export type UserRole = "guest" | "member" | "vendor" | "admin" | "super_admin" | "moderator";
 
+// Struktur data profil pengguna saat sedang login
 export interface UserProfile {
   name: string;
   email: string;
@@ -743,6 +751,7 @@ export interface UserProfile {
   badgeLabel: string;
 }
 
+// Data simulasi profil untuk masing-masing peran saat pengujian fitur
 export const ROLE_PROFILES: Record<UserRole, UserProfile | null> = {
   vendor: {
     name: "Trendshop",
@@ -1020,6 +1029,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [wishlist, cartHydrated]);
 
+  // Menambahkan produk ke dalam keranjang belanja
   const addToCart = (item: CartItem) => {
     setCart(prev => {
       const existingIndex = prev.findIndex(i => i.id === item.id);
@@ -1034,6 +1044,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setIsAddToCartModalOpen(true);
   };
 
+  // Menghapus produk dari keranjang belanja berdasarkan ID
   const removeFromCart = (id: string) => {
     setCart(prev => prev.filter(i => i.id !== id));
   };
@@ -1050,9 +1061,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setCart([]);
   };
 
+  // Menghitung total jumlah barang di keranjang belanja
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  // Menghitung subtotal harga seluruh barang di keranjang belanja
   const cartSubtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
+  // Menambah atau menghapus produk dari daftar favorit (Wishlist)
   const toggleWishlist = (productSlug: string) => {
     setWishlist(prev => {
       if (prev.includes(productSlug)) {
@@ -1065,6 +1080,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const isInWishlist = (productSlug: string) => wishlist.includes(productSlug);
   const wishlistCount = wishlist.length;
 
+  // Fungsi penerjemah teks multi-bahasa sesuai bahasa yang sedang aktif
   const t = (path: string, fallback?: string) => {
     const keys = path.split(".");
     let current: any = translations[language.code as LanguageCode];
@@ -1085,6 +1101,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return current;
   };
 
+  // Mengubah angka harga ke format mata uang yang dipilih (contoh: Rp 50.000 atau $12.50)
   const formatPrice = (priceVal: number) => {
     const converted = priceVal * currency.rate;
     if (currency.code === "IDR") {

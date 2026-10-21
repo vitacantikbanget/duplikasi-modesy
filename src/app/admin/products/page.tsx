@@ -7,7 +7,6 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-
 import Link from "next/link";
 import EmptyProductListPage from "@/components/admin/EmptyProductListPage";
 import {
